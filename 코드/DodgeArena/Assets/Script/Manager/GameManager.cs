@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
 
         Chunk chunk = Instantiate(chunkObject, location.center.vector, Quaternion.identity, objectsRoot.transform);
         chunks.Add(location, chunk);
-        chunk.Initiate(location);
+        chunk.ResetProperties(location);
         return chunk;
     }
 

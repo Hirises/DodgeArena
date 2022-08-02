@@ -7,10 +7,12 @@ using NaughtyAttributes;
 // (0,0) 기준 정사각형 배열
 public class Chunk : MonoBehaviour
 {
+    private bool _valid = false;
     private bool _initiated = false;
     private bool _loaded;
     public bool loaded { get => _loaded; }
     public bool initiated { get => _initiated; }
+    public bool valid { get => _valid; }
     [SerializeField]
     [ReadOnly]
     private ChunkLocation _location;
@@ -25,17 +27,28 @@ public class Chunk : MonoBehaviour
     /// <summary>
     /// 청크 초기화 (처음 생성)
     /// </summary>
-    public void Initiate(ChunkLocation position)
+    public void ResetProperties(ChunkLocation position)
     {
-        if (initiated)
+        if (valid)
         {
             return;
         }
 
         gameObject.SetActive(false);
         this._loaded = false;
+        this._initiated = false;
         this._location = position;
         entities = new List<Entity>();
+        _valid = true;
+    }
+
+    public void Initiate()
+    {
+        if (initiated)
+        {
+            return;
+        }
+
         SpawnObjects();
         _initiated = true;
     }
@@ -49,6 +62,7 @@ public class Chunk : MonoBehaviour
 
         gameObject.SetActive(true);
         this._loaded = true;
+        Initiate();
         foreach(Entity entity in entities)
         {
             entity.OnLoad();
