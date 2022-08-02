@@ -4,8 +4,8 @@ using UnityEngine;
 using System;
 using NaughtyAttributes;
 
-[CreateAssetMenu(fileName = "SpawningData", menuName = "Scriptable Objects/Spawning Data", order = 0)]
-public class SpawningData : ScriptableObject
+[CreateAssetMenu(fileName = "SpawnerData", menuName = "Scriptable Objects/Spawner Data", order = 0)]
+public class SpawnerData : ScriptableObject
 {
     [SerializeField]
     [Range(min:0, max:1)]
@@ -19,7 +19,7 @@ public class SpawningData : ScriptableObject
     [SerializeField]
     private int maxCount = 1;
     [SerializeField]
-    private float density = 5;
+    private float density = 2.0f;
     [SerializeField]
     [ValidateInput("checkValidVariants")]
     private Entity[] variants;
@@ -35,8 +35,9 @@ public class SpawningData : ScriptableObject
     }
 
     #pragma warning disable CS0618 // 형식 또는 멤버는 사용되지 않습니다.
-    public void Spawn(Chunk chunk)
+    public List<Entity> Spawn(Chunk chunk)
     {
+        List<Entity> entities = new List<Entity>();
         int groupCount = UnityEngine.Random.RandomRange(minGroupCount, maxGroupCount + 1);
         for (int j = 0; j < groupCount; j++)
         {
@@ -46,8 +47,10 @@ public class SpawningData : ScriptableObject
             {
                 int variant = UnityEngine.Random.RandomRange(0, variants.Length);
                 Entity instance = Instantiate(variants[variant], baseLocation.Randomize(density).location, Quaternion.identity, chunk.rootObject.transform);
-                instance.onSpawn();
+                instance.OnSpawn();
+                entities.Add(instance);
             }
         }
+        return entities;
     }
 }

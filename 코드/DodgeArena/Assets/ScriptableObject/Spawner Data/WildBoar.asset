@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce0c62ea44b26714fa1b981c6770a522, type: 3}
-  m_Name: Grass
+  m_Name: WildBoar
   m_EditorClassIdentifier: 
-  spawningRate: 1
+  spawningRate: 0.10000000149011612
   minGroupCount: 1
-  maxGroupCount: 3
+  maxGroupCount: 1
   minCount: 1
-  maxCount: 3
-  density: 1.5
+  maxCount: 2
+  density: 3
   variants:
-  - {fileID: 7683292132076754099, guid: 6db13d99d709f184c997b9480d3a11af, type: 3}
-  - {fileID: 2120888135695460797, guid: 21cda78d5a9685b46bb7000cd2e2778c, type: 3}
+  - {fileID: 1697931047449044391, guid: e1e4cce6851f1604aaf487e64166e83f, type: 3}

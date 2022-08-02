@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [SerializeField]
-    public SpawningData[] spawners;
+    public SpawnerData[] spawners;
     [SerializeField]
     public GameObject objectsRoot;
     [SerializeField]
@@ -114,6 +114,10 @@ public class GameManager : MonoBehaviour
     public void RemoveChunk(Chunk chunk)
     {
         chunk.Unload();
+        foreach (Entity entity in chunk.entities)
+        {
+            entity.OnDespawn();
+        }
         chunks.Remove(chunk.location);
         Destroy(chunk.rootObject);
     }

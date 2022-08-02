@@ -12,13 +12,14 @@ public class Chunk
     public bool initiated { get => _initiated; }
     public readonly ChunkLocation location;
     public readonly GameObject rootObject;
-
+    public List<Entity> entities;
 
     public Chunk(ChunkLocation position)
     {
         this._initiated = false;
         this._loaded = false;
         this.location = position;
+        entities = new List<Entity>();
         this.rootObject = MonoBehaviour.Instantiate(GameManager.instance.chunkObject, position.centerLocation.location, Quaternion.identity, GameManager.instance.objectsRoot.transform);
     }
 
@@ -37,6 +38,9 @@ public class Chunk
            && Mathf.Abs(pos.y - location.centerLocation.location.y) <= GameManager.instance.chunkLoadRange;
     }
 
+    /// <summary>
+    /// 청크 초기화 (처음 생성)
+    /// </summary>
     public void Initiate()
     {
         if (initiated)
@@ -58,6 +62,10 @@ public class Chunk
         rootObject.SetActive(true);
         Initiate();
         this._loaded = true;
+        foreach(Entity entity in entities)
+        {
+            entity.OnLoad();
+        }
     }
 
     public void Unload()
@@ -68,6 +76,10 @@ public class Chunk
         }
 
         this._loaded = false;
+        foreach (Entity entity in entities)
+        {
+            entity.OnUnload();
+        }
         rootObject.SetActive(false);
     }
 
@@ -79,11 +91,11 @@ public class Chunk
     //이 청크에 오브잭트들을 소환
     public void SpawnObjects()
     {
-        foreach(SpawningData spawner in GameManager.instance.spawners)
+        foreach(SpawnerData spawner in GameManager.instance.spawners)
         {
             if (spawner.CanSpawnWith(this))
             {
-                spawner.Spawn(this);
+                entities.AddRange(spawner.Spawn(this));
             }
         }
     }
