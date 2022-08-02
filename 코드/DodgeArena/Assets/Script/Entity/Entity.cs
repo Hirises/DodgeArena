@@ -17,7 +17,21 @@ public abstract class Entity : MonoBehaviour
         {
             transform.position = value.location;
             _location = location;
+
+            //청크 업데이트
+            Chunk newChunk = location.ToChunkLocation().GetChunk();
+            if (!newChunk.Equals(chunk))    
+            {
+                newChunk.entities.Add(this);
+                chunk.entities.Remove(this);
+                _chunk = newChunk;
+            }
         }
+    }
+    private Chunk _chunk;
+    public Chunk chunk
+    {
+        get => _chunk;
     }
 
     /// <summary>
@@ -83,7 +97,7 @@ public abstract class Entity : MonoBehaviour
     /// </summary>
     public virtual void OnSpawn()
     {
-        _location = new WorldLocation(transform.position);
+        
     }
 
     /// <summary>

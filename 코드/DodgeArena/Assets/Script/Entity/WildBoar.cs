@@ -23,11 +23,6 @@ public class WildBoar : LivingEntity
     private float restDuration;
     private Timer timer = new Timer();
 
-    public override void OnSpawn()
-    {
-        base.OnSpawn();
-    }
-
     public override void OnLoad()
     {
         base.OnLoad();
