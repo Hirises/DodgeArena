@@ -46,7 +46,7 @@ public class SpawnerData : ScriptableObject
             for (int i = 0; i < spawnCount; i++)
             {
                 int variant = UnityEngine.Random.RandomRange(0, variants.Length);
-                GameManager.instance.Spawn(variants[variant], baseLocation.Randomize(density));
+                GameManager.instance.Spawn(variants[variant], baseLocation.Randomize(density), chunk);
             }
         }
         return entities;

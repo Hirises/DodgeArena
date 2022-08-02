@@ -7,7 +7,7 @@ using NaughtyAttributes;
 // (0,0) 기준 정사각형 배열
 public class Chunk : MonoBehaviour
 {
-    private bool _initiated;
+    private bool _initiated = false;
     private bool _loaded;
     public bool loaded { get => _loaded; }
     public bool initiated { get => _initiated; }
@@ -20,21 +20,6 @@ public class Chunk : MonoBehaviour
     [ReadOnly]
     public List<Entity> entities;
 
-    public bool CheckKeep()
-    {
-        Vector2 pos = GameManager.instance.player.transform.position;
-        return Mathf.Abs(pos.x - location.center.vector.x) <= GameManager.instance.chunkSaveRange
-           && Mathf.Abs(pos.y - location.center.vector.y) <= GameManager.instance.chunkSaveRange;
-    }
-
-
-    public bool CheckLoad()
-    {
-        Vector2 pos = GameManager.instance.player.transform.position;
-        return Mathf.Abs(pos.x - location.center.vector.x) <= GameManager.instance.chunkLoadRange
-           && Mathf.Abs(pos.y - location.center.vector.y) <= GameManager.instance.chunkLoadRange;
-    }
-
     /// <summary>
     /// 청크 초기화 (처음 생성)
     /// </summary>
@@ -45,7 +30,7 @@ public class Chunk : MonoBehaviour
             return;
         }
 
-        this._initiated = false;
+        gameObject.SetActive(false);
         this._loaded = false;
         this._location = position;
         entities = new List<Entity>();
@@ -60,7 +45,7 @@ public class Chunk : MonoBehaviour
             return;
         }
 
-        rootObject.SetActive(true);
+        gameObject.SetActive(true);
         this._loaded = true;
         foreach(Entity entity in entities)
         {
@@ -80,7 +65,7 @@ public class Chunk : MonoBehaviour
         {
             entity.OnUnload();
         }
-        rootObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void Remove()

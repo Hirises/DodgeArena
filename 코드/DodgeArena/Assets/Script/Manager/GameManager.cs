@@ -44,11 +44,17 @@ public class GameManager : MonoBehaviour
         UpdateChunk();
     }
 
-    public void Spawn<T>(T target, WorldLocation location) where T : Entity
+    public T Spawn<T>(T target, WorldLocation location) where T : Entity
     {
-        Entity instance = Instantiate(target, location.vector, Quaternion.identity, location.chunk.rootObject.transform);
+        return Spawn(target, location, location.chunk);
+    }
+
+    public T Spawn<T>(T target, WorldLocation location, Chunk chunk) where T : Entity
+    {
+        T instance = Instantiate(target, location.vector, Quaternion.identity, chunk.gameObject.transform);
         instance.location = location;
         instance.OnSpawn();
+        return instance;
     }
 
     public void UpdateChunk()
@@ -67,19 +73,52 @@ public class GameManager : MonoBehaviour
 
     public void CheckChunk(ChunkLocation location)
     {
-        Chunk chunk = GetChunk(location);
-        if (chunk.CheckLoad())
+        if (location.CheckLoad())
         {
-            chunk.Load();
+            if (!chunks.ContainsKey(location))
+            {
+                SpawnChunk(location);
+                return;
+            }
+            LoadChunk(location);
         }
-        else if (chunk.CheckKeep())
+        else if (location.CheckKeep())
         {
-            chunk.Unload();
+            if (!chunks.ContainsKey(location))
+            {
+                SpawnChunk(location);
+                return;
+            }
+            UnloadChunk(location);
         }
         else
         {
-            chunk.Remove();
+            RemoveChunk(location);
         }
+    }
+
+    public Chunk GetChunk(ChunkLocation location)
+    {
+        if (!chunks.ContainsKey(location))
+        {
+            return SpawnChunk(location);
+        }
+        Chunk chunk = chunks[location];
+        return chunk;
+    }
+
+    public Chunk SpawnChunk(ChunkLocation location)
+    {
+        Debug.LogError("error");
+        if (chunks.ContainsKey(location))
+        {
+            return GetChunk(location);
+        }
+
+        Chunk chunk = Instantiate(chunkObject, location.center.vector, Quaternion.identity, objectsRoot.transform);
+        chunks.Add(location, chunk);
+        chunk.Initiate(location);
+        return chunk;
     }
 
     public Chunk LoadChunk(ChunkLocation location)
@@ -90,19 +129,6 @@ public class GameManager : MonoBehaviour
         }
         Chunk chunk = GetChunk(location);
         chunk.Load();
-        return chunk;
-    }
-
-    public Chunk SpawnChunk(ChunkLocation location)
-    {
-        if (chunks.ContainsKey(location))
-        {
-            return GetChunk(location);
-        }
-
-        Chunk chunk = Instantiate(chunkObject, location.center.vector, Quaternion.identity, objectsRoot.transform);
-        chunk.Initiate(location);
-        chunks.Add(location, chunk);
         return chunk;
     }
 
@@ -134,16 +160,6 @@ public class GameManager : MonoBehaviour
             entity.OnDespawn();
         }
         chunks.Remove(chunk.location);
-        Destroy(chunk.rootObject);
-    }
-
-    public Chunk GetChunk(ChunkLocation location)
-    {
-        if (!chunks.ContainsKey(location))
-        {
-            return SpawnChunk(location);
-        }
-        Chunk chunk =  chunks[location];
-        return chunk;
+        Destroy(chunk.gameObject);
     }
 }

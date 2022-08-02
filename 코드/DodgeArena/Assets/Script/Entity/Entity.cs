@@ -27,7 +27,7 @@ public abstract class Entity : MonoBehaviour
                 {
                     chunk.entities.Remove(this);
                 }
-                transform.parent = newChunk.rootObject.transform;
+                transform.parent = newChunk.gameObject.transform;
                 _chunk = newChunk;
             }
         }
@@ -36,6 +36,21 @@ public abstract class Entity : MonoBehaviour
     public Chunk chunk
     {
         get => _chunk;
+    }
+    private bool _initiated = false;
+    public bool initiated { get => _initiated; }
+
+    public void Initiated(WorldLocation location, Chunk chunk)
+    {
+        if (initiated)
+        {
+            return;
+        }
+
+        this._location = location;
+        this._chunk = chunk;
+        chunk.entities.Add(this);
+        transform.parent = chunk.gameObject.transform;
     }
 
     /// <summary>
