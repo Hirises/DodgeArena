@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     [SerializeField]
-    public SpawnerData[] spawners;
+    public Spawner[] spawners;
     [SerializeField]
     public GameObject objectsRoot;
     [SerializeField]

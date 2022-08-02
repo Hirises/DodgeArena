@@ -4,11 +4,14 @@ using UnityEngine;
 using System;
 using NaughtyAttributes;
 
-[CreateAssetMenu(fileName = "SpawnerData", menuName = "Scriptable Objects/Spawner Data", order = 0)]
-public class SpawnerData : ScriptableObject
+public abstract class Spawner : ScriptableObject
 {
-    [SerializeField]
-    [Range(min:0, max:1)]
+    public abstract bool CanSpawnWith(Chunk chunk);
+
+    public abstract List<Entity> Spawn(Chunk chunk);
+
+/*    [SerializeField]
+    [Range(min: 0, max: 1)]
     private double spawningRate;
     [SerializeField]
     private int minGroupCount = 1;
@@ -24,18 +27,18 @@ public class SpawnerData : ScriptableObject
     [ValidateInput("checkValidVariants")]
     private Entity[] variants;
 
-    public bool checkValidVariants(GameObject[] v)
+    public override bool checkValidVariants(GameObject[] v)
     {
         return v != null && v.Length > 0;
     }
 
-    public bool CanSpawnWith(Chunk chunk)
+    public override bool CanSpawnWith(Chunk chunk)
     {
         return (new System.Random()).NextDouble() < spawningRate;
     }
 
-    #pragma warning disable CS0618 // 형식 또는 멤버는 사용되지 않습니다.
-    public List<Entity> Spawn(Chunk chunk)
+#pragma warning disable CS0618 // 형식 또는 멤버는 사용되지 않습니다.
+    public override List<Entity> Spawn(Chunk chunk)
     {
         List<Entity> entities = new List<Entity>();
         int groupCount = UnityEngine.Random.RandomRange(minGroupCount, maxGroupCount + 1);
@@ -50,5 +53,5 @@ public class SpawnerData : ScriptableObject
             }
         }
         return entities;
-    }
+    }*/
 }

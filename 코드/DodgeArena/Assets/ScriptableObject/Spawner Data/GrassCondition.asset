@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2638759551bc8f740a39f881f21c8e9f, type: 3}
-  m_Name: Grass
+  m_Script: {fileID: 11500000, guid: d38f62c9e0302a341923a73f24991cf4, type: 3}
+  m_Name: GrassCondition
   m_EditorClassIdentifier: 
-  conditions:
-  - {fileID: 11400000, guid: 1a1f10483e07415439f5f78caf7616b8, type: 2}
-  spawn: {fileID: 11400000, guid: f5f9021a0f4c7dd459da6d455f9ca4e7, type: 2}
+  rate: 1

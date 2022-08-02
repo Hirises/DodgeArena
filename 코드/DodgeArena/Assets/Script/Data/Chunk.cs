@@ -92,7 +92,7 @@ public class Chunk : MonoBehaviour
     //이 청크에 오브잭트들을 소환
     public void SpawnObjects()
     {
-        foreach(SpawnerData spawner in GameManager.instance.spawners)
+        foreach(Spawner spawner in GameManager.instance.spawners)
         {
             if (spawner.CanSpawnWith(this))
             {
