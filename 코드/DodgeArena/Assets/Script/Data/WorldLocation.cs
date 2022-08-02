@@ -50,4 +50,22 @@ public class WorldLocation
     {
         return new WorldLocation(o1.location / o2);
     }
+
+    public override bool Equals(object obj)
+    {
+        if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+        {
+            return false;
+        }
+        else
+        {
+            WorldLocation p = (WorldLocation)obj;
+            return p.location.Equals(location);
+        }
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(location);
+    }
 }
