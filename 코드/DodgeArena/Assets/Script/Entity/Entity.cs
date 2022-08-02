@@ -15,11 +15,11 @@ public abstract class Entity : MonoBehaviour
         get => _location;
         set
         {
-            transform.position = value.location;
+            transform.position = value.vector;
             _location = location;
 
             //청크 업데이트
-            Chunk newChunk = location.ToChunkLocation().GetChunk();
+            Chunk newChunk = location.chunk);
             if (!newChunk.Equals(chunk))    
             {
                 newChunk.entities.Add(this);

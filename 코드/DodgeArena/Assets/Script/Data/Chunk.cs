@@ -20,22 +20,22 @@ public class Chunk
         this._loaded = false;
         this.location = position;
         entities = new List<Entity>();
-        this.rootObject = MonoBehaviour.Instantiate(GameManager.instance.chunkObject, position.centerLocation.location, Quaternion.identity, GameManager.instance.objectsRoot.transform);
+        this.rootObject = MonoBehaviour.Instantiate(GameManager.instance.chunkObject, position.center.vector, Quaternion.identity, GameManager.instance.objectsRoot.transform);
     }
 
     public bool CheckKeep()
     {
         Vector2 pos = GameManager.instance.player.transform.position;
-        return Mathf.Abs(pos.x - location.centerLocation.location.x) <= GameManager.instance.chunkSaveRange
-           && Mathf.Abs(pos.y - location.centerLocation.location.y) <= GameManager.instance.chunkSaveRange;
+        return Mathf.Abs(pos.x - location.center.vector.x) <= GameManager.instance.chunkSaveRange
+           && Mathf.Abs(pos.y - location.center.vector.y) <= GameManager.instance.chunkSaveRange;
     }
 
 
     public bool CheckLoad()
     {
         Vector2 pos = GameManager.instance.player.transform.position;
-        return Mathf.Abs(pos.x - location.centerLocation.location.x) <= GameManager.instance.chunkLoadRange
-           && Mathf.Abs(pos.y - location.centerLocation.location.y) <= GameManager.instance.chunkLoadRange;
+        return Mathf.Abs(pos.x - location.center.vector.x) <= GameManager.instance.chunkLoadRange
+           && Mathf.Abs(pos.y - location.center.vector.y) <= GameManager.instance.chunkLoadRange;
     }
 
     /// <summary>
@@ -103,7 +103,7 @@ public class Chunk
     // 청크내의 랜덤한 위치를 반환
     public WorldLocation RandomPosition()
     {
-        return location.centerLocation.Randomize(GameManager.instance.chunkWeidth / 2);
+        return location.center.Randomize(GameManager.instance.chunkWeidth / 2);
     }
 
     public override bool Equals(object obj)

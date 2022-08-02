@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     public void UpdateChunk()
     {
         int loadRange = (int)Mathf.Floor(chunkUpdateRange / chunkWeidth);
-        Vector2 offset = new WorldLocation(player.transform.position).ToChunkLocation().location;
+        Vector2 offset = new WorldLocation(player.transform.position).chunkLocation.vector;
         for (int x = -loadRange; x <= loadRange; x++)
         {
             for (int y = -loadRange; y <= loadRange; y++)
