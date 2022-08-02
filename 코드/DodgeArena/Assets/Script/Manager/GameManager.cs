@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public SpawningData[] spawners;
     [SerializeField]
     public GameObject objectsRoot;
+    [SerializeField]
+    public GameObject chunkObject;
     private Dictionary<ChunkLocation, Chunk> chunks = new Dictionary<ChunkLocation, Chunk>();
     [SerializeField]
     public float chunkLoadRange;

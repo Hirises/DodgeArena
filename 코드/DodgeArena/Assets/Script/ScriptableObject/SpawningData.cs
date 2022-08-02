@@ -45,7 +45,7 @@ public class SpawningData : ScriptableObject
             for (int i = 0; i < spawnCount; i++)
             {
                 int variant = UnityEngine.Random.RandomRange(0, variants.Length);
-                Entity instance = Instantiate(variants[variant], baseLocation.Randomize(density).location, Quaternion.identity, GameManager.instance.objectsRoot.transform);
+                Entity instance = Instantiate(variants[variant], baseLocation.Randomize(density).location, Quaternion.identity, chunk.rootObject.transform);
                 instance.onSpawn();
             }
         }

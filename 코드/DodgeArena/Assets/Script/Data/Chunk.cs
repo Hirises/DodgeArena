@@ -6,11 +6,13 @@ using UnityEngine;
 // (0,0) 기준 정사각형 배열
 public class Chunk
 {
-    public readonly ChunkLocation postion;
+    public readonly ChunkLocation position;
+    public readonly GameObject rootObject;
 
-    public Chunk(ChunkLocation postion)
+    public Chunk(ChunkLocation position)
     {
-        this.postion = postion;
+        this.position = position;
+        this.rootObject = MonoBehaviour.Instantiate(GameManager.instance.chunkObject, position.CenterLocation().location, Quaternion.identity, GameManager.instance.objectsRoot.transform);
     }
 
     //이 청크에 오브잭트들을 소환
@@ -28,7 +30,7 @@ public class Chunk
     // 청크내의 랜덤한 위치를 반환
     public WorldLocation RandomPosition()
     {
-        return postion.CenterLocation().Randomize(GameManager.instance.chunkWeidth / 2);
+        return position.CenterLocation().Randomize(GameManager.instance.chunkWeidth / 2);
     }
 
     public override bool Equals(object obj)
@@ -40,12 +42,12 @@ public class Chunk
         else
         {
             Chunk p = (Chunk)obj;
-            return p.postion.Equals(postion);
+            return p.position.Equals(position);
         }
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(postion);
+        return HashCode.Combine(position);
     }
 }
