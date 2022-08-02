@@ -15,7 +15,7 @@ public abstract class Entity : MonoBehaviour
         get => _location;
         set
         {
-            transform.position = value.vector;
+            transform.position = value.vector - new Vector3(0, 0, spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit);
             _location = value;
 
             //청크 업데이트
