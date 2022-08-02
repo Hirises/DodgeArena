@@ -6,12 +6,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     [SerializeField]
-    public readonly SpawningData[] spawners;
-    private Dictionary<ChunkLocation, Chunk> chunks;
+    public SpawningData[] spawners;
     [SerializeField]
-    public readonly float chunkLoadRange;
+    public GameObject objectsRoot;
+    private Dictionary<ChunkLocation, Chunk> chunks = new Dictionary<ChunkLocation, Chunk>();
     [SerializeField]
-    public readonly float chunkWeidth;
+    public float chunkLoadRange;
+    [SerializeField]
+    public float chunkWeidth;
 
     private void Awake()
     {
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
                 ChunkLocation chunkLocation = new ChunkLocation(new Vector2(x, y));
                 Chunk chunk = new Chunk(chunkLocation);
                 chunks.Add(chunkLocation, chunk);
+                chunk.SpawnObjects();
             }
         }
     }

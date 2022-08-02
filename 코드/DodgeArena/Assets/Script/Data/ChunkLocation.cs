@@ -9,10 +9,9 @@ public class ChunkLocation
         this.location = location;
     }
 
-    public WorldLocation CenterLocation(float z)
+    public WorldLocation CenterLocation()
     {
-        Vector2 center = location * GameManager.instance.chunkWeidth;
-        return new WorldLocation(new Vector3(center.x, center.y, z));
+        return new WorldLocation(location * GameManager.instance.chunkWeidth);
     }
 
     public Chunk GetChunk()

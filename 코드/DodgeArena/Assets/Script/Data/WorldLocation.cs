@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class WorldLocation
 {
@@ -8,13 +9,26 @@ public class WorldLocation
 
     public WorldLocation(Vector3 location)
     {
+        location.z = location.y;
         this.location = location;
+    }
+
+    public WorldLocation(Vector2 location)
+    {
+        this.location = new Vector3(location.x, location.y, location.y);
     }
 
     public ChunkLocation ToChunkLocation()
     {
         return new ChunkLocation(new Vector2(Mathf.Floor((location.x + GameManager.instance.chunkWeidth / 2) / GameManager.instance.chunkWeidth),
             Mathf.Floor((location.y + GameManager.instance.chunkWeidth / 2) / GameManager.instance.chunkWeidth)));
+    }
+
+    public WorldLocation Randomize(float half)
+    {
+        System.Random random = new System.Random();
+        return new WorldLocation(location + new Vector3(Convert.ToSingle(random.NextDouble()) * half * 2 - half,
+           Convert.ToSingle(random.NextDouble()) * half * 2 - half, 0));
     }
 
     public static WorldLocation operator +(WorldLocation o1, WorldLocation o2)

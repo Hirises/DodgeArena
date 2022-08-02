@@ -6,9 +6,11 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField]
     private PlayerController player;
+    [SerializeField]
+    private float zOffset;
 
     private void LateUpdate()
     {
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + zOffset);
     }
 }

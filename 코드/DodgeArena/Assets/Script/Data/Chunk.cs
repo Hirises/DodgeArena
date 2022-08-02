@@ -26,11 +26,9 @@ public class Chunk
     }
 
     // 청크내의 랜덤한 위치를 반환
-    public WorldLocation RandomPosition(float z)
+    public WorldLocation RandomPosition()
     {
-        System.Random random = new System.Random();
-        return new WorldLocation(postion.CenterLocation(z).location + new Vector3(Convert.ToSingle(random.NextDouble()) * GameManager.instance.chunkWeidth - GameManager.instance.chunkWeidth / 2,
-           Convert.ToSingle(random.NextDouble()) * GameManager.instance.chunkWeidth - GameManager.instance.chunkWeidth / 2, 0));
+        return postion.CenterLocation().Randomize(GameManager.instance.chunkWeidth / 2);
     }
 
     public override bool Equals(object obj)
