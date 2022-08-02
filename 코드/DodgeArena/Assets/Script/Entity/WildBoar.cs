@@ -60,7 +60,7 @@ public class WildBoar : LivingEntity
         float angle = Vector2.SignedAngle(Vector2.right, dir);
         Debug.Log(angle.ToString());
         transform.rotation = Quaternion.Euler(0, 0, angle);
-        spriteRenderer.flipY = transform.rotation.eulerAngles.x <= 0;
+        spriteRenderer.flipY = dir.x <= 0;
         spriteRenderer.sprite = attack;
         timer.Reset();
         while (true)
