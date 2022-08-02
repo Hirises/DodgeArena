@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject chunkObject;
     [SerializeField]
-    public PlayerController player;
+    public Player player;
     [SerializeField]
     public float chunkUpdateRange;
     [SerializeField]

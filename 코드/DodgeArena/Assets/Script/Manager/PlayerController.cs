@@ -7,11 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private new Rigidbody2D rigidbody;
     [SerializeField]
-    private SpriteRenderer spriteRenderer;
-    [SerializeField]
-    private Sprite player_normal;
-    [SerializeField]
-    private Sprite player_hit;
+    private Player player;
 
     [SerializeField]
     private float playerSpeed;
@@ -22,23 +18,11 @@ public class PlayerController : MonoBehaviour
         Move();
     }
 
-    public void LateUpdate()
-    {
-        FixPosition();
-    }
-
     private void Move()
     {
         Vector2 direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         direction.Normalize();
         Vector2 moveVector = direction * playerSpeed;
         rigidbody.velocity = moveVector;
-    }
-
-
-    private void FixPosition()
-    {
-        Vector3 pos = this.transform.position;
-        this.transform.position = new Vector3(pos.x, pos.y, pos.y);
     }
 }

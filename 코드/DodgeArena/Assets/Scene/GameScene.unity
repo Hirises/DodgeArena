@@ -356,7 +356,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 41605be9de4f04e4692931c0dc8b343e, type: 2}
   objectsRoot: {fileID: 1236331380}
   chunkObject: {fileID: 2718173031260316098, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
-  player: {fileID: 1546719919}
+  player: {fileID: 1546719922}
   chunkUpdateRange: 70
   chunkSaveRange: 60
   chunkLoadRange: 30
@@ -418,6 +418,7 @@ GameObject:
   - component: {fileID: 1546719918}
   - component: {fileID: 1546719917}
   - component: {fileID: 1546719919}
+  - component: {fileID: 1546719922}
   - component: {fileID: 1546719921}
   - component: {fileID: 1546719920}
   m_Layer: 0
@@ -507,9 +508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 1546719921}
-  spriteRenderer: {fileID: 1546719917}
-  player_normal: {fileID: 21300000, guid: da867b795d9a7b24493eada61eacad61, type: 3}
-  player_hit: {fileID: 21300000, guid: f35625a005f5cfa4ea6a0de7cbb30329, type: 3}
+  player: {fileID: 1546719922}
   playerSpeed: 5
 --- !u!58 &1546719920
 CircleCollider2D:
@@ -548,6 +547,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1546719922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1546719916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa04e81fef3748045bbb778404f338fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 1546719917}
+  rigidbody: {fileID: 1546719921}
+  controller: {fileID: 1546719919}
+  normal: {fileID: 21300000, guid: da867b795d9a7b24493eada61eacad61, type: 3}
+  hit: {fileID: 21300000, guid: f35625a005f5cfa4ea6a0de7cbb30329, type: 3}
 --- !u!1 &2133264886
 GameObject:
   m_ObjectHideFlags: 0

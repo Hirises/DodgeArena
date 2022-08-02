@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0c62ea44b26714fa1b981c6770a522, type: 3}
   m_Name: WildBoar
   m_EditorClassIdentifier: 
-  spawningRate: 0.10000000149011612
+  spawningRate: 0.20000000298023224
   minGroupCount: 1
   maxGroupCount: 1
   minCount: 1
