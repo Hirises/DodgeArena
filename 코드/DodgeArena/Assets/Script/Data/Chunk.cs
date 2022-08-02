@@ -2,26 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 // (0,0) 기준 정사각형 배열
-public class Chunk
+public class Chunk : MonoBehaviour
 {
     private bool _initiated;
     private bool _loaded;
     public bool loaded { get => _loaded; }
     public bool initiated { get => _initiated; }
-    public readonly ChunkLocation location;
-    public readonly GameObject rootObject;
-    public List<Entity> entities;
-
-    public Chunk(ChunkLocation position)
+    private ChunkLocation _location;
+    public ChunkLocation location
     {
-        this._initiated = false;
-        this._loaded = false;
-        this.location = position;
-        entities = new List<Entity>();
-        this.rootObject = MonoBehaviour.Instantiate(GameManager.instance.chunkObject, position.center.vector, Quaternion.identity, GameManager.instance.objectsRoot.transform);
+        get => _location;
     }
+    public readonly GameObject rootObject;
+    [ReadOnly]
+    public List<Entity> entities;
 
     public bool CheckKeep()
     {
@@ -41,13 +38,17 @@ public class Chunk
     /// <summary>
     /// 청크 초기화 (처음 생성)
     /// </summary>
-    public void Initiate()
+    public void Initiate(ChunkLocation position)
     {
         if (initiated)
         {
             return;
         }
 
+        this._initiated = false;
+        this._loaded = false;
+        this._location = position;
+        entities = new List<Entity>();
         SpawnObjects();
         _initiated = true;
     }
@@ -60,7 +61,6 @@ public class Chunk
         }
 
         rootObject.SetActive(true);
-        Initiate();
         this._loaded = true;
         foreach(Entity entity in entities)
         {

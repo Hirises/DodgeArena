@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject objectsRoot;
     [SerializeField]
-    public GameObject chunkObject;
+    public Chunk chunkObject;
     [SerializeField]
     public Player player;
     [SerializeField]
@@ -42,6 +42,13 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         UpdateChunk();
+    }
+
+    public void Spawn<T>(T target, WorldLocation location) where T : Entity
+    {
+        Entity instance = Instantiate(target, location.vector, Quaternion.identity, location.chunk.rootObject.transform);
+        instance.location = location;
+        instance.OnSpawn();
     }
 
     public void UpdateChunk()
@@ -81,13 +88,21 @@ public class GameManager : MonoBehaviour
         {
             return GetChunk(location);
         }
-
-        if (!chunks.ContainsKey(location))
-        {
-            chunks.Add(location, new Chunk(location));
-        }
         Chunk chunk = GetChunk(location);
         chunk.Load();
+        return chunk;
+    }
+
+    public Chunk SpawnChunk(ChunkLocation location)
+    {
+        if (chunks.ContainsKey(location))
+        {
+            return GetChunk(location);
+        }
+
+        Chunk chunk = Instantiate(chunkObject, location.center.vector, Quaternion.identity, objectsRoot.transform);
+        chunk.Initiate(location);
+        chunks.Add(location, chunk);
         return chunk;
     }
 
@@ -126,7 +141,7 @@ public class GameManager : MonoBehaviour
     {
         if (!chunks.ContainsKey(location))
         {
-            return LoadChunk(location);
+            return SpawnChunk(location);
         }
         Chunk chunk =  chunks[location];
         return chunk;

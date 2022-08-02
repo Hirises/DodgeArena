@@ -355,7 +355,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d7ba14dbf924ddf4aa8d7be23a6e0e35, type: 2}
   - {fileID: 11400000, guid: 41605be9de4f04e4692931c0dc8b343e, type: 2}
   objectsRoot: {fileID: 1236331380}
-  chunkObject: {fileID: 2718173031260316098, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
+  chunkObject: {fileID: 61806345724639106, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
   player: {fileID: 1546719922}
   chunkUpdateRange: 70
   chunkSaveRange: 60

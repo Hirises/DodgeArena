@@ -15,8 +15,8 @@ public class ChunkLocation
 
     public ChunkLocation(Vector2 location) 
     {
-        location.x = Mathf.Floor(location.x);
-        location.y = Mathf.Floor(location.y);
+        location.x = Mathf.Floor((location.x + GameManager.instance.chunkWeidth / 2) / GameManager.instance.chunkWeidth);
+        location.y = Mathf.Floor((location.y + GameManager.instance.chunkWeidth / 2) / GameManager.instance.chunkWeidth);
         this.vector = location;
     }
 

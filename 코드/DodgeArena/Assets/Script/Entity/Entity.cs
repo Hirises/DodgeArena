@@ -16,14 +16,18 @@ public abstract class Entity : MonoBehaviour
         set
         {
             transform.position = value.vector;
-            _location = location;
+            _location = value;
 
             //청크 업데이트
-            Chunk newChunk = location.chunk);
+            Chunk newChunk = value.chunk;
             if (!newChunk.Equals(chunk))    
             {
                 newChunk.entities.Add(this);
-                chunk.entities.Remove(this);
+                if(chunk != null)
+                {
+                    chunk.entities.Remove(this);
+                }
+                transform.parent = newChunk.rootObject.transform;
                 _chunk = newChunk;
             }
         }
