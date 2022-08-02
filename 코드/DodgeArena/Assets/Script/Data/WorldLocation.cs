@@ -6,6 +6,10 @@ using System;
 public class WorldLocation
 {
     public readonly Vector3 location;
+    public Vector2 flattenLocation
+    {
+        get => new Vector2(location.x, location.y);
+    }
 
     public WorldLocation(Vector3 location)
     {

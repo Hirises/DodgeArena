@@ -52,15 +52,7 @@ public class WildBoar : LivingEntity
     //À§Çù
     public IEnumerator Threaten()
     {
-        Vector3 player = GameManager.instance.player.gameObject.transform.position;
-        Vector3 self = transform.position;
-        Vector2 dir = new Vector2(player.x - self.x, player.y - self.y);
-        Debug.Log(dir.ToString());
-        dir.Normalize();
-        float angle = Vector2.SignedAngle(Vector2.right, dir);
-        Debug.Log(angle.ToString());
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-        spriteRenderer.flipY = dir.x <= 0;
+        LookAt(GameManager.instance.player.gameObject.transform.position);
         spriteRenderer.sprite = attack;
         timer.Reset();
         while (true)

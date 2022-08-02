@@ -20,9 +20,47 @@ public abstract class Entity : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 플레이어와의 거리를 비교합니다
+    /// </summary>
+    /// <param name="distance">임계 거리</param>
+    /// <returns></returns>
     protected bool CheckPlayerDistance(float distance)
     {
-        return Vector3.Distance(GameManager.instance.player.gameObject.transform.position, transform.position) < distance;
+        return CheckDistance(GameManager.instance.player.gameObject.transform.position, distance);
+    }
+
+    /// <summary>
+    /// 대상과의 거리를 비교합니다
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="distance"></param>
+    /// <returns></returns>
+    protected bool CheckDistance(Vector3 position, float distance)
+    {
+        return Vector3.Distance(position, transform.position) <= distance;
+    }
+
+    /// <summary>
+    /// 2D기준으로 대상을 바라봅니다. <br/>
+    /// Z회전이 0일때 오른쪽을 바라본다고 가정합니다.
+    /// </summary>
+    /// <param name="targetPos">바라볼 대상의 위치</param>
+    protected void LookAt(Vector3 targetPos)
+    {
+        LookAt(targetPos, Vector2.right);
+    }
+
+    /// <summary>
+    /// 2D기준으로 대상을 바라봅니다.
+    /// </summary>
+    /// <param name="targetPos">바라볼 대상의 위치</param>
+    /// <param name="zeroRotation">Z회전이 0일때 바라보는 방향</param>
+    protected void LookAt(Vector3 targetPos, Vector2 zeroRotation)
+    {
+        Vector3 angle = Util.LootAtRotation(transform.position, targetPos, zeroRotation);
+        transform.rotation = Quaternion.Euler(angle);
+        spriteRenderer.flipY = Mathf.Abs(angle.z) > 90;
     }
 
     private void LateUpdate()
@@ -30,10 +68,13 @@ public abstract class Entity : MonoBehaviour
         FixPosition();
     }
 
+    /// <summary>
+    /// 현재 위치를 보정합니다.
+    /// </summary>
     protected void FixPosition()
     {
-        Vector3 pos = this.transform.position;
-        this.transform.position = new Vector3(pos.x, pos.y, pos.y);
+        WorldLocation loc = new WorldLocation(this.transform.position);
+        location = loc;
     }
 
     /// <summary>
