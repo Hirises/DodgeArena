@@ -16,8 +16,8 @@ MonoBehaviour:
   minGroupCount: 1
   maxGroupCount: 3
   minCount: 1
-  maxCount: 3
-  density: 1.5
+  maxCount: 1
+  density: 0
   variants:
   - {fileID: 6005948440453704258, guid: 6db13d99d709f184c997b9480d3a11af, type: 3}
   - {fileID: 8545217746941271224, guid: 21cda78d5a9685b46bb7000cd2e2778c, type: 3}

@@ -11,6 +11,8 @@ public class Chunk : MonoBehaviour
     private bool _loaded;
     public bool loaded { get => _loaded; }
     public bool initiated { get => _initiated; }
+    [SerializeField]
+    [ReadOnly]
     private ChunkLocation _location;
     public ChunkLocation location
     {

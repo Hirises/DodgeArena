@@ -78,7 +78,6 @@ public class GameManager : MonoBehaviour
             if (!chunks.ContainsKey(location))
             {
                 SpawnChunk(location);
-                return;
             }
             LoadChunk(location);
         }
@@ -109,7 +108,6 @@ public class GameManager : MonoBehaviour
 
     public Chunk SpawnChunk(ChunkLocation location)
     {
-        Debug.LogError("error");
         if (chunks.ContainsKey(location))
         {
             return GetChunk(location);

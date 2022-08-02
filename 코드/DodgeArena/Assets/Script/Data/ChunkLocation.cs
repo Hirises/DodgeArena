@@ -15,8 +15,8 @@ public class ChunkLocation
 
     public ChunkLocation(Vector2 location) 
     {
-        //location.x = Mathf.Floor((location.x + GameManager.instance.chunkWeidth / 2) / GameManager.instance.chunkWeidth);
-        //location.y = Mathf.Floor((location.y + GameManager.instance.chunkWeidth / 2) / GameManager.instance.chunkWeidth);
+        location.x = Mathf.Floor(location.x);
+        location.y = Mathf.Floor(location.y);
         this.vector = location;
     }
 
@@ -50,5 +50,10 @@ public class ChunkLocation
     public override int GetHashCode()
     {
         return HashCode.Combine(vector);
+    }
+
+    public override string ToString()
+    {
+        return vector.ToString();
     }
 }
