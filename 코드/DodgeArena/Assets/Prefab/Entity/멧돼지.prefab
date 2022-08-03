@@ -110,7 +110,7 @@ MonoBehaviour:
   awarenessDistance: 13
   threateningDuration: 0.5
   dashSpeed: 12
-  dashDistance: 9
+  dashDistance: 7
   restDuration: 1.5
 --- !u!50 &1697931047449044390
 Rigidbody2D:

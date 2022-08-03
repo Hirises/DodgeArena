@@ -7,12 +7,9 @@ using NaughtyAttributes;
 // (0,0) 기준 정사각형 배열
 public class Chunk : MonoBehaviour
 {
-    private bool _valid = false;
-    private bool _initiated = false;
-    private bool _loaded;
-    public bool loaded { get => _loaded; }
-    public bool initiated { get => _initiated; }
-    public bool valid { get => _valid; }
+    public bool loaded { get; private set; }
+    public bool initiated { get; private set; }
+    public bool valid { get; private set; }
     [SerializeField]
     [ReadOnly]
     private ChunkLocation _location;

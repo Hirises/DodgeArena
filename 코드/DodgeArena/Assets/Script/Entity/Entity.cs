@@ -49,16 +49,10 @@ public abstract class Entity : MonoBehaviour
             }
         }
     }
-    private Chunk _chunk;
-    public Chunk chunk
-    {
-        get => _chunk;
-    }
-    private bool _initiated = false;
-    public bool initiated { get => _initiated; }
-
-    private bool _loaded = false;
-    public bool loaded { get => _loaded; }
+    public Chunk chunk { get; private set; }
+    public bool initiated { get; private set; }
+    public bool loaded { get; private set; }
+    public bool filped { get; private set; }
 
     public void Initiated(WorldLocation location, Chunk chunk)
     {
@@ -70,6 +64,7 @@ public abstract class Entity : MonoBehaviour
         this._location = location;
         this._chunk = chunk;
         this._loaded = false;
+        FixFlip();
         chunk.entities.Add(this);
         transform.parent = chunk.gameObject.transform;
     }
@@ -114,7 +109,7 @@ public abstract class Entity : MonoBehaviour
     {
         Vector3 angle = Util.LootAtRotation(transform.position, targetPos, zeroRotation);
         transform.rotation = Quaternion.Euler(angle);
-        spriteRenderer.flipY = Mathf.Abs(angle.z) > 90;
+        FixFlip();
     }
 
     private void LateUpdate()
@@ -129,6 +124,18 @@ public abstract class Entity : MonoBehaviour
     {
         WorldLocation loc = new WorldLocation(this.transform.position);
         location = loc;
+    }
+
+    /// <summary>
+    /// 2D 회전시 위아래 반전을 보정합니다
+    /// </summary>
+    protected void FixFlip()
+    {
+        if (Mathf.Abs(transform.rotation.eulerAngles.z) > 90 != filped)
+        {
+            _filped = !_filped;
+            transform.localScale = new Vector3(transform.localScale.x, -1 * transform.localScale.y, transform.localScale.z);
+        }
     }
 
     public void Remove()

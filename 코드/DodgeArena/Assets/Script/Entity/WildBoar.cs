@@ -22,6 +22,19 @@ public class WildBoar : LivingEntity
     [SerializeField]
     private float restDuration;
     private Timer timer = new Timer();
+    public State state
+    {
+        get;
+        private set;
+    }
+
+    public enum State
+    {
+        Stand,
+        Threaten,
+        Dash,
+        Rest
+    }
 
     public override bool OnLoad()
     {
@@ -49,6 +62,7 @@ public class WildBoar : LivingEntity
     //¼­ÀÖ±â
     public IEnumerator Stand()
     {
+        state = State.Stand;
         while (true)
         {
             if (CheckPlayerDistance(awarenessDistance))
@@ -64,6 +78,7 @@ public class WildBoar : LivingEntity
     //À§Çù
     public IEnumerator Threaten()
     {
+        state = State.Threaten;
         LookAt(GameManager.instance.player.gameObject.transform.position);
         spriteRenderer.sprite = attack;
         timer.Reset();
@@ -82,6 +97,7 @@ public class WildBoar : LivingEntity
     //µ¹Áø
     public IEnumerator Dash()
     {
+        state = State.Dash;
         Vector3 dir = transform.right;
         float distance = Util.ToVector(transform.position, GameManager.instance.player.gameObject.transform.position).magnitude + dashDistance;
         float dashDuration = distance / dashSpeed;
@@ -102,6 +118,7 @@ public class WildBoar : LivingEntity
     //ÈÞ½Ä
     public IEnumerator Rest()
     {
+        state = State.Rest;
         rigidbody.velocity = Vector2.zero;
         spriteRenderer.sprite = normal;
         timer.Reset();
