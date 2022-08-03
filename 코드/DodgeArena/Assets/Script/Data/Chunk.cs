@@ -32,12 +32,12 @@ public class Chunk : MonoBehaviour
         }
 
         gameObject.SetActive(false);
-        this._loaded = false;
-        this._initiated = false;
+        this.loaded = false;
+        this.initiated = false;
         this._location = position;
         this.spawnData = GameManager.instance.spawnDataSetter.GenerateNewSpawnData();
         entities = new List<Entity>();
-        _valid = true;
+        valid = true;
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class Chunk : MonoBehaviour
         }
 
         SpawnObjects();
-        _initiated = true;
+        initiated = true;
     }
 
     public void Load()
@@ -67,7 +67,7 @@ public class Chunk : MonoBehaviour
         {
             entity.OnLoad();
         }
-        this._loaded = true;
+        this.loaded = true;
     }
 
     public void Unload()
@@ -77,7 +77,7 @@ public class Chunk : MonoBehaviour
             return;
         }
 
-        this._loaded = false;
+        this.loaded = false;
         foreach (Entity entity in entities)
         {
             entity.OnUnload();

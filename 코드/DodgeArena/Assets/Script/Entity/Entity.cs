@@ -35,7 +35,7 @@ public abstract class Entity : MonoBehaviour
                     chunk.entities.Remove(this);
                 }
                 transform.parent = newChunk.gameObject.transform;
-                _chunk = newChunk;
+                chunk = newChunk;
 
                 //청크 상태 반영
                 if (newChunk.loaded)
@@ -62,8 +62,8 @@ public abstract class Entity : MonoBehaviour
         }
 
         this._location = location;
-        this._chunk = chunk;
-        this._loaded = false;
+        this.chunk = chunk;
+        this.loaded = false;
         FixFlip();
         chunk.entities.Add(this);
         transform.parent = chunk.gameObject.transform;
@@ -133,7 +133,7 @@ public abstract class Entity : MonoBehaviour
     {
         if (Mathf.Abs(transform.rotation.eulerAngles.z) > 90 != filped)
         {
-            _filped = !_filped;
+            filped = !filped;
             transform.localScale = new Vector3(transform.localScale.x, -1 * transform.localScale.y, transform.localScale.z);
         }
     }
@@ -164,7 +164,7 @@ public abstract class Entity : MonoBehaviour
         {
             return false;
         }
-        _loaded = true;
+        loaded = true;
 
         return true;
     }
@@ -178,7 +178,7 @@ public abstract class Entity : MonoBehaviour
         {
             return false;
         }
-        _loaded = false;
+        loaded = false;
 
         return true;
     }

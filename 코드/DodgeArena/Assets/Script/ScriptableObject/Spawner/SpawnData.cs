@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SpawnData
-{
+public class SpawnData{
     /// <summary>
     /// 해당 스폰 지역의 위험도 <br/>
     /// 이 수치까지만 적이 스폰된다
@@ -19,16 +18,14 @@ public class SpawnData
     public readonly int initialReturns;
     public int returns;
 
-    public SpawnData(int risk, int returns)
-    {
+    public SpawnData(int risk, int returns) {
         this.initialRisk = risk;
         this.initialReturns = returns;
 
         Reset();
     }
 
-    public void Reset()
-    {
+    public void Reset() {
         this.risk = 0;
         this.returns = 0;
     }
