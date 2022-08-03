@@ -159,7 +159,9 @@ public class GameManager : MonoBehaviour
     public void RemoveChunk(Chunk chunk)
     {
         chunk.Unload();
-        foreach (Entity entity in chunk.entities)
+        List<Entity> copy = new List<Entity>();
+        copy.AddRange(chunk.entities);
+        foreach (Entity entity in copy)
         {
             entity.Remove();
         }

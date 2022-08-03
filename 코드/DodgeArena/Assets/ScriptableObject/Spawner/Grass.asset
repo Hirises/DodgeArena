@@ -18,10 +18,8 @@ MonoBehaviour:
   returns: 0
   minGroup: 1
   maxGrounp: 3
-  groupDense: 10
   minCount: 1
   maxCouint: 3
   dense: 1
   variants:
-  - {fileID: 6005948440453704258, guid: 6db13d99d709f184c997b9480d3a11af, type: 3}
-  - {fileID: 8545217746941271224, guid: 21cda78d5a9685b46bb7000cd2e2778c, type: 3}
+  - {fileID: 6185907691642991307, guid: 6db13d99d709f184c997b9480d3a11af, type: 3}
