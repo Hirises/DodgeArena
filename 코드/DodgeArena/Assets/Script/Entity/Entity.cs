@@ -10,8 +10,10 @@ using System;
 public abstract class Entity : MonoBehaviour
 {
     [SerializeField]
+    [BoxGroup("Entity")]
     protected EntityType.Type entityType;
     [SerializeField]
+    [BoxGroup("Entity")]
     protected SpriteRenderer spriteRenderer;
     [SerializeField]
     protected Collider2D[] innerColliders;

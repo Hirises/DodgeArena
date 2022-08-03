@@ -1,32 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 /// <summary>
 /// ¸äµÅÁö °´Ã¼
 /// </summary>
-public class WildBoar : LivingEntity
-{
+public class WildBoar : LivingEntity {
     [SerializeField]
+    [BoxGroup("WildBoar")]
     private Sprite normal;
     [SerializeField]
+    [BoxGroup("WildBoar")]
     private Sprite attack;
     [SerializeField]
+    [BoxGroup("WildBoar")]
     private float awarenessDistance;
     [SerializeField]
+    [BoxGroup("WildBoar")]
     private float threateningDuration;
     [SerializeField]
+    [BoxGroup("WildBoar")]
     private float dashSpeed;
     [SerializeField]
+    [BoxGroup("WildBoar")]
     private float dashDistance;
     [SerializeField]
+    [BoxGroup("WildBoar")]
     private float restDuration;
-    private Timer timer = new Timer();
-    public State state
-    {
+    [ShowNativeProperty]
+    public State state {
         get;
         private set;
     }
+    private Timer timer = new Timer();
 
     public enum State
     {
