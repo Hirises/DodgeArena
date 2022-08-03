@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using System;
 
 /// <summary>
 /// 씬에 스폰되는 모든 객체의 부모
@@ -12,12 +13,15 @@ public abstract class Entity : MonoBehaviour
     protected EntityType.Type entityType;
     [SerializeField]
     protected SpriteRenderer spriteRenderer;
+    [SerializeField]
+    protected Collider2D[] innerColliders;
     private WorldLocation _location;
     public WorldLocation location
     {
         get => _location;
         set
         {
+            //위치 재정렬
             transform.position = value.vector - new Vector3(0, 0, spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit);
             _location = value;
 

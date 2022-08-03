@@ -14,10 +14,12 @@ public class EntityType
     public enum Type
     {
         Undefined,
+        Player,
         Grass,
         WildBoar
     }
 
+    public static readonly EntityType Player = new EntityType(Type.Player);
     public static readonly EntityType Grass = new EntityType(Type.Grass);
     public static readonly EntityType WildBoar = new EntityType(Type.WildBoar);
 
