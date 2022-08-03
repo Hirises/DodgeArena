@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entities: []
+  spawnData: {fileID: 11400000, guid: 7c1a4de2d3bb8864e98545e9153956ce, type: 2}

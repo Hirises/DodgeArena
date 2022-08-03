@@ -33,9 +33,8 @@ public class WorldLocation
 
     public WorldLocation Randomize(float half)
     {
-        System.Random random = new System.Random();
-        return new WorldLocation(vector + new Vector3(Convert.ToSingle(random.NextDouble()) * half * 2 - half,
-           Convert.ToSingle(random.NextDouble()) * half * 2 - half, 0));
+        return new WorldLocation(vector + new Vector3(Random.instance.NextFloat() * half * 2 - half,
+           Random.instance.NextFloat() * half * 2 - half, 0));
     }
 
     public static WorldLocation operator +(WorldLocation o1, WorldLocation o2)

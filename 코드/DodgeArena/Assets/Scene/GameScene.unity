@@ -5163,8 +5163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eca88e66a9c4ca840ba4c12258709a16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawners:
-  - {fileID: 11400000, guid: d7ba14dbf924ddf4aa8d7be23a6e0e35, type: 2}
+  spawners: []
   objectsRoot: {fileID: 1236331380}
   chunkObject: {fileID: 61806345724639106, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
   player: {fileID: 1546719922}

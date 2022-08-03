@@ -20,12 +20,12 @@ public class Chunk : MonoBehaviour
     {
         get => _location;
     }
-    public readonly GameObject rootObject;
-    [ReadOnly]
+    [HideInInspector]
     public List<Entity> entities;
+    public SpawnData spawnData;
 
     /// <summary>
-    /// 没农 檬扁拳 (贸澜 积己)
+    /// 没农 府悸 (贸澜 积己矫)
     /// </summary>
     public void ResetProperties(ChunkLocation position)
     {
@@ -42,6 +42,9 @@ public class Chunk : MonoBehaviour
         _valid = true;
     }
 
+    /// <summary>
+    /// 没农 檬扁拳 (贸澜 Load瞪 锭)
+    /// </summary>
     public void Initiate()
     {
         if (initiated)
@@ -94,10 +97,7 @@ public class Chunk : MonoBehaviour
     {
         foreach(Spawner spawner in GameManager.instance.spawners)
         {
-            if (spawner.CanSpawnWith(this))
-            {
-                entities.AddRange(spawner.Spawn(this));
-            }
+            spawner.Spawn(this);
         }
     }
 
