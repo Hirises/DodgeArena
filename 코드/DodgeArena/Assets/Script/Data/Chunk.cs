@@ -103,9 +103,14 @@ public class Chunk : MonoBehaviour
     }
 
     // 청크내의 랜덤한 위치를 반환
-    public WorldLocation RandomPosition()
+    public WorldLocation RandomLocation()
     {
-        return location.center.Randomize(GameManager.instance.chunkWeidth / 2);
+        return RandomLocation(0);
+    }
+
+    public WorldLocation RandomLocation(float margin)
+    {
+        return location.center.Randomize((GameManager.instance.chunkWeidth - margin) / 2);
     }
 
     public override bool Equals(object obj)

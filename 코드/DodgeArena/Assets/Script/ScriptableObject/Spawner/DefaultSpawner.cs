@@ -21,8 +21,6 @@ public class DefaultSpawner : Spawner
     public int minGroup = 1;
     [BoxGroup("Group")]
     public int maxGrounp = 1;
-    [BoxGroup("Group")]
-    public float groupDense = 10;
     [BoxGroup("Individual")]
     public int minCount = 1;
     [BoxGroup("Individual")]
@@ -53,7 +51,7 @@ public class DefaultSpawner : Spawner
             for(int i = 0; i < group; i++)
             {
                 //그룹 기준 위치 설정 & 그룹에 생성될 개채수 설정
-                WorldLocation groupLocation = chunk.location.center.Randomize(groupDense);
+                WorldLocation groupLocation = chunk.RandomLocation(dense);
                 int count = Random.instance.RandomRange(minGroup, maxGrounp);
 
                 //보상(리턴) 수치 확인
