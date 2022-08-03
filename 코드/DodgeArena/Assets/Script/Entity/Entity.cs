@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 /// <summary>
 /// 씬에 스폰되는 모든 객체의 부모
 /// </summary>
 public abstract class Entity : MonoBehaviour
 {
+    [SerializeField]
+    protected EntityType.Type entityType;
     [SerializeField]
     protected SpriteRenderer spriteRenderer;
     private WorldLocation _location;

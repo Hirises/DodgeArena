@@ -63,13 +63,14 @@ public class WildBoar : LivingEntity
         StartCoroutine("Dash");
     }
 
-    //À§Çù
+    //µ¹Áø
     public IEnumerator Dash()
     {
-        rigidbody.velocity = transform.right * dashSpeed;
+        Vector3 dir = transform.right;
         timer.Reset();
         while (true)
         {
+            rigidbody.velocity = dir * dashSpeed;
             yield return null;
             timer.Tick();
             if (timer.Check(dashDuration))
