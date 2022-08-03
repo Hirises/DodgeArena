@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     public float chunkLoadRange;
     [SerializeField]
     public float chunkWeidth;
+    [SerializeField]
+    public SpawnDataSetter spawnDataSetter;
 
     private Dictionary<ChunkLocation, Chunk> chunks = new Dictionary<ChunkLocation, Chunk>();
 

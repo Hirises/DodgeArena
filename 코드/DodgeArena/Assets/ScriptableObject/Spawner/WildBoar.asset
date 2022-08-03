@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 488d6d7d703e0a44981966c9e10d387e, type: 3}
+  m_Name: WildBoar
+  m_EditorClassIdentifier: 
+  UseRate: 1
+  rate: 0.5
+  risk: 10
+  returns: 0
+  minGroup: 1
+  maxGrounp: 2
+  groupDense: 10
+  minCount: 1
+  maxCouint: 2
+  dense: 2
+  variants:
+  - {fileID: 1697931047449044391, guid: e1e4cce6851f1604aaf487e64166e83f, type: 3}

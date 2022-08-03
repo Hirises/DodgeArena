@@ -38,6 +38,7 @@ public class Chunk : MonoBehaviour
         this._loaded = false;
         this._initiated = false;
         this._location = position;
+        this.spawnData = GameManager.instance.spawnDataSetter.GenerateNewSpawnData();
         entities = new List<Entity>();
         _valid = true;
     }

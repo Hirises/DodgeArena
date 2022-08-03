@@ -33,6 +33,10 @@ public class WorldLocation
 
     public WorldLocation Randomize(float half)
     {
+        if(half == 0)
+        {
+            return this;
+        }
         return new WorldLocation(vector + new Vector3(Random.instance.NextFloat() * half * 2 - half,
            Random.instance.NextFloat() * half * 2 - half, 0));
     }
