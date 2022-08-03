@@ -65,12 +65,12 @@ public class Chunk : MonoBehaviour
         }
 
         gameObject.SetActive(true);
-        this._loaded = true;
         Initiate();
         foreach(Entity entity in entities)
         {
             entity.OnLoad();
         }
+        this._loaded = true;
     }
 
     public void Unload()

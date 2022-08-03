@@ -5323,7 +5323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 1546719921}
   player: {fileID: 1546719922}
-  playerSpeed: 7
+  playerSpeed: 9
 --- !u!50 &1546719921
 Rigidbody2D:
   serializedVersion: 4

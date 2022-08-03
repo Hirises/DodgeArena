@@ -18,16 +18,32 @@ public class WildBoar : LivingEntity
     [SerializeField]
     private float dashSpeed;
     [SerializeField]
-    private float dashDuration;
+    private float dashDistance;
     [SerializeField]
     private float restDuration;
     private Timer timer = new Timer();
 
-    public override void OnLoad()
+    public override bool OnLoad()
     {
-        base.OnLoad();
+        if(!base.OnLoad()){
+            return false;
+        }
 
         StartCoroutine("Stand");
+
+        return true;
+    }
+
+    public override bool OnUnload()
+    {
+        if (!base.OnUnload())
+        {
+            return false;
+        }
+
+        StopAllCoroutines();
+
+        return true;
     }
 
     //º≠¿÷±‚
@@ -67,6 +83,8 @@ public class WildBoar : LivingEntity
     public IEnumerator Dash()
     {
         Vector3 dir = transform.right;
+        float distance = Util.ToVector(transform.position, GameManager.instance.player.gameObject.transform.position).magnitude + dashDistance;
+        float dashDuration = distance / dashSpeed;
         timer.Reset();
         while (true)
         {

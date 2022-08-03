@@ -36,6 +36,16 @@ public abstract class Entity : MonoBehaviour
                 }
                 transform.parent = newChunk.gameObject.transform;
                 _chunk = newChunk;
+
+                //청크 상태 반영
+                if (newChunk.loaded)
+                {
+                    OnLoad();
+                }
+                else
+                {
+                    OnUnload();
+                }
             }
         }
     }
@@ -140,25 +150,30 @@ public abstract class Entity : MonoBehaviour
     /// <summary>
     /// 이 개체가 포함된 청크가 로드되었을때 호출됩니다
     /// </summary>
-    public virtual void OnLoad()
+    /// <returns>성공적으로 실행되었는지 여부</returns>
+    public virtual bool OnLoad()
     {
         if (loaded)
         {
-            return;
+            return false;
         }
         _loaded = true;
+
+        return true;
     }
 
     /// <summary>
     /// 이 개체가 포함된 청크가 언로드되었을때 호출됩니다
     /// </summary>
-    public virtual void OnUnload()
+    public virtual bool OnUnload()
     {
         if (!loaded)
         {
-            return;
+            return false;
         }
         _loaded = false;
+
+        return true;
     }
 
     /// <summary>

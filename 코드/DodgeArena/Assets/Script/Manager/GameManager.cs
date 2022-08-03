@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
             Destroy(transform);
         }
 
+        player.location = new WorldLocation(new Vector2(0, 0));
         UpdateChunk();
     }
 
