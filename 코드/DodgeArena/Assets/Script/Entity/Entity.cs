@@ -7,16 +7,15 @@ using System;
 /// <summary>
 /// 씬에 스폰되는 모든 객체의 부모
 /// </summary>
-public abstract class Entity : MonoBehaviour
-{
+public abstract class Entity : MonoBehaviour {
+    [SerializeField]
+    protected Collider2D[] innerColliders;
     [SerializeField]
     [BoxGroup("Entity")]
     protected EntityType.Type entityType;
     [SerializeField]
     [BoxGroup("Entity")]
     protected SpriteRenderer spriteRenderer;
-    [SerializeField]
-    protected Collider2D[] innerColliders;
     private WorldLocation _location;
     public WorldLocation location
     {
