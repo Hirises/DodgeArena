@@ -48,14 +48,18 @@ public class GameManager : MonoBehaviour
 
     public T Spawn<T>(T target, WorldLocation location) where T : Entity
     {
-        return Spawn(target, location, location.chunk);
-    }
-
-    public T Spawn<T>(T target, WorldLocation location, Chunk chunk) where T : Entity
-    {
+        Chunk chunk = location.chunk;
         T instance = Instantiate(target, location.vector, Quaternion.identity, chunk.gameObject.transform);
         instance.location = location;
         instance.OnSpawn();
+        if (chunk.loaded)
+        {
+            instance.OnLoad();
+        }
+        else
+        {
+            instance.OnUnload();
+        }
         return instance;
     }
 
@@ -157,7 +161,7 @@ public class GameManager : MonoBehaviour
         chunk.Unload();
         foreach (Entity entity in chunk.entities)
         {
-            entity.OnDespawn();
+            entity.Remove();
         }
         chunks.Remove(chunk.location);
         Destroy(chunk.gameObject);

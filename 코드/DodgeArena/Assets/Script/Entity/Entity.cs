@@ -40,6 +40,9 @@ public abstract class Entity : MonoBehaviour
     private bool _initiated = false;
     public bool initiated { get => _initiated; }
 
+    private bool _loaded = false;
+    public bool loaded { get => _loaded; }
+
     public void Initiated(WorldLocation location, Chunk chunk)
     {
         if (initiated)
@@ -49,6 +52,7 @@ public abstract class Entity : MonoBehaviour
 
         this._location = location;
         this._chunk = chunk;
+        this._loaded = false;
         chunk.entities.Add(this);
         transform.parent = chunk.gameObject.transform;
     }
@@ -110,6 +114,13 @@ public abstract class Entity : MonoBehaviour
         location = loc;
     }
 
+    public void Remove()
+    {
+        OnDespawn();
+        chunk.entities.Remove(this);
+        Destroy(gameObject);
+    }
+
     /// <summary>
     /// 이 개체가 처음 생성되었을때 호출됩니다 <br/>
     /// <see cref="OnLoad()"/>보다 먼저 호출됩니다
@@ -120,26 +131,38 @@ public abstract class Entity : MonoBehaviour
     }
 
     /// <summary>
-    /// 이 개체가 로드되었을때 호출됩니다
+    /// 이 개체가 포함된 청크가 로드되었을때 호출됩니다
     /// </summary>
     public virtual void OnLoad()
     {
-
+        if (loaded)
+        {
+            return;
+        }
+        _loaded = true;
     }
 
     /// <summary>
-    /// 이 개체가 언로드되었을때 호출됩니다
+    /// 이 개체가 포함된 청크가 언로드되었을때 호출됩니다
     /// </summary>
     public virtual void OnUnload()
     {
-
+        if (!loaded)
+        {
+            return;
+        }
+        _loaded = false;
     }
 
     /// <summary>
     /// 이 개체가 완전히 파괴될 때 호출됩니다
+    /// 항상 <see cref="OnUnload()"/> 이후에 호출됩니다
     /// </summary>
     public virtual void OnDespawn()
     {
-
+        if (loaded)
+        {
+            OnUnload();
+        }
     }
 }

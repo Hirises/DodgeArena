@@ -25,6 +25,8 @@ public class WildBoar : LivingEntity
 
     public override void OnLoad()
     {
+        base.OnLoad();
+
         StartCoroutine("Stand");
     }
 
