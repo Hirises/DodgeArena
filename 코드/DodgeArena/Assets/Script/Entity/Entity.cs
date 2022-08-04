@@ -9,13 +9,17 @@ using System;
 /// </summary>
 public abstract class Entity : MonoBehaviour {
     [SerializeField]
-    protected Collider2D[] innerColliders;
-    [SerializeField]
     [BoxGroup("Entity")]
-    protected EntityType.Type entityType;
+    public EntityType.Type entityType;
     [SerializeField]
     [BoxGroup("Entity")]
     protected SpriteRenderer spriteRenderer;
+    [SerializeField]
+    [BoxGroup("Entity")]
+    protected new Rigidbody2D rigidbody;
+    [SerializeField]
+    [BoxGroup("Entity")]
+    protected SubCollider triggerCollider;
     private WorldLocation _location;
     public WorldLocation location
     {
@@ -23,7 +27,9 @@ public abstract class Entity : MonoBehaviour {
         set
         {
             //위치 재정렬
-            transform.position = value.vector - new Vector3(0, 0, spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit);
+            int order = Mathf.FloorToInt((value.vector.y - spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit - GameManager.instance.player.transform.position.y)
+                * spriteRenderer.sprite.pixelsPerUnit);
+            spriteRenderer.sortingOrder = order;
             _location = value;
 
             //청크 업데이트
@@ -65,6 +71,8 @@ public abstract class Entity : MonoBehaviour {
         this._location = location;
         this.chunk = chunk;
         this.loaded = false;
+        this.triggerCollider.onTriggerEnter += OnColliderEnter;
+        this.triggerCollider.onTriggerExit += OnColliderExit;
         FixFlip();
         chunk.entities.Add(this);
         transform.parent = chunk.gameObject.transform;
@@ -116,6 +124,7 @@ public abstract class Entity : MonoBehaviour {
     private void LateUpdate()
     {
         FixPosition();
+        FixFlip();
     }
 
     /// <summary>
@@ -130,12 +139,36 @@ public abstract class Entity : MonoBehaviour {
     /// <summary>
     /// 2D 회전시 위아래 반전을 보정합니다
     /// </summary>
-    protected void FixFlip()
-    {
-        if (Mathf.Abs(transform.rotation.eulerAngles.z) > 90 != filped)
-        {
+    protected void FixFlip() {
+        if(transform.right.x < 0 != filped) {
             filped = !filped;
             transform.localScale = new Vector3(transform.localScale.x, -1 * transform.localScale.y, transform.localScale.z);
+        }
+    }
+
+    /// <summary>
+    /// 다른 물체와 충돌했을 때 (이벤트에 등록)
+    /// </summary>
+    private void OnColliderEnter(Collider2D collision) {
+        if(collision.gameObject.TryGetComponent(out Entity other)) {
+            OnStartCollide(other);
+        } else if(collision.gameObject.TryGetComponent(out SubCollider sub)) {
+            if(sub.root.TryGetComponent(out Entity parent)) {
+                OnStartCollide(parent);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 다른 물체와 충돌이 끝났을 때 (이벤트에 등록)
+    /// </summary>
+    private void OnColliderExit(Collider2D collision) {
+        if(collision.gameObject.TryGetComponent(out Entity other)) {
+            OnEndCollide(other);
+        } else if(collision.gameObject.TryGetComponent(out SubCollider sub)) {
+            if(sub.root.TryGetComponent(out Entity parent)) {
+                OnEndCollide(parent);
+            }
         }
     }
 
@@ -156,9 +189,10 @@ public abstract class Entity : MonoBehaviour {
     }
 
     /// <summary>
-    /// 이 개체가 포함된 청크가 로드되었을때 호출됩니다
+    /// 이 개체가 포함된 청크가 로드되었을때 호출됩니다 <br/>
+    /// 항상 base.OnLoad()를 호출한 후 성공여부를 확인해야합니다
     /// </summary>
-    /// <returns>성공적으로 실행되었는지 여부</returns>
+    /// <returns>성공적으로 실행되었는지 여부<br/>false 반환시 더이상 실행하지 않는다</returns>
     public virtual bool OnLoad()
     {
         if (loaded)
@@ -171,8 +205,10 @@ public abstract class Entity : MonoBehaviour {
     }
 
     /// <summary>
-    /// 이 개체가 포함된 청크가 언로드되었을때 호출됩니다
+    /// 이 개체가 포함된 청크가 언로드되었을때 호출됩니다 <br/>
+    /// 항상 base.OnUnload()를 호출한 후 성공여부를 확인해야합니다
     /// </summary>
+    /// <returns>성공적으로 실행되었는지 여부<br/>false 반환시 더이상 실행하지 않는다</returns>
     public virtual bool OnUnload()
     {
         if (!loaded)
@@ -194,5 +230,21 @@ public abstract class Entity : MonoBehaviour {
         {
             OnUnload();
         }
+    }
+
+    /// <summary>
+    /// 이 개체가 다른 개체와 충돌했을 때 호출됩니다
+    /// </summary>
+    /// <param name="other">충돌한 개체</param>
+    public virtual void OnStartCollide(Entity other) {
+
+    }
+
+    /// <summary>
+    /// 이 개체와 다른 개체와의 충돌이 끝났을 때 호출됩니다
+    /// </summary>
+    /// <param name="other">충돌한 개체</param>
+    public virtual void OnEndCollide(Entity other) {
+
     }
 }

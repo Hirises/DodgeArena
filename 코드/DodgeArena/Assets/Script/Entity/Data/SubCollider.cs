@@ -1,0 +1,37 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+/// <summary>
+/// 콜라이더의 레이어를 분리할때 이벤트를 따로 받을 수 있도록 해주는 컴포넌트
+/// </summary>
+public class SubCollider : MonoBehaviour
+{
+    public GameObject root;
+    public delegate void EventHandler(Collider2D collision);
+    /// <summary>
+    /// 해당 콜라이더에 대한 OnTriggerEnter2D 이벤트
+    /// </summary>
+    public event EventHandler onTriggerEnter;
+    /// <summary>
+    /// 해당 콜라이더에 대한 OnTriggerStay2D 이벤트
+    /// </summary>
+    public event EventHandler onTriggerStay;
+    /// <summary>
+    /// 해당 콜라이더에 대한 OnTriggerExit2D 이벤트
+    /// </summary>
+    public event EventHandler onTriggerExit;
+        
+    private void OnTriggerEnter2D(Collider2D collision) {
+        Debug.Log("collde");
+        onTriggerEnter?.Invoke(collision);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision) {
+        onTriggerStay?.Invoke(collision);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        onTriggerExit?.Invoke(collision);
+    }
+}

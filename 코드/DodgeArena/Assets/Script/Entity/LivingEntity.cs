@@ -8,7 +8,5 @@ using NaughtyAttributes;
 /// </summary>
 public class LivingEntity : Entity
 {
-    [SerializeField]
-    [BoxGroup("LivingEntity")]
-    protected new Rigidbody2D rigidbody;
+
 }

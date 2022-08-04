@@ -27,6 +27,9 @@ public class WildBoar : LivingEntity {
     private float dashDistance;
     [SerializeField]
     [BoxGroup("WildBoar")]
+    private int dashDamage;
+    [SerializeField]
+    [BoxGroup("WildBoar")]
     private float restDuration;
     [ShowNativeProperty]
     public State state {
@@ -120,6 +123,14 @@ public class WildBoar : LivingEntity {
             }
         }
         StartCoroutine("Rest");
+    }
+
+    public override void OnStartCollide(Entity other) {
+        Debug.Log(other.entityType.ToString());
+        if(state == State.Dash && other.entityType == EntityType.Type.Player) {
+            Player player = (Player) other;
+            player.Damage(dashDamage);
+        }
     }
 
     //ÈÞ½Ä

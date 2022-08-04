@@ -22,7 +22,8 @@ public class WorldLocation
 
     public WorldLocation(Vector3 location)
     {
-        location.z = location.y;
+        //location.z = location.y;
+        location.z = 0;
         this.vector = location;
     }
 

@@ -1,29 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
     [SerializeField]
+    [BoxGroup("Reference")]
+    public Player player;
+
+    [SerializeField]
+    [BoxGroup("Spawner")]
     public Spawner[] spawners;
     [SerializeField]
+    [BoxGroup("Spawner")]
+    public SpawnDataSetter spawnDataSetter;
+
+    [SerializeField]
+    [BoxGroup("Chunk")]
     public GameObject objectsRoot;
     [SerializeField]
+    [BoxGroup("Chunk")]
     public Chunk chunkObject;
     [SerializeField]
-    public Player player;
-    [SerializeField]
+    [BoxGroup("Chunk")]
     public float chunkUpdateRange;
     [SerializeField]
+    [BoxGroup("Chunk")]
     public float chunkSaveRange;
     [SerializeField]
+    [BoxGroup("Chunk")]
     public float chunkLoadRange;
     [SerializeField]
+    [BoxGroup("Chunk")]
     public float chunkWeidth;
+
     [SerializeField]
-    public SpawnDataSetter spawnDataSetter;
+    [BoxGroup("Test")]
+    public TextMeshProUGUI debugText;
+
+
 
     private Dictionary<ChunkLocation, Chunk> chunks = new Dictionary<ChunkLocation, Chunk>();
 
@@ -39,29 +59,18 @@ public class GameManager : MonoBehaviour
         }
 
         player.location = new WorldLocation(new Vector2(0, 0));
+        player.OnSpawn();
         UpdateChunk();
     }
 
     private void Update()
     {
         UpdateChunk();
+        Test();
     }
 
-    public T Spawn<T>(T target, WorldLocation location) where T : Entity
-    {
-        Chunk chunk = location.chunk;
-        T instance = Instantiate(target, location.vector, Quaternion.identity, chunk.gameObject.transform);
-        instance.location = location;
-        instance.OnSpawn();
-        if (chunk.loaded)
-        {
-            instance.OnLoad();
-        }
-        else
-        {
-            instance.OnUnload();
-        }
-        return instance;
+    public void Test() {
+        debugText.text = player.hp.ToString();
     }
 
     public void UpdateChunk()
@@ -168,5 +177,25 @@ public class GameManager : MonoBehaviour
         }
         chunks.Remove(chunk.location);
         Destroy(chunk.gameObject);
+    }
+
+    /// <summary>
+    /// 입력된 개체를 월드에 생성합니다
+    /// </summary>
+    /// <typeparam name="T">생성할 개체의 타입</typeparam>
+    /// <param name="target">생성할 개체</param>
+    /// <param name="location">생성할 위치</param>
+    /// <returns>생성된 개체</returns>
+    public T Spawn<T>(T target, WorldLocation location) where T : Entity {
+        Chunk chunk = location.chunk;
+        T instance = Instantiate(target, location.vector, Quaternion.identity, chunk.gameObject.transform);
+        instance.location = location;
+        instance.OnSpawn();
+        if(chunk.loaded) {
+            instance.OnLoad();
+        } else {
+            instance.OnUnload();
+        }
+        return instance;
     }
 }
