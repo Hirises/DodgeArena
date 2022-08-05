@@ -124,9 +124,10 @@ public abstract class Entity : MonoBehaviour {
     /// <param name="currentLocation">현재 위치</param>
     protected void FixPosition(WorldLocation currentLocation) {
         //위치 재정렬
-        int order = Mathf.FloorToInt(( currentLocation.vector.y - spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit - GameManager.instance.player.transform.position.y )
-            * spriteRenderer.sprite.pixelsPerUnit);
-        spriteRenderer.sortingOrder = order;
+        //int order = Mathf.FloorToInt(( currentLocation.vector.y - spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit - GameManager.instance.player.transform.position.y )
+        //    * spriteRenderer.sprite.pixelsPerUnit);
+        //spriteRenderer.sortingOrder = order;
+        this.transform.position = currentLocation.vector - new Vector3(0, 0, spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit);
         location = currentLocation;
 
         //청크 업데이트

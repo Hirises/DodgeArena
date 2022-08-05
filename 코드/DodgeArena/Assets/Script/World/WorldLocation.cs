@@ -28,7 +28,7 @@ public class WorldLocation
     public WorldLocation(World world, Vector3 location)
     {
         this.world = world;
-        location.z = 0;
+        location.z = location.y;
         this.vector = location;
     }
 
