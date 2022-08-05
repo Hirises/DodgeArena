@@ -16,6 +16,8 @@ public class World : MonoBehaviour {
         }
 
         this.type = type;
+        this.loaded = false;
+        gameObject.SetActive(false);
         this.initiated = true;
     }
 

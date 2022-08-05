@@ -79,4 +79,8 @@ public class WorldLocation
     {
         return HashCode.Combine(vector);
     }
+
+    public override string ToString() {
+        return world.name + vector.ToString();
+    }
 }

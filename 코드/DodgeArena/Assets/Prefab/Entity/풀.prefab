@@ -83,7 +83,6 @@ GameObject:
   - component: {fileID: 3459423282737122679}
   - component: {fileID: 5700230945087700101}
   - component: {fileID: 6185907691642991307}
-  - component: {fileID: 6005948440453704258}
   - component: {fileID: 3280884793346473326}
   - component: {fileID: 2360380203078798310}
   m_Layer: 8
@@ -173,29 +172,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cb7c2d32af37af498930f5228e8d30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityType: 2
+  type: 1
   spriteRenderer: {fileID: 5700230945087700101}
   rigidbody: {fileID: 0}
   triggerCollider: {fileID: 6591019712053230608}
   variants:
   - {fileID: 21300000, guid: f9990f54e59272d4296174534cadec48, type: 3}
   - {fileID: 21300000, guid: 112c418f73069344a8ea52c957b3307d, type: 3}
---- !u!114 &6005948440453704258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8769676836770011094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7de5c5a6eba63f4788ad44e1c613431, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityType: 2
-  spriteRenderer: {fileID: 5700230945087700101}
-  rigidbody: {fileID: 2360380203078798310}
-  triggerCollider: {fileID: 6591019712053230608}
 --- !u!61 &3280884793346473326
 BoxCollider2D:
   m_ObjectHideFlags: 0

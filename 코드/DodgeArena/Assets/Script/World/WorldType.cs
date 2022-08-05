@@ -36,4 +36,8 @@ public class WorldType
     public override int GetHashCode() {
         return HashCode.Combine(type);
     }
+
+    public override string ToString() {
+        return type.ToString();
+    }
 }

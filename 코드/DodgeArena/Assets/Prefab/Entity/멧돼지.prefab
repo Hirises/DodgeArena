@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c602012547d632469980ddf0efadc53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityType: 3
+  type: 2
   spriteRenderer: {fileID: 1697931047449044388}
   rigidbody: {fileID: 1697931047449044390}
   triggerCollider: {fileID: 9076025652147364937}

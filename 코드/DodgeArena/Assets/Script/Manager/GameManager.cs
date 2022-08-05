@@ -80,7 +80,8 @@ public class GameManager : MonoBehaviour
 
         state = GameState.Run;
         World main = LoadWorld(WorldType.Main);
-        player.location = new WorldLocation(main, new Vector2(0, 0));
+        WorldLocation startLocation = new WorldLocation(main, new Vector2(0, 0));
+        player.Initiated(startLocation, startLocation.chunk);
         player.OnSpawn();
     }
 
