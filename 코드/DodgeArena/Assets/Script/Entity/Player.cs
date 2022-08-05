@@ -25,6 +25,24 @@ public class Player : LivingEntity {
         this.hp = initialHp;
     }
 
+    /// <summary>
+    /// 이 개체를 다른 위치로 순간이동시킵니다
+    /// </summary>
+    /// <param name="location">대상 위치</param>
+    public override void Teleport(WorldLocation location) {
+        if(location.world.Equals(this.location.world)) {
+            this.transform.position = location.vector;
+            this.location = location;
+            FixPosition();
+        } else {
+            World world = this.location.world;
+            this.transform.position = location.vector;
+            this.location = location;
+            FixPosition();
+            world.Unload();
+        }
+    }
+
     public void Damage(int damage) {
         hp -= damage;
 

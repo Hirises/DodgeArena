@@ -88,6 +88,9 @@ public class GameManager : MonoBehaviour
     private void Update() {
         UpdateChunkState();
         Test();
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
+        }
     }
 
     public void UpdateChunkState() {

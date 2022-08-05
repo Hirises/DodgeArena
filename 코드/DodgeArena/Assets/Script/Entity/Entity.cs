@@ -20,42 +20,7 @@ public abstract class Entity : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Entity")]
     protected SubCollider triggerCollider;
-    private WorldLocation _location;
-    public WorldLocation location
-    {
-        get => _location;
-        set
-        {
-            //위치 재정렬
-            int order = Mathf.FloorToInt((value.vector.y - spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit - GameManager.instance.player.transform.position.y)
-                * spriteRenderer.sprite.pixelsPerUnit);
-            spriteRenderer.sortingOrder = order;
-            _location = value;
-
-            //청크 업데이트
-            Chunk newChunk = value.chunk;
-            if (!newChunk.Equals(chunk))    
-            {
-                newChunk.entities.Add(this);
-                if(chunk != null)
-                {
-                    chunk.entities.Remove(this);
-                }
-                transform.parent = newChunk.gameObject.transform;
-                chunk = newChunk;
-
-                //청크 상태 반영
-                if (newChunk.loaded)
-                {
-                    OnLoad();
-                }
-                else
-                {
-                    OnUnload();
-                }
-            }
-        }
-    }
+    public WorldLocation location { get; protected set; }
     public Chunk chunk { get; private set; }
     public bool initiated { get; private set; }
     public bool loaded { get; private set; }
@@ -68,7 +33,7 @@ public abstract class Entity : MonoBehaviour {
             return;
         }
 
-        this._location = location;
+        this.location = location;
         this.chunk = chunk;
         this.loaded = false;
         this.triggerCollider.onTriggerEnter += OnColliderEnter;
@@ -132,8 +97,37 @@ public abstract class Entity : MonoBehaviour {
     /// </summary>
     protected void FixPosition()
     {
-        WorldLocation loc = new WorldLocation(location.world, this.transform.position);
-        location = loc;
+        FixPosition(new WorldLocation(location.world, this.transform.position));
+    }
+
+    /// <summary>
+    /// 위치를 보정합니다.
+    /// </summary>
+    /// <param name="currentLocation">현재 위치</param>
+    protected void FixPosition(WorldLocation currentLocation) {
+        //위치 재정렬
+        int order = Mathf.FloorToInt(( currentLocation.vector.y - spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit - GameManager.instance.player.transform.position.y )
+            * spriteRenderer.sprite.pixelsPerUnit);
+        spriteRenderer.sortingOrder = order;
+        location = currentLocation;
+
+        //청크 업데이트
+        Chunk newChunk = currentLocation.chunk;
+        if(!newChunk.Equals(chunk)) {
+            newChunk.entities.Add(this);
+            if(chunk != null) {
+                chunk.entities.Remove(this);
+            }
+            transform.parent = newChunk.gameObject.transform;
+            chunk = newChunk;
+
+            //청크 상태 반영
+            if(newChunk.loaded) {
+                OnLoad();
+            } else {
+                OnUnload();
+            }
+        }
     }
 
     /// <summary>
@@ -180,6 +174,15 @@ public abstract class Entity : MonoBehaviour {
         OnDespawn();
         chunk.entities.Remove(this);
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// 이 개체를 다른 위치로 순간이동시킵니다
+    /// </summary>
+    /// <param name="location">대상 위치</param>
+    public virtual void Teleport(WorldLocation location) {
+        this.transform.position = location.vector;
+        FixPosition();
     }
 
     /// <summary>

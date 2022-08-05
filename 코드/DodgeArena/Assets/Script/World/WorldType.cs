@@ -11,10 +11,12 @@ public class WorldType
     }
 
     public enum Type {
-        Main
+        Main,
+        Sub
     }
 
     public static readonly WorldType Main = new WorldType(Type.Main);
+    public static readonly WorldType Sub = new WorldType(Type.Sub);
 
     public readonly Type type;
 
