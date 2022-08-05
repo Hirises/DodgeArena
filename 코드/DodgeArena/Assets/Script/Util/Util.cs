@@ -54,4 +54,118 @@ public class Util
     {
         return new Vector2(targetPos.x - selfPos.x, targetPos.y - selfPos.y);
     }
+
+    /// <summary>
+    /// 랜덤하게 점들을 흩뿌립니다 <br></br>
+    /// 입력된 중심점을 기준으로하는 정사각형 모양의 공간을 가정합니다 <br></br>
+    /// 몇몇 경우에 완벽하게 흩뿌려지지 않을 수 있습니다
+    /// </summary>
+    /// <param name="count">흩뿌릴 점의 개수</param>
+    /// <param name="center">중심점</param>
+    /// <param name="minDistance">점들 사이의 최소거리</param>
+    /// <param name="width">점들이 뿌려질 공간의 반지름</param>
+    /// <returns>흩뿌려진 점의 위치</returns>
+    public static Vector2[] SpreadLocation(int count, Vector2 center, float minDistance, float width) {
+        //기본 위치 설정 (랜덤)
+        Vector2[] positions = new Vector2[count];
+        for(int index = 0; index < positions.Length; index++) {
+            positions[index] = Randomize(center, width);
+        }
+
+        const int MAX_TRY_COUNT = 1000; //최대 시도횟수
+
+        for(int tryCount = 0; tryCount < MAX_TRY_COUNT; tryCount++) {
+            bool success = true;    //성공여부 플레그 초기화
+
+            //각 플레이어에 대해 검증
+            for(int index = 0; index < positions.Length; index++) {
+                //초기화
+                Vector2 position = positions[index];
+                int occupiedCount = 0;
+                Vector2 avoidForce = new Vector2();
+
+                for(int checkIndex = 0; checkIndex < positions.Length; checkIndex++) {
+                    if(checkIndex == index) {
+                        //검증 대상과 동일하다면 스킵
+                        continue;
+                    }
+
+                    //둘 사이의 거리 구하기
+                    Vector2 checkPosition = positions[checkIndex];
+                    float distance = Vector2.Distance(position, checkPosition);
+
+                    //만약 둘 사이의 거리가 최소거리보다 작다면
+                    if(distance < minDistance) {
+                        //회피 방향 적용
+                        occupiedCount += 1;
+                        avoidForce += checkPosition - position;
+                    }
+                }
+
+                //겹치는 점이 1개 이상 있었다면
+                if(occupiedCount > 0) {
+                    avoidForce /= occupiedCount;
+                    float length = avoidForce.magnitude;
+
+                    if(length > 0f) {   //길이가 있다면
+                        //반대 방향으로 이동
+                        position -= avoidForce.normalized;
+                    } else {    //길이가 없다면
+                        //다시 랜덤하게 설정
+                        position = Randomize(center, width);
+                    }
+
+                    //실패 판정
+                    success = false;
+                }
+
+                //해당 점이 공간을 벗어났다면
+                if(!IsIn(position, center, width)) {
+                    //다시 랜덤하게 설정
+                    position = Randomize(center, width);
+
+                    //실패 판정
+                    success = false;
+                }
+
+                positions[index] = position;
+            }
+
+            //성공시 탈출
+            if(success) {
+                break;
+            }
+        }
+
+        return positions;
+    }
+
+    /// <summary>
+    /// 입력된 벡터를 랜덤한 방향으로 이동시킵니다 <br></br>
+    /// 입력된 벡터로부터 정사각형 공간을 가정합니다
+    /// </summary>
+    /// <param name="input">이동시킬 벡터</param>
+    /// <param name="half">최대 이동할 거리 (반지름)</param>
+    /// <returns>이동된 벡터</returns>
+    public static Vector2 Randomize(Vector2 input, float half) {
+        if(half == 0) {
+            return input;
+        }
+
+        return input + new Vector2(Random.instance.NextFloat() * half * 2 - half,
+           Random.instance.NextFloat() * half * 2 - half);
+    }
+
+    /// <summary>
+    /// 입력된 벡터가 해당 공간 안에 있는지 판단합니다 <br></br>
+    /// 기준점으로부터 정사각형 공간을 가정합니다
+    /// </summary>
+    /// <param name="input">확인할 벡터</param>
+    /// <param name="center">기준점</param>
+    /// <param name="half">반지름</param>
+    /// <returns></returns>
+    public static bool IsIn(Vector2 input, Vector2 center, float half) {
+        return input.x >= center.x - half && input.x >= center.x - half
+            && input.x >= center.x - half && input.x >= center.x - half;
+    }
 }

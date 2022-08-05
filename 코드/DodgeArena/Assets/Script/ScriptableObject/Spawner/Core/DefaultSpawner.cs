@@ -26,12 +26,16 @@ public class DefaultSpawner : Spawner
     public int minGroup = 1;
     [BoxGroup("Group")]
     public int maxGrounp = 1;
+    [BoxGroup("Group")]
+    public float groupDistance = 1;
     [BoxGroup("Individual")]
     public int minCount = 1;
     [BoxGroup("Individual")]
     public int maxCouint = 1;
     [BoxGroup("Individual")]
-    public float dense = 1;
+    public float distance = 1;
+    [BoxGroup("Individual")]
+    public float width = 1;
     [BoxGroup("Variant")]
     public Entity[] variants;
 
@@ -51,13 +55,15 @@ public class DefaultSpawner : Spawner
         if (CheckConditions(chunk))
         {
             List<Entity> entities = new List<Entity>();
+            World world = chunk.world;
 
             //그룹별 생성
             int group = Random.instance.RandomRange(minGroup, maxGrounp);
+            Vector2[] groupLocations = Util.SpreadLocation(group, chunk.location.center.vector2, groupDistance, GameManager.instance.chunkWeidth - width);
             for(int i = 0; i < group; i++)
             {
                 //그룹 기준 위치 설정 & 그룹에 생성될 개채수 설정
-                WorldLocation groupLocation = chunk.RandomLocation(dense);
+                WorldLocation groupLocation = new WorldLocation(world, groupLocations[i]);
                 int count = Random.instance.RandomRange(minGroup, maxGrounp);
 
                 //보상(리턴) 수치 확인
@@ -81,10 +87,11 @@ public class DefaultSpawner : Spawner
                 }
 
                 //실제 개체 생성
+                Vector2[] locations = Util.SpreadLocation(count, groupLocation.vector2, distance, width);
                 for (int j = 0; j < count; j++)
                 {
-                    WorldLocation location = groupLocation.Randomize(dense);
-                    chunk.world.Spawn(variants[Random.instance.RandInt(0, variants.Length)] ,location);
+                    WorldLocation location = new WorldLocation(world, locations[j]);
+                    chunk.world.Spawn(variants[Random.instance.RandInt(0, variants.Length)], location);
                 }
             }
 

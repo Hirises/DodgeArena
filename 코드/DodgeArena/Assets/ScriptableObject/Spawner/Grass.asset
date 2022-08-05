@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 488d6d7d703e0a44981966c9e10d387e, type: 3}
   m_Name: Grass
   m_EditorClassIdentifier: 
-  worlds: 0000000001000000
+  whiteList: 0
+  worlds: 
   UseRate: 0
   rate: 0
   risk: 0

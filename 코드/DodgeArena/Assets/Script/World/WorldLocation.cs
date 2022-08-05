@@ -7,6 +7,9 @@ public class WorldLocation
 {
     public readonly World world;
     public readonly Vector3 vector;
+    public Vector2 vector2 {
+        get => Util.FlattenLocation(vector);
+    }
     public ChunkLocation chunkLocation
     {
         get => new ChunkLocation(world, new Vector2(Mathf.Floor((vector.x + GameManager.instance.chunkWeidth / 2) / GameManager.instance.chunkWeidth),
@@ -38,8 +41,7 @@ public class WorldLocation
         {
             return this;
         }
-        return new WorldLocation(world, vector + new Vector3(Random.instance.NextFloat() * half * 2 - half,
-           Random.instance.NextFloat() * half * 2 - half, 0));
+        return new WorldLocation(world, Util.Randomize(vector, half));
     }
 
     public static WorldLocation operator +(WorldLocation o1, WorldLocation o2)
