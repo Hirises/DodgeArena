@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     [BoxGroup("Chunk")]
-    public GameObject objectsRoot;
+    public GameObject chunkRoot;
     [SerializeField]
     [BoxGroup("Chunk")]
     public Chunk chunkObject;
@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
             return GetChunk(location);
         }
 
-        Chunk chunk = Instantiate(chunkObject, location.center.vector, Quaternion.identity, objectsRoot.transform);
+        Chunk chunk = Instantiate(chunkObject, location.center.vector, Quaternion.identity, chunkRoot.transform);
         chunks.Add(location, chunk);
         chunk.ResetProperties(location);
         return chunk;
