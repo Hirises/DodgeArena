@@ -79,8 +79,7 @@ public class GameManager : MonoBehaviour
         }
 
         state = GameState.Run;
-        World main = LoadWorld(WorldType.Main);
-        WorldLocation startLocation = new WorldLocation(main, new Vector2(0, 0));
+        WorldLocation startLocation = new WorldLocation(LoadWorld(WorldType.Main), new Vector2(0, 0));
         player.Initiated(startLocation, startLocation.chunk);
         player.OnSpawn();
     }
@@ -88,9 +87,10 @@ public class GameManager : MonoBehaviour
     private void Update() {
         UpdateChunkState();
         Test();
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
-        }
+    }
+
+    public void Test() {
+        debugText.text = player.hp.ToString();
     }
 
     public void UpdateChunkState() {
@@ -105,10 +105,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Test() {
-        debugText.text = player.hp.ToString();
-    }
-
     public void GameEnd() {
         state = GameState.Stop;
         foreach(WorldType type in worlds.Keys) {
@@ -117,6 +113,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("TempMenuScene");
     }
 
+    #region World
     public World GetWorld(WorldType type) {
         if(worlds.ContainsKey(type)) {
             return worlds[type];
@@ -143,5 +140,6 @@ public class GameManager : MonoBehaviour
         }
 
         GetWorld(type).Unload();
-    }
+    } 
+    #endregion
 }

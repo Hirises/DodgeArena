@@ -20,6 +20,7 @@ public abstract class Entity : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Entity")]
     protected SubCollider triggerCollider;
+
     public WorldLocation location { get; protected set; }
     public Chunk chunk { get; private set; }
     public bool initiated { get; private set; }
@@ -43,13 +44,33 @@ public abstract class Entity : MonoBehaviour {
         transform.parent = chunk.gameObject.transform;
     }
 
+    #region Controll
+    /// <summary>
+    /// 이 개체를 다른 위치로 순간이동시킵니다
+    /// </summary>
+    /// <param name="location">대상 위치</param>
+    public virtual void Teleport(WorldLocation location) {
+        this.transform.position = location.vector;
+        FixPosition();
+    }
+
+    /// <summary>
+    /// 해당 엔티티를 월드에서 제거합니다
+    /// </summary>
+    public void Remove() {
+        OnDespawn();
+        chunk.entities.Remove(this);
+        Destroy(gameObject);
+    } 
+    #endregion
+
+    #region Utils
     /// <summary>
     /// 플레이어와의 거리를 비교합니다
     /// </summary>
     /// <param name="distance">임계 거리</param>
     /// <returns></returns>
-    protected bool CheckPlayerDistance(float distance)
-    {
+    public bool CheckPlayerDistance(float distance) {
         return CheckDistance(GameManager.instance.player.gameObject.transform.position, distance);
     }
 
@@ -59,8 +80,7 @@ public abstract class Entity : MonoBehaviour {
     /// <param name="position"></param>
     /// <param name="distance"></param>
     /// <returns></returns>
-    protected bool CheckDistance(Vector3 position, float distance)
-    {
+    public bool CheckDistance(Vector3 position, float distance) {
         return Vector3.Distance(position, transform.position) <= distance;
     }
 
@@ -69,8 +89,7 @@ public abstract class Entity : MonoBehaviour {
     /// Z회전이 0일때 오른쪽을 바라본다고 가정합니다.
     /// </summary>
     /// <param name="targetPos">바라볼 대상의 위치</param>
-    protected void LookAt(Vector3 targetPos)
-    {
+    public void LookAt(Vector3 targetPos) {
         LookAt(targetPos, Vector2.right);
     }
 
@@ -79,15 +98,15 @@ public abstract class Entity : MonoBehaviour {
     /// </summary>
     /// <param name="targetPos">바라볼 대상의 위치</param>
     /// <param name="zeroRotation">Z회전이 0일때 바라보는 방향</param>
-    protected void LookAt(Vector3 targetPos, Vector2 zeroRotation)
-    {
+    public void LookAt(Vector3 targetPos, Vector2 zeroRotation) {
         Vector3 angle = Util.LootAtRotation(transform.position, targetPos, zeroRotation);
         transform.rotation = Quaternion.Euler(angle);
         FixFlip();
     }
+    #endregion
 
-    private void LateUpdate()
-    {
+    #region Update
+    private void LateUpdate() {
         FixPosition();
         FixFlip();
     }
@@ -95,8 +114,7 @@ public abstract class Entity : MonoBehaviour {
     /// <summary>
     /// 현재 위치를 보정합니다.
     /// </summary>
-    protected void FixPosition()
-    {
+    protected void FixPosition() {
         FixPosition(new WorldLocation(location.world, this.transform.position));
     }
 
@@ -139,11 +157,13 @@ public abstract class Entity : MonoBehaviour {
             transform.localScale = new Vector3(transform.localScale.x, -1 * transform.localScale.y, transform.localScale.z);
         }
     }
+    #endregion
 
+    #region Virtual
     /// <summary>
     /// 다른 물체와 충돌했을 때 (이벤트에 등록)
     /// </summary>
-    private void OnColliderEnter(Collider2D collision) { 
+    private void OnColliderEnter(Collider2D collision) {
         if(collision.gameObject.TryGetComponent(out Entity other)) {
             OnStartCollide(other);
         } else if(collision.gameObject.TryGetComponent(out SubCollider sub)) {
@@ -167,31 +187,11 @@ public abstract class Entity : MonoBehaviour {
     }
 
     /// <summary>
-    /// 해당 엔티티를 월드에서 제거합니다
-    /// </summary>
-    public void Remove()
-    {
-        OnDespawn();
-        chunk.entities.Remove(this);
-        Destroy(gameObject);
-    }
-
-    /// <summary>
-    /// 이 개체를 다른 위치로 순간이동시킵니다
-    /// </summary>
-    /// <param name="location">대상 위치</param>
-    public virtual void Teleport(WorldLocation location) {
-        this.transform.position = location.vector;
-        FixPosition();
-    }
-
-    /// <summary>
     /// 이 개체가 처음 생성되었을때 호출됩니다 <br/>
     /// <see cref="OnLoad()"/>보다 먼저 호출됩니다
     /// </summary>
-    public virtual void OnSpawn()
-    {
-        
+    public virtual void OnSpawn() {
+
     }
 
     /// <summary>
@@ -199,10 +199,8 @@ public abstract class Entity : MonoBehaviour {
     /// 항상 base.OnLoad()를 호출한 후 성공여부를 확인해야합니다
     /// </summary>
     /// <returns>성공적으로 실행되었는지 여부<br/>false 반환시 더이상 실행하지 않는다</returns>
-    public virtual bool OnLoad()
-    {
-        if (loaded)
-        {
+    public virtual bool OnLoad() {
+        if(loaded) {
             return false;
         }
         loaded = true;
@@ -215,10 +213,8 @@ public abstract class Entity : MonoBehaviour {
     /// 항상 base.OnUnload()를 호출한 후 성공여부를 확인해야합니다
     /// </summary>
     /// <returns>성공적으로 실행되었는지 여부<br/>false 반환시 더이상 실행하지 않는다</returns>
-    public virtual bool OnUnload()
-    {
-        if (!loaded)
-        {
+    public virtual bool OnUnload() {
+        if(!loaded) {
             return false;
         }
         loaded = false;
@@ -230,10 +226,8 @@ public abstract class Entity : MonoBehaviour {
     /// 이 개체가 완전히 파괴될 때 호출됩니다
     /// 항상 <see cref="OnUnload()"/> 이후에 호출됩니다
     /// </summary>
-    public virtual void OnDespawn()
-    {
-        if (loaded)
-        {
+    public virtual void OnDespawn() {
+        if(loaded) {
             OnUnload();
         }
     }
@@ -252,5 +246,6 @@ public abstract class Entity : MonoBehaviour {
     /// <param name="other">충돌한 개체</param>
     public virtual void OnEndCollide(Entity other) {
 
-    }
+    } 
+    #endregion
 }
