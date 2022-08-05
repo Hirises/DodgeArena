@@ -27,7 +27,7 @@ public abstract class Entity : MonoBehaviour {
     public bool loaded { get; private set; }
     public bool filped { get; private set; }
 
-    public void Initiated(WorldLocation location, Chunk chunk)
+    public void Initiated(WorldLocation location)
     {
         if (initiated)
         {
@@ -35,7 +35,7 @@ public abstract class Entity : MonoBehaviour {
         }
 
         this.location = location;
-        this.chunk = chunk;
+        this.chunk = location.chunk;
         this.loaded = false;
         this.triggerCollider.onTriggerEnter += OnColliderEnter;
         this.triggerCollider.onTriggerExit += OnColliderExit;

@@ -79,14 +79,18 @@ public class GameManager : MonoBehaviour
         }
 
         state = GameState.Run;
-        WorldLocation startLocation = new WorldLocation(LoadWorld(WorldType.Main), new Vector2(0, 0));
-        player.Initiated(startLocation, startLocation.chunk);
+        LoadWorld(WorldType.Main);
+        WorldLocation startLocation = new WorldLocation(GetWorld(WorldType.Main), new Vector2(0, 0));
+        player.Initiated(startLocation);
         player.OnSpawn();
     }
 
     private void Update() {
         UpdateChunkState();
         Test();
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
+        }
     }
 
     public void Test() {

@@ -6,6 +6,11 @@ using NaughtyAttributes;
 [CreateAssetMenu(fileName = "DefaultSpawner", menuName = "Spawner/Core/DefaultSpawner")]
 public class DefaultSpawner : Spawner
 {
+    [BoxGroup("Environment")]
+    public bool whiteList = true;
+    [BoxGroup("Environment")]
+    public List<WorldType.Type> worlds;
+
     [BoxGroup("Rate")]
     public bool UseRate = false;
     [BoxGroup("Rate")]
@@ -37,6 +42,7 @@ public class DefaultSpawner : Spawner
         {
             flag &= Random.instance.CheckRate(rate);
         }
+        flag &= !(whiteList ^ worlds.Contains(chunk.world.type.type));
         return flag;
     }
 
