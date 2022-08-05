@@ -13,7 +13,6 @@ public class EntityType
 
     public enum Type
     {
-        Undefined,
         Player,
         Grass,
         WildBoar
