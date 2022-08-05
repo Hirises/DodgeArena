@@ -26,11 +26,15 @@ public class GameManager : MonoBehaviour
     public SpawnDataSetter spawnDataSetter;
 
     [SerializeField]
-    [BoxGroup("Chunk")]
-    public GameObject chunkRoot;
+    [BoxGroup("World")]
+    public GameObject worldRoot;
+    [SerializeField]
+    [BoxGroup("World")]
+    public World worldPrefab;
+
     [SerializeField]
     [BoxGroup("Chunk")]
-    public Chunk chunkObject;
+    public Chunk chunkPrefab;
     [SerializeField]
     [BoxGroup("Chunk")]
     public float chunkUpdateRange;
@@ -48,6 +52,8 @@ public class GameManager : MonoBehaviour
     [BoxGroup("Test")]
     public TextMeshProUGUI debugText;
 
+    public Dictionary<WorldType, World> worlds = new Dictionary<WorldType, World>();
+
     private GameState _state;
     public GameState state {
         get => _state;
@@ -60,7 +66,6 @@ public class GameManager : MonoBehaviour
             _state = value;
         }
     }
-    private Dictionary<ChunkLocation, Chunk> chunks = new Dictionary<ChunkLocation, Chunk>();
 
     private void Awake()
     {
@@ -74,135 +79,65 @@ public class GameManager : MonoBehaviour
         }
 
         state = GameState.Run;
-        player.location = new WorldLocation(new Vector2(0, 0));
+        World main = LoadWorld(WorldType.Main);
+        player.location = new WorldLocation(main, new Vector2(0, 0));
         player.OnSpawn();
-        UpdateChunk();
     }
 
-    private void Update()
-    {
-        if(state == GameState.Run) {
-            UpdateChunk();
-        }
+    private void Update() {
+        UpdateChunkState();
         Test();
+    }
+
+    public void UpdateChunkState() {
+        World world = player.location.world;
+        int loadRange = (int) Mathf.Floor(chunkUpdateRange / chunkWeidth);
+        Vector2 offset = player.location.chunkLocation.vector;
+        for(int x = -loadRange; x <= loadRange; x++) {
+            for(int y = -loadRange; y <= loadRange; y++) {
+                ChunkLocation location = new ChunkLocation(world, new Vector2(x + offset.x, y + offset.y));
+                world.UpdateChunkState(location);
+            }
+        }
     }
 
     public void Test() {
         debugText.text = player.hp.ToString();
     }
 
-    #region Chunk
-    public void UpdateChunk() {
-        int loadRange = (int) Mathf.Floor(chunkUpdateRange / chunkWeidth);
-        Vector2 offset = new WorldLocation(player.transform.position).chunkLocation.vector;
-        for(int x = -loadRange; x <= loadRange; x++) {
-            for(int y = -loadRange; y <= loadRange; y++) {
-                ChunkLocation location = new ChunkLocation(new Vector2(x + offset.x, y + offset.y));
-                CheckChunk(location);
-            }
-        }
-    }
-
-    public void CheckChunk(ChunkLocation location) {
-        if(location.CheckLoad()) {
-            if(!chunks.ContainsKey(location)) {
-                SpawnChunk(location);
-            }
-            LoadChunk(location);
-        } else if(location.CheckKeep()) {
-            if(!chunks.ContainsKey(location)) {
-                SpawnChunk(location);
-                return;
-            }
-            UnloadChunk(location);
-        } else {
-            RemoveChunk(location);
-        }
-    }
-
-    public Chunk GetChunk(ChunkLocation location) {
-        if(!chunks.ContainsKey(location)) {
-            return SpawnChunk(location);
-        }
-        Chunk chunk = chunks[location];
-        return chunk;
-    }
-
-    public Chunk SpawnChunk(ChunkLocation location) {
-        if(chunks.ContainsKey(location)) {
-            return GetChunk(location);
-        }
-
-        Chunk chunk = Instantiate(chunkObject, location.center.vector, Quaternion.identity, chunkRoot.transform);
-        chunks.Add(location, chunk);
-        chunk.ResetProperties(location);
-        return chunk;
-    }
-
-    public Chunk LoadChunk(ChunkLocation location) {
-        if(chunks.ContainsKey(location) && GetChunk(location).loaded) {
-            return GetChunk(location);
-        }
-        Chunk chunk = GetChunk(location);
-        chunk.Load();
-        return chunk;
-    }
-
-    public void UnloadChunk(ChunkLocation location) {
-        if(!chunks.ContainsKey(location) || !GetChunk(location).loaded) {
-            return;
-        }
-
-        GetChunk(location).Unload();
-    }
-
-    public void RemoveChunk(ChunkLocation location) {
-        if(!chunks.ContainsKey(location)) {
-            return;
-        }
-
-        RemoveChunk(GetChunk(location));
-    }
-
-    public void RemoveChunk(Chunk chunk) {
-        chunk.Unload();
-        List<Entity> copy = new List<Entity>();
-        copy.AddRange(chunk.entities);
-        foreach(Entity entity in copy) {
-            entity.Remove();
-        }
-        chunks.Remove(chunk.location);
-        Destroy(chunk.gameObject);
-    } 
-    #endregion
-
     public void GameEnd() {
         state = GameState.Stop;
-        ChunkLocation[] locations = new ChunkLocation[chunks.Keys.Count];
-        chunks.Keys.CopyTo(locations, 0);
-        foreach(ChunkLocation location in locations) {
-            RemoveChunk(location);
+        foreach(WorldType type in worlds.Keys) {
+            UnloadWorld(type);
         }
         SceneManager.LoadScene("TempMenuScene");
     }
 
-    /// <summary>
-    /// 입력된 개체를 월드에 생성합니다
-    /// </summary>
-    /// <typeparam name="T">생성할 개체의 타입</typeparam>
-    /// <param name="target">생성할 개체</param>
-    /// <param name="location">생성할 위치</param>
-    /// <returns>생성된 개체</returns>
-    public T Spawn<T>(T target, WorldLocation location) where T : Entity {
-        Chunk chunk = location.chunk;
-        T instance = Instantiate(target, location.vector, Quaternion.identity, chunk.gameObject.transform);
-        instance.Initiated(location, chunk);
-        instance.OnSpawn();
-        if(chunk.loaded) {
-            instance.OnLoad();
-        } else {
-            instance.OnUnload();
+    public World GetWorld(WorldType type) {
+        if(worlds.ContainsKey(type)) {
+            return worlds[type];
         }
-        return instance;
+        return SpawnWorld(type);
+    }
+
+    public World SpawnWorld(WorldType type) {
+        World world = Instantiate(worldPrefab, worldRoot.transform);
+        worlds.Add(type, world);
+        world.Initiate(type);
+        return world;
+    }
+
+    public World LoadWorld(WorldType type) {
+        World world = GetWorld(type);
+        world.Load();
+        return world;
+    }
+
+    public void UnloadWorld(WorldType type) {
+        if(!worlds.ContainsKey(type)) {
+            return;
+        }
+
+        GetWorld(type).Unload();
     }
 }

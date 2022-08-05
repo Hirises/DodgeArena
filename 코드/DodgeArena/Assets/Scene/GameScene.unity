@@ -5169,8 +5169,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8f9f30741fe25f143bf9cd8ecc0afe2e, type: 2}
   - {fileID: 11400000, guid: 294e4f0c1cc24d04b9895c27b79a16d0, type: 2}
   spawnDataSetter: {fileID: 11400000, guid: 7c1a4de2d3bb8864e98545e9153956ce, type: 2}
-  objectsRoot: {fileID: 1236331380}
-  chunkObject: {fileID: 61806345724639106, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
+  worldRoot: {fileID: 1236331380}
+  worldPrefab: {fileID: 3882782164361037413, guid: 4989cd94d77e6aa45aab9f0284aae1c7, type: 3}
+  chunkPrefab: {fileID: 61806345724639106, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
   chunkUpdateRange: 80
   chunkSaveRange: 60
   chunkLoadRange: 30
@@ -5201,7 +5202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1236331381}
   m_Layer: 0
-  m_Name: Objects
+  m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5494,7 +5495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa04e81fef3748045bbb778404f338fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityType: 1
+  type: 0
   spriteRenderer: {fileID: 1546719917}
   rigidbody: {fileID: 1546719921}
   triggerCollider: {fileID: 1830074327}

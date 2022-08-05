@@ -132,7 +132,7 @@ public abstract class Entity : MonoBehaviour {
     /// </summary>
     protected void FixPosition()
     {
-        WorldLocation loc = new WorldLocation(this.transform.position);
+        WorldLocation loc = new WorldLocation(location.world, this.transform.position);
         location = loc;
     }
 

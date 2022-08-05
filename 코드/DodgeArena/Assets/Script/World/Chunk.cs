@@ -10,6 +10,7 @@ public class Chunk : MonoBehaviour
     public bool loaded { get; private set; }
     public bool initiated { get; private set; }
     public bool valid { get; private set; }
+    public World world { private set; get; }
     [SerializeField]
     [ReadOnly]
     private ChunkLocation _location;
@@ -36,6 +37,7 @@ public class Chunk : MonoBehaviour
         this.initiated = false;
         this._location = position;
         this.spawnData = GameManager.instance.spawnDataSetter.GenerateNewSpawnData();
+        world = position.world;
         entities = new List<Entity>();
         valid = true;
     }
@@ -87,7 +89,7 @@ public class Chunk : MonoBehaviour
 
     public void Remove()
     {
-        GameManager.instance.RemoveChunk(this);
+        world.RemoveChunk(this);
     }
 
     //이 청크에 오브잭트들을 소환

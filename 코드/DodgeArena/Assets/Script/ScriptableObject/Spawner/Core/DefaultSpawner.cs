@@ -78,7 +78,7 @@ public class DefaultSpawner : Spawner
                 for (int j = 0; j < count; j++)
                 {
                     WorldLocation location = groupLocation.Randomize(dense);
-                    GameManager.instance.Spawn(variants[Random.instance.RandInt(0, variants.Length)] ,location);
+                    chunk.world.Spawn(variants[Random.instance.RandInt(0, variants.Length)] ,location);
                 }
             }
 
