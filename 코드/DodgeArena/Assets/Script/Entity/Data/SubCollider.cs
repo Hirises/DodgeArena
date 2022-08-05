@@ -23,15 +23,20 @@ public class SubCollider : MonoBehaviour
     public event EventHandler onTriggerExit;
         
     private void OnTriggerEnter2D(Collider2D collision) {
-        Debug.Log("collde");
-        onTriggerEnter?.Invoke(collision);
+        if(onTriggerEnter != null) {
+            onTriggerEnter(collision);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision) {
-        onTriggerStay?.Invoke(collision);
+        if(onTriggerStay != null) {
+            onTriggerStay(collision);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
-        onTriggerExit?.Invoke(collision);
+        if(onTriggerExit != null) {
+            onTriggerExit(collision);
+        }
     }
 }

@@ -126,7 +126,6 @@ public class WildBoar : LivingEntity {
     }
 
     public override void OnStartCollide(Entity other) {
-        Debug.Log(other.entityType.ToString());
         if(state == State.Dash && other.entityType == EntityType.Type.Player) {
             Player player = (Player) other;
             player.Damage(dashDamage);

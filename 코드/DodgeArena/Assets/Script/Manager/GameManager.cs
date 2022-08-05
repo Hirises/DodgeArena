@@ -189,7 +189,7 @@ public class GameManager : MonoBehaviour
     public T Spawn<T>(T target, WorldLocation location) where T : Entity {
         Chunk chunk = location.chunk;
         T instance = Instantiate(target, location.vector, Quaternion.identity, chunk.gameObject.transform);
-        instance.location = location;
+        instance.Initiated(location, chunk);
         instance.OnSpawn();
         if(chunk.loaded) {
             instance.OnLoad();

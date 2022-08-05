@@ -149,7 +149,7 @@ public abstract class Entity : MonoBehaviour {
     /// <summary>
     /// 다른 물체와 충돌했을 때 (이벤트에 등록)
     /// </summary>
-    private void OnColliderEnter(Collider2D collision) {
+    private void OnColliderEnter(Collider2D collision) { 
         if(collision.gameObject.TryGetComponent(out Entity other)) {
             OnStartCollide(other);
         } else if(collision.gameObject.TryGetComponent(out SubCollider sub)) {
