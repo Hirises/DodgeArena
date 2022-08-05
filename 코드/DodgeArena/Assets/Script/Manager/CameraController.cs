@@ -11,6 +11,8 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + zOffset);
+        if(GameManager.instance.state == GameManager.GameState.Run) {
+            transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + zOffset);
+        }
     }
 }

@@ -27,5 +27,9 @@ public class Player : LivingEntity {
 
     public void Damage(int damage) {
         hp -= damage;
+
+        if(hp <= 0) {
+            GameManager.instance.GameEnd();
+        }
     }
 }

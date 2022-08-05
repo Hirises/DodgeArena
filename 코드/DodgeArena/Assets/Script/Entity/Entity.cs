@@ -172,6 +172,9 @@ public abstract class Entity : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 해당 엔티티를 월드에서 제거합니다
+    /// </summary>
     public void Remove()
     {
         OnDespawn();
