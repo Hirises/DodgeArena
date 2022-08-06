@@ -78,22 +78,37 @@ public class GameManager : MonoBehaviour
             Destroy(transform);
         }
 
-        state = GameState.Run;
+        state = GameState.Stop;
         LoadWorld(WorldType.Main);
         WorldLocation startLocation = new WorldLocation(GetWorld(WorldType.Main), new Vector2(0, 0));
         player.Initiated(startLocation);
         player.OnSpawn();
+        state = GameState.Run;
     }
 
     private void Update() {
-        UpdateChunkState();
+        if(state == GameState.Run) {
+            UpdateChunkState();
+        }
+        CheckPlayerInput();
         Test();
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
+    }
+
+    public void CheckPlayerInput() {
+        if(Input.GetKeyDown(KeyCode.Escape)) {
+            if(state == GameState.Run) {
+                state = GameState.Stop;
+            } else {
+                state = GameState.Run;
+            }
         }
     }
 
     public void Test() {
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
+        }
+
         debugText.text = player.hp.ToString();
     }
 
