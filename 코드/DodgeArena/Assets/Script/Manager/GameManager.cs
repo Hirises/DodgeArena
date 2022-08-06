@@ -181,6 +181,6 @@ public class GameManager : MonoBehaviour
         foreach(WorldType type in worlds.Keys) {
             UnloadWorld(type);
         }
-        SceneManager.LoadScene("TempMenuScene");
+        SceneManager.LoadScene(Scene.MainScene.name);
     }
 }
