@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Util
 {
@@ -167,5 +168,30 @@ public class Util
     public static bool IsIn(Vector2 input, Vector2 center, float half) {
         return input.x >= center.x - half && input.x >= center.x - half
             && input.x >= center.x - half && input.x >= center.x - half;
+    }
+
+    /// <summary>
+    /// 가중치에 따라 리스트에서 랜덤한 요소를 선택합니다
+    /// </summary>
+    /// <typeparam name="T">선택할 요소의 타입</typeparam>
+    /// <param name="objects">선택할 요소들</param>
+    /// <param name="weightFuction">요소에서 가중치를 반환하는 함수</param>
+    /// <returns>선택된 요소</returns>
+    public static T GetByWeigth<T>(List<T> objects, Func<T, int> weightFuction) {
+        List<int> weights = new List<int>();
+        int weight;
+        int maxWeight = 0;
+        for(int index = 0; index < objects.Count; index++) {
+            weight = weightFuction(objects[index]);
+            weights.Add(weight);
+            maxWeight += weight;
+        }
+        int ran = Random.instance.RandInt(0, maxWeight);
+        for(int index = weights.Count - 1; index >= 0; index--) {
+            if(ran < weights[index]) {
+                return objects[index];
+            }
+        }
+        return objects[0];
     }
 }

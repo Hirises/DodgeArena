@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 488d6d7d703e0a44981966c9e10d387e, type: 3}
   m_Name: WildBoar
   m_EditorClassIdentifier: 
-  whiteList: 1
-  worlds: 00000000
+  whiteListForWorld: 0
+  worlds: 
+  whiteListForBiomes: 0
+  biomes: 
   UseRate: 0
   rate: 0.5
   risk: 10

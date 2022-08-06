@@ -21,7 +21,7 @@ public class Chunk : MonoBehaviour
     }
     [HideInInspector]
     public List<Entity> entities;
-    public SpawnData spawnData;
+    public ChunkData chunkData;
 
     /// <summary>
     /// 청크 리셋 (처음 생성시)
@@ -37,11 +37,14 @@ public class Chunk : MonoBehaviour
         this.loaded = false;
         this.initiated = false;
         this._location = position;
-        this.spawnData = GameManager.instance.spawnDataSetter.GenerateNewSpawnData();
         world = position.world;
         this.biome = biome;
         entities = new List<Entity>();
+        this.chunkData = GameManager.instance.GetChunkDataGenerator(this).Generate(this);
         valid = true;
+#if UNITY_EDITOR
+        gameObject.name = position.vector.ToString();
+#endif
     }
 
     /// <summary>
@@ -97,9 +100,9 @@ public class Chunk : MonoBehaviour
     //이 청크에 오브잭트들을 소환
     public void SpawnObjects()
     {
-        foreach(Spawner spawner in GameManager.instance.spawners)
+        foreach(EntityGenerator spawner in GameManager.instance.entityGenerators)
         {
-            spawner.Spawn(this);
+            spawner.Generate(this);
         }
     }
 

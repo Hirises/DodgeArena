@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-[CreateAssetMenu(fileName = "DefaultSpawner", menuName = "Spawner/Core/DefaultSpawner")]
-public class DefaultSpawner : Spawner
+[CreateAssetMenu(fileName = "Default", menuName = "EntityGenerator/Default")]
+public class DefaultEntityGenerator : EntityGenerator
 {
     [BoxGroup("Environment")]
-    public bool whiteList = true;
+    public bool whiteListForWorld = false;
     [BoxGroup("Environment")]
     public List<WorldType.Type> worlds;
+    [BoxGroup("Environment")]
+    public bool whiteListForBiomes = false;
+    [BoxGroup("Environment")]
+    public List<Biome.Type> biomes;
 
     [BoxGroup("Rate")]
     public bool UseRate = false;
@@ -46,11 +50,12 @@ public class DefaultSpawner : Spawner
         {
             flag &= Random.instance.CheckRate(rate);
         }
-        flag &= !(whiteList ^ worlds.Contains(chunk.world.type.type));
+        flag &= !(whiteListForWorld ^ worlds.Contains(chunk.world.type.type));
+        flag &= !(whiteListForBiomes ^ biomes.Contains(chunk.biome.type) );
         return flag;
     }
 
-    public override List<Entity> Spawn(Chunk chunk)
+    public override List<Entity> Generate(Chunk chunk)
     {
         if (CheckConditions(chunk))
         {
@@ -69,21 +74,21 @@ public class DefaultSpawner : Spawner
                 //보상(리턴) 수치 확인
                 if (returns > 0)
                 {
-                    if (chunk.spawnData.returns + (returns * count) > chunk.spawnData.initialReturns)
+                    if (chunk.chunkData.returns + (returns * count) > chunk.chunkData.initialReturns)
                     {
                         break;
                     }
-                    chunk.spawnData.returns += (returns * count);
-                    chunk.spawnData.risk -= (returns * count);
+                    chunk.chunkData.returns += (returns * count);
+                    chunk.chunkData.risk -= (returns * count);
                 }
                 //리스크 수치 확인
                 if (risk > 0)
                 {
-                    if (chunk.spawnData.risk + (risk * count) > chunk.spawnData.initialRisk)
+                    if (chunk.chunkData.risk + (risk * count) > chunk.chunkData.initialRisk)
                     {
                         break;
                     }
-                    chunk.spawnData.risk += (risk * count);
+                    chunk.chunkData.risk += (risk * count);
                 }
 
                 //실제 개체 생성

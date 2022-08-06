@@ -5165,15 +5165,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1546719922}
-  spawners:
+  chunkDataGenerators:
+  - {fileID: 11400000, guid: 73bea87824f3d994f8c15b2e62402d04, type: 2}
+  - {fileID: 11400000, guid: 6e73a66f97a737b4abd3ba3d7256c24d, type: 2}
+  entityGenerators:
   - {fileID: 11400000, guid: 8f9f30741fe25f143bf9cd8ecc0afe2e, type: 2}
   - {fileID: 11400000, guid: 294e4f0c1cc24d04b9895c27b79a16d0, type: 2}
-  spawnDataSetter: {fileID: 11400000, guid: 7c1a4de2d3bb8864e98545e9153956ce, type: 2}
   worldRoot: {fileID: 1236331380}
   worldPrefab: {fileID: 3882782164361037413, guid: 4989cd94d77e6aa45aab9f0284aae1c7, type: 3}
   chunkPrefab: {fileID: 61806345724639106, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
-  half_ChunkUpdateRange: 150
-  half_ChunkSaveRange: 120
+  half_ChunkUpdateRange: 180
+  half_ChunkSaveRange: 150
   half_ChunkLoadRange: 90
   half_ChunkWeidth: 30
   debugText: {fileID: 1526811635}

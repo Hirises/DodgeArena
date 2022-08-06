@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using NaughtyAttributes;
 
-public abstract class Spawner : ScriptableObject
+public abstract class EntityGenerator : ScriptableObject
 {
-    public abstract List<Entity> Spawn(Chunk chunk);
+    public abstract List<Entity> Generate(Chunk chunk);
 }

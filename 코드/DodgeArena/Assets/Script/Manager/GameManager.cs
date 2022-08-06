@@ -19,11 +19,11 @@ public class GameManager : MonoBehaviour
     public Player player;
 
     [SerializeField]
-    [BoxGroup("Spawner")]
-    public Spawner[] spawners;
+    [BoxGroup("Generator")]
+    public ChunkDataGenerator[] chunkDataGenerators;
     [SerializeField]
-    [BoxGroup("Spawner")]
-    public SpawnDataSetter spawnDataSetter;
+    [BoxGroup("Generator")]
+    public EntityGenerator[] entityGenerators;
 
     [SerializeField]
     [BoxGroup("World")]
@@ -67,14 +67,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Awake()
-    {
-        if(instance == null)
-        {
+    #region UnityLifecycle
+    private void Awake() {
+        if(instance == null) {
             instance = this;
-        }
-        else
-        {
+        } else {
             Destroy(transform);
         }
 
@@ -122,15 +119,8 @@ public class GameManager : MonoBehaviour
                 world.UpdateChunkState(location);
             }
         }
-    }
-
-    public void GameEnd() {
-        state = GameState.Stop;
-        foreach(WorldType type in worlds.Keys) {
-            UnloadWorld(type);
-        }
-        SceneManager.LoadScene("TempMenuScene");
-    }
+    } 
+    #endregion
 
     #region World
     public World GetWorld(WorldType type) {
@@ -159,6 +149,38 @@ public class GameManager : MonoBehaviour
         }
 
         GetWorld(type).Unload();
-    } 
+    }
     #endregion
+
+    /// <summary>
+    /// 해당 청크에 대해 사용 가능한 <see cref="ChunkDataGenerator"/>들의 목록을 반환합니다
+    /// </summary>
+    /// <param name="chunk">확인할 청크</param>
+    /// <returns>가능한 목록</returns>
+    public List<ChunkDataGenerator> GetPossibleChunkDataGenerators(Chunk chunk) {
+        List<ChunkDataGenerator> output = new List<ChunkDataGenerator>();
+        foreach(ChunkDataGenerator generator in chunkDataGenerators) {
+            if(generator.CheckConditions(chunk)) {
+                output.Add(generator);
+            }
+        }
+        return output;
+    }
+
+    /// <summary>
+    /// 해당 청크에 대한 랜덤한 <see cref="ChunkDataGenerator"/>를 반환합니다
+    /// </summary>
+    /// <param name="chunk">확인할 청크</param>
+    /// <returns>반환된 생성자</returns>
+    public ChunkDataGenerator GetChunkDataGenerator(Chunk chunk) {
+        return Util.GetByWeigth(GetPossibleChunkDataGenerators(chunk), val => val.weight);
+    }
+
+    public void GameEnd() {
+        state = GameState.Stop;
+        foreach(WorldType type in worlds.Keys) {
+            UnloadWorld(type);
+        }
+        SceneManager.LoadScene("TempMenuScene");
+    }
 }
