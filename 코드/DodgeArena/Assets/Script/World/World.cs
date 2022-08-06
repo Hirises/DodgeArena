@@ -47,12 +47,13 @@ public class World : MonoBehaviour {
     #region Chunk
 
     public void UpdateChunkState(ChunkLocation location) {
-        if(location.CheckLoad()) {
+        Vector2 pos = GameManager.instance.player.location.vector2;
+        if(location.CheckLoad(pos)) {
             if(!chunks.ContainsKey(location)) {
                 SpawnChunk(location);
             }
             LoadChunk(location);
-        } else if(location.CheckKeep()) {
+        } else if(location.CheckKeep(pos)) {
             if(!chunks.ContainsKey(location)) {
                 SpawnChunk(location);
                 return;

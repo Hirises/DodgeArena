@@ -109,7 +109,7 @@ public class Chunk : MonoBehaviour
 
     public WorldLocation RandomLocation(float margin)
     {
-        return location.center.Randomize((GameManager.instance.chunkWeidth - margin) / 2);
+        return location.center.Randomize((GameManager.instance.half_ChunkWeidth - margin) / 2);
     }
 
     public override bool Equals(object obj)

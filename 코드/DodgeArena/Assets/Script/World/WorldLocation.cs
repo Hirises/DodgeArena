@@ -12,8 +12,8 @@ public class WorldLocation
     }
     public ChunkLocation chunkLocation
     {
-        get => new ChunkLocation(world, new Vector2(Mathf.Floor((vector.x + GameManager.instance.chunkWeidth / 2) / GameManager.instance.chunkWeidth),
-            Mathf.Floor((vector.y + GameManager.instance.chunkWeidth / 2) / GameManager.instance.chunkWeidth)));
+        get => new ChunkLocation(world, new Vector2(Mathf.Floor((vector.x + GameManager.instance.half_ChunkWeidth) / (GameManager.instance.half_ChunkWeidth * 2)),
+            Mathf.Floor((vector.y + GameManager.instance.half_ChunkWeidth) / (GameManager.instance.half_ChunkWeidth * 2))));
     }
     public Chunk chunk
     {

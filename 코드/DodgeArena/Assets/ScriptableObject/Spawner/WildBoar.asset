@@ -12,15 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 488d6d7d703e0a44981966c9e10d387e, type: 3}
   m_Name: WildBoar
   m_EditorClassIdentifier: 
+  whiteList: 1
   worlds: 00000000
-  UseRate: 1
+  UseRate: 0
   rate: 0.5
   risk: 10
   returns: 0
-  minGroup: 1
-  maxGrounp: 2
+  minGroup: 3
+  maxGrounp: 12
+  half_GroupDistance: 7
   minCount: 1
-  maxCouint: 2
-  dense: 2
+  maxCount: 3
+  half_Distance: 2
+  half_Width: 5
   variants:
   - {fileID: 1697931047449044391, guid: e1e4cce6851f1604aaf487e64166e83f, type: 3}

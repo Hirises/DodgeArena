@@ -18,10 +18,12 @@ MonoBehaviour:
   rate: 0
   risk: 0
   returns: 0
-  minGroup: 1
-  maxGrounp: 3
+  minGroup: 9
+  maxGrounp: 27
+  half_GroupDistance: 5
   minCount: 1
-  maxCouint: 3
-  dense: 1
+  maxCount: 3
+  half_Distance: 0.5
+  half_Width: 1.5
   variants:
   - {fileID: 6185907691642991307, guid: 6db13d99d709f184c997b9480d3a11af, type: 3}

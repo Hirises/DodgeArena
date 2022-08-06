@@ -11,7 +11,7 @@ public class ChunkLocation
     }
     public WorldLocation center
     {
-        get => new WorldLocation(world, vector * GameManager.instance.chunkWeidth);
+        get => new WorldLocation(world, vector * GameManager.instance.half_ChunkWeidth * 2);
     }
 
     public ChunkLocation(World world, Vector2 location) {
@@ -21,18 +21,26 @@ public class ChunkLocation
         this.vector = location;
     }
 
-    public bool CheckKeep()
+    /// <summary>
+    /// 입력된 위치를 기준으로 이 청크가 보관되어야 하는지 여부를 반환합니다
+    /// </summary>
+    /// <param name="pos">플레이어 위치</param>
+    /// <returns>보관 여부</returns>
+    public bool CheckKeep(Vector2 pos)
     {
-        Vector2 pos = GameManager.instance.player.transform.position;
-        return Mathf.Abs(pos.x - center.vector.x) <= GameManager.instance.chunkSaveRange
-           && Mathf.Abs(pos.y - center.vector.y) <= GameManager.instance.chunkSaveRange;
+        return Mathf.Abs(pos.x - center.vector.x) <= GameManager.instance.half_ChunkSaveRange
+           && Mathf.Abs(pos.y - center.vector.y) <= GameManager.instance.half_ChunkSaveRange;
     }
 
-    public bool CheckLoad()
+    /// <summary>
+    /// 입력된 위치를 기준으로 이 청크가 로드되어야 되는지 여부를 반환합니다
+    /// </summary>
+    /// <param name="pos">플레이어 위치</param>
+    /// <returns>로드 여부</returns>
+    public bool CheckLoad(Vector2 pos)
     {
-        Vector2 pos = GameManager.instance.player.transform.position;
-        return Mathf.Abs(pos.x - center.vector.x) <= GameManager.instance.chunkLoadRange
-           && Mathf.Abs(pos.y - center.vector.y) <= GameManager.instance.chunkLoadRange;
+        return Mathf.Abs(pos.x - center.vector.x) <= GameManager.instance.half_ChunkLoadRange
+           && Mathf.Abs(pos.y - center.vector.y) <= GameManager.instance.half_ChunkLoadRange;
     }
 
     public override bool Equals(object obj)

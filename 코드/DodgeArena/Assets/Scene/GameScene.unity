@@ -5172,10 +5172,10 @@ MonoBehaviour:
   worldRoot: {fileID: 1236331380}
   worldPrefab: {fileID: 3882782164361037413, guid: 4989cd94d77e6aa45aab9f0284aae1c7, type: 3}
   chunkPrefab: {fileID: 61806345724639106, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
-  chunkUpdateRange: 140
-  chunkSaveRange: 110
-  chunkLoadRange: 80
-  chunkWeidth: 30
+  half_ChunkUpdateRange: 150
+  half_ChunkSaveRange: 120
+  half_ChunkLoadRange: 90
+  half_ChunkWeidth: 30
   debugText: {fileID: 1526811635}
 --- !u!4 &583666927
 Transform:

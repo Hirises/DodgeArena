@@ -37,16 +37,16 @@ public class GameManager : MonoBehaviour
     public Chunk chunkPrefab;
     [SerializeField]
     [BoxGroup("Chunk")]
-    public float chunkUpdateRange;
+    public float half_ChunkUpdateRange;
     [SerializeField]
     [BoxGroup("Chunk")]
-    public float chunkSaveRange;
+    public float half_ChunkSaveRange;
     [SerializeField]
     [BoxGroup("Chunk")]
-    public float chunkLoadRange;
+    public float half_ChunkLoadRange;
     [SerializeField]
     [BoxGroup("Chunk")]
-    public float chunkWeidth;
+    public float half_ChunkWeidth;
 
     [SerializeField]
     [BoxGroup("Test")]
@@ -99,10 +99,10 @@ public class GameManager : MonoBehaviour
 
     public void UpdateChunkState() {
         World world = player.location.world;
-        int loadRange = (int) Mathf.Floor(chunkUpdateRange / chunkWeidth);
+        int half_LoadRange = (int) Mathf.Floor(half_ChunkUpdateRange / half_ChunkWeidth);
         Vector2 offset = player.location.chunkLocation.vector;
-        for(int x = -loadRange; x <= loadRange; x++) {
-            for(int y = -loadRange; y <= loadRange; y++) {
+        for(int x = -half_LoadRange; x <= half_LoadRange; x++) {
+            for(int y = -half_LoadRange; y <= half_LoadRange; y++) {
                 ChunkLocation location = new ChunkLocation(world, new Vector2(x + offset.x, y + offset.y));
                 world.UpdateChunkState(location);
             }

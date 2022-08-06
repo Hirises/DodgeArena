@@ -27,15 +27,15 @@ public class DefaultSpawner : Spawner
     [BoxGroup("Group")]
     public int maxGrounp = 1;
     [BoxGroup("Group")]
-    public float groupDistance = 1;
+    public float half_GroupDistance = 1;
     [BoxGroup("Individual")]
     public int minCount = 1;
     [BoxGroup("Individual")]
-    public int maxCouint = 1;
+    public int maxCount = 1;
     [BoxGroup("Individual")]
-    public float distance = 1;
+    public float half_Distance = 1;
     [BoxGroup("Individual")]
-    public float width = 1;
+    public float half_Width = 1;
     [BoxGroup("Variant")]
     public Entity[] variants;
 
@@ -59,12 +59,12 @@ public class DefaultSpawner : Spawner
 
             //그룹별 생성
             int group = Random.instance.RandomRange(minGroup, maxGrounp);
-            Vector2[] groupLocations = Util.SpreadLocation(group, chunk.location.center.vector2, groupDistance, GameManager.instance.chunkWeidth - width);
+            Vector2[] groupLocations = Util.SpreadLocation(group, chunk.location.center.vector2, half_GroupDistance, GameManager.instance.half_ChunkWeidth - half_Width);
             for(int i = 0; i < group; i++)
             {
                 //그룹 기준 위치 설정 & 그룹에 생성될 개채수 설정
                 WorldLocation groupLocation = new WorldLocation(world, groupLocations[i]);
-                int count = Random.instance.RandomRange(minGroup, maxGrounp);
+                int count = Random.instance.RandomRange(minCount, maxCount);
 
                 //보상(리턴) 수치 확인
                 if (returns > 0)
@@ -87,7 +87,7 @@ public class DefaultSpawner : Spawner
                 }
 
                 //실제 개체 생성
-                Vector2[] locations = Util.SpreadLocation(count, groupLocation.vector2, distance, width);
+                Vector2[] locations = Util.SpreadLocation(count, groupLocation.vector2, half_Distance, half_Width);
                 for (int j = 0; j < count; j++)
                 {
                     WorldLocation location = new WorldLocation(world, locations[j]);
