@@ -11,7 +11,7 @@ public class Chunk : MonoBehaviour
     public bool initiated { get; private set; }
     public bool valid { get; private set; }
     public World world { private set; get; }
-    public Biome biome { private set; get; }
+    public BiomeInfo biomeInfo { private set; get; }
     [SerializeField]
     [ReadOnly]
     private ChunkLocation _location;
@@ -26,7 +26,7 @@ public class Chunk : MonoBehaviour
     /// <summary>
     /// 没农 府悸 (贸澜 积己矫)
     /// </summary>
-    public void ResetProperties(ChunkLocation position, Biome biome)
+    public void ResetProperties(ChunkLocation position, BiomeInfo biomeInfo)
     {
         if (valid)
         {
@@ -38,8 +38,9 @@ public class Chunk : MonoBehaviour
         this.initiated = false;
         this._location = position;
         world = position.world;
-        this.biome = biome;
         entities = new List<Entity>();
+        this.biomeInfo = biomeInfo;
+        biomeInfo.Calculate();
         this.chunkData = GameManager.instance.GetChunkDataGenerator(this).Generate(this);
         valid = true;
 #if UNITY_EDITOR

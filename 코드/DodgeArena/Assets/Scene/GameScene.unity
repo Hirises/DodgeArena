@@ -5173,6 +5173,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 294e4f0c1cc24d04b9895c27b79a16d0, type: 2}
   worldRoot: {fileID: 1236331380}
   worldPrefab: {fileID: 3882782164361037413, guid: 4989cd94d77e6aa45aab9f0284aae1c7, type: 3}
+  half_MinBiomeSize: 3
+  half_MaxBiomeSize: 5
   chunkPrefab: {fileID: 61806345724639106, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
   half_ChunkUpdateRange: 180
   half_ChunkSaveRange: 150

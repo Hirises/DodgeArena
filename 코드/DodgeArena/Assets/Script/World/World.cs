@@ -9,6 +9,7 @@ public class World : MonoBehaviour {
     public bool initiated { private set; get; }
     public bool loaded { private set; get; }
     private Dictionary<ChunkLocation, Chunk> chunks = new Dictionary<ChunkLocation, Chunk>();
+    private Dictionary<ChunkLocation, BiomeInfo> biomes = new Dictionary<ChunkLocation, BiomeInfo>();
 
     public void Initiate(WorldType type) {
         if(initiated) {
@@ -82,7 +83,7 @@ public class World : MonoBehaviour {
 
         Chunk chunk = Instantiate(GameManager.instance.chunkPrefab, location.center.vector, Quaternion.identity, transform);
         chunks.Add(location, chunk);
-        chunk.ResetProperties(location, Biome.Plain);
+        chunk.ResetProperties(location, new BiomeInfo(location));
         return chunk;
     }
 
@@ -122,6 +123,19 @@ public class World : MonoBehaviour {
         Destroy(chunk.gameObject);
     }
     #endregion
+
+    /// <summary>
+    /// 해당 청크에 대한 바이옴 정보를 가져옵니다
+    /// </summary>
+    /// <param name="location">가져올 청크 위치</param>
+    /// <returns>바이옴 정보</returns>
+    public BiomeInfo GetBiomeInfo(ChunkLocation location) {
+        if(!biomes.ContainsKey(location)) {
+            biomes.Add(location, new BiomeInfo(location));
+        }
+
+        return biomes[location];
+    }
 
     /// <summary>
     /// 입력된 개체를 월드에 생성합니다

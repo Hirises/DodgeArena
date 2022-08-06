@@ -33,6 +33,13 @@ public class GameManager : MonoBehaviour
     public World worldPrefab;
 
     [SerializeField]
+    [BoxGroup("Biome")]
+    public int half_MinBiomeSize;
+    [SerializeField]
+    [BoxGroup("Biome")]
+    public int half_MaxBiomeSize;
+
+    [SerializeField]
     [BoxGroup("Chunk")]
     public Chunk chunkPrefab;
     [SerializeField]
@@ -106,7 +113,12 @@ public class GameManager : MonoBehaviour
             player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
         }
 
-        debugText.text = player.hp.ToString();
+        string biomeInfo = "";
+        foreach(Biome biome in player.location.chunk.biomeInfo.affectedBiomes.Keys) {
+            biomeInfo += biome.type.ToString();
+        }
+
+        debugText.text = player.hp.ToString() + "\n" + biomeInfo;
     }
 
     public void UpdateChunkState() {

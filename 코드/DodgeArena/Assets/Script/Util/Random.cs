@@ -51,7 +51,7 @@ public class Random
     /// <returns>랜덤값</returns>
     public bool NextBool()
     {
-        return RandomRange(0, 1) == 0;
+        return RandRange(0, 1) == 0;
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class Random
     /// <param name="min">최소값</param>
     /// <param name="max">최대값</param>
     /// <returns>랜덤값</returns>
-    public int RandomRange(int min, int max)
+    public int RandRange(int min, int max)
     {
         if(min > max)
         {

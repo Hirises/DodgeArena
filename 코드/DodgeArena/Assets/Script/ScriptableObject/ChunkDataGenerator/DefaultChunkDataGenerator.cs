@@ -26,11 +26,10 @@ public class DefaultChunkDataGenerator : ChunkDataGenerator {
     public override bool CheckConditions(Chunk chunk) {
         bool flag = true;
         flag &= !( whiteListForWorld ^ worlds.Contains(chunk.world.type.type) );
-        flag &= !( whiteListForBiomes ^ biomes.Contains(chunk.biome.type) );
         return flag;
     }
 
     public override ChunkData Generate(Chunk chunk) {
-        return new ChunkData(Random.instance.RandomRange(minRisk, maxRisk), Random.instance.RandomRange(minReturn, maxReturn));
+        return new ChunkData(Random.instance.RandRange(minRisk, maxRisk), Random.instance.RandRange(minReturn, maxReturn));
     }
 }

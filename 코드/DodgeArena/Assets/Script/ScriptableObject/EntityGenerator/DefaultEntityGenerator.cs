@@ -51,7 +51,6 @@ public class DefaultEntityGenerator : EntityGenerator
             flag &= Random.instance.CheckRate(rate);
         }
         flag &= !(whiteListForWorld ^ worlds.Contains(chunk.world.type.type));
-        flag &= !(whiteListForBiomes ^ biomes.Contains(chunk.biome.type) );
         return flag;
     }
 
@@ -63,13 +62,13 @@ public class DefaultEntityGenerator : EntityGenerator
             World world = chunk.world;
 
             //그룹별 생성
-            int group = Random.instance.RandomRange(minGroup, maxGrounp);
-            Vector2[] groupLocations = Util.SpreadLocation(group, chunk.location.center.vector2, half_GroupDistance, GameManager.instance.half_ChunkWeidth - half_Width);
+            int group = Random.instance.RandRange(minGroup, maxGrounp);
+            List<Vector2> groupLocations = Util.SpreadLocation(group, chunk.location.center.vector2, half_GroupDistance, GameManager.instance.half_ChunkWeidth - half_Width);
             for(int i = 0; i < group; i++)
             {
                 //그룹 기준 위치 설정 & 그룹에 생성될 개채수 설정
                 WorldLocation groupLocation = new WorldLocation(world, groupLocations[i]);
-                int count = Random.instance.RandomRange(minCount, maxCount);
+                int count = Random.instance.RandRange(minCount, maxCount);
 
                 //보상(리턴) 수치 확인
                 if (returns > 0)
@@ -92,7 +91,7 @@ public class DefaultEntityGenerator : EntityGenerator
                 }
 
                 //실제 개체 생성
-                Vector2[] locations = Util.SpreadLocation(count, groupLocation.vector2, half_Distance, half_Width);
+                List<Vector2> locations = Util.SpreadLocation(count, groupLocation.vector2, half_Distance, half_Width);
                 for (int j = 0; j < count; j++)
                 {
                     WorldLocation location = new WorldLocation(world, locations[j]);

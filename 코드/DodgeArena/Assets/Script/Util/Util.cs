@@ -66,12 +66,57 @@ public class Util
     /// <param name="minDistance">점들 사이의 최소거리</param>
     /// <param name="width">점들이 뿌려질 공간의 반지름</param>
     /// <returns>흩뿌려진 점의 위치</returns>
-    public static Vector2[] SpreadLocation(int count, Vector2 center, float minDistance, float width) {
+    public static List<Vector2> SpreadLocation(int count, Vector2 center, float minDistance, float width) {
+        return SpreadLocation(count, center, minDistance, width, new List<Vector2>());
+    }
+
+    /// <summary>
+    /// 랜덤하게 점들을 흩뿌립니다 <br></br>
+    /// 입력된 중심점을 기준으로하는 정사각형 모양의 공간을 가정합니다 <br></br>
+    /// 몇몇 경우에 완벽하게 흩뿌려지지 않을 수 있습니다
+    /// </summary>
+    /// <param name="preset">흩뿌릴 점</param>
+    /// <param name="center">중심점</param>
+    /// <param name="minDistance">점들 사이의 최소거리</param>
+    /// <param name="width">점들이 뿌려질 공간의 반지름</param>
+    /// <returns>흩뿌려진 점의 위치</returns>
+    public static List<Vector2> SpreadLocation(List<Vector2> preset, int count, Vector2 center, float minDistance, float width) {
+        return SpreadLocation(preset, center, minDistance, width, new List<Vector2>());
+    }
+
+    /// <summary>
+    /// 랜덤하게 점들을 흩뿌립니다 <br></br>
+    /// 입력된 중심점을 기준으로하는 정사각형 모양의 공간을 가정합니다 <br></br>
+    /// 몇몇 경우에 완벽하게 흩뿌려지지 않을 수 있습니다
+    /// </summary>
+    /// <param name="count">흩뿌릴 점의 개수</param>
+    /// <param name="center">중심점</param>
+    /// <param name="minDistance">점들 사이의 최소거리</param>
+    /// <param name="width">점들이 뿌려질 공간의 반지름</param>
+    /// <param name="obstacles">이미 고정된 점들(움직이지는 않으나 고려대상임)</param>
+    /// <returns>흩뿌려진 점의 위치</returns>
+    public static List<Vector2> SpreadLocation(int count, Vector2 center, float minDistance, float width, List<Vector2> obstacles) {
         //기본 위치 설정 (랜덤)
-        Vector2[] positions = new Vector2[count];
-        for(int index = 0; index < positions.Length; index++) {
-            positions[index] = Randomize(center, width);
+        List<Vector2> positions = new List<Vector2>();
+        for(int index = 0; index < count; index++) {
+            positions.Add(Randomize(center, width));
         }
+
+        return SpreadLocation(positions, center, minDistance, width, obstacles);
+    }
+
+    /// <summary>
+    /// 랜덤하게 점들을 흩뿌립니다 <br></br>
+    /// 입력된 중심점을 기준으로하는 정사각형 모양의 공간을 가정합니다 <br></br>
+    /// 몇몇 경우에 완벽하게 흩뿌려지지 않을 수 있습니다
+    /// </summary>
+    /// <param name="preset">흩뿌릴 점</param>
+    /// <param name="center">중심점</param>
+    /// <param name="minDistance">점들 사이의 최소거리</param>
+    /// <param name="width">점들이 뿌려질 공간의 반지름</param>
+    /// <param name="obstacles">이미 고정된 점들(움직이지는 않으나 고려대상임)</param>
+    /// <returns>흩뿌려진 점의 위치</returns>
+    public static List<Vector2> SpreadLocation(List<Vector2> preset, Vector2 center, float minDistance, float width, List<Vector2> obstacles) {
 
         const int MAX_TRY_COUNT = 1000; //최대 시도횟수
 
@@ -79,20 +124,25 @@ public class Util
             bool success = true;    //성공여부 플레그 초기화
 
             //각 플레이어에 대해 검증
-            for(int index = 0; index < positions.Length; index++) {
+            for(int index = 0; index < preset.Count; index++) {
                 //초기화
-                Vector2 position = positions[index];
+                Vector2 position = preset[index];
                 int occupiedCount = 0;
                 Vector2 avoidForce = new Vector2();
 
-                for(int checkIndex = 0; checkIndex < positions.Length; checkIndex++) {
+                for(int checkIndex = 0; checkIndex < preset.Count + obstacles.Count; checkIndex++) {
                     if(checkIndex == index) {
                         //검증 대상과 동일하다면 스킵
                         continue;
                     }
 
                     //둘 사이의 거리 구하기
-                    Vector2 checkPosition = positions[checkIndex];
+                    Vector2 checkPosition;
+                    if(checkIndex < preset.Count) {
+                        checkPosition = preset[checkIndex];
+                    } else {
+                        checkPosition = obstacles[checkIndex - preset.Count];
+                    }
                     float distance = Vector2.Distance(position, checkPosition);
 
                     //만약 둘 사이의 거리가 최소거리보다 작다면
@@ -129,7 +179,7 @@ public class Util
                     success = false;
                 }
 
-                positions[index] = position;
+                preset[index] = position;
             }
 
             //성공시 탈출
@@ -138,7 +188,7 @@ public class Util
             }
         }
 
-        return positions;
+        return preset;
     }
 
     /// <summary>
