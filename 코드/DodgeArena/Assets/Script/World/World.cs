@@ -79,7 +79,7 @@ public class World : MonoBehaviour {
 
         Chunk chunk = Instantiate(GameManager.instance.chunkPrefab, location.center.vector, Quaternion.identity, transform);
         chunks.Add(location, chunk);
-        chunk.ResetProperties(location);
+        chunk.ResetProperties(location, Biome.Plain);
         return chunk;
     }
 
