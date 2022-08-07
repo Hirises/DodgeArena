@@ -16,16 +16,20 @@ public class ChunkLocation
 
     public ChunkLocation(World world, Vector2 location) {
         this.world = world;
-        location.x = Mathf.Floor(location.x);
-        location.y = Mathf.Floor(location.y);
+        location.x = Mathf.RoundToInt(location.x);
+        location.y = Mathf.RoundToInt(location.y);
         this.vector = location;
     }
 
+    public int Distance(ChunkLocation another) {
+        return Util.DistanceSquare(vector, another.vector);
+    }
+
     /// <summary>
-    /// ÀÔ·ÂµÈ À§Ä¡¸¦ ±âÁØÀ¸·Î ÀÌ Ã»Å©°¡ º¸°üµÇ¾î¾ß ÇÏ´ÂÁö ¿©ºÎ¸¦ ¹İÈ¯ÇÕ´Ï´Ù
+    /// ì…ë ¥ëœ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì´ ì²­í¬ê°€ ë³´ê´€ë˜ì–´ì•¼ í•˜ëŠ”ì§€ ì—¬ë¶€ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="pos">ÇÃ·¹ÀÌ¾î À§Ä¡</param>
-    /// <returns>º¸°ü ¿©ºÎ</returns>
+    /// <param name="pos">í”Œë ˆì´ì–´ ìœ„ì¹˜</param>
+    /// <returns>ë³´ê´€ ì—¬ë¶€</returns>
     public bool CheckKeep(Vector2 pos)
     {
         return Mathf.Abs(pos.x - center.vector.x) <= GameManager.instance.half_ChunkSaveRange
@@ -33,10 +37,10 @@ public class ChunkLocation
     }
 
     /// <summary>
-    /// ÀÔ·ÂµÈ À§Ä¡¸¦ ±âÁØÀ¸·Î ÀÌ Ã»Å©°¡ ·ÎµåµÇ¾î¾ß µÇ´ÂÁö ¿©ºÎ¸¦ ¹İÈ¯ÇÕ´Ï´Ù
+    /// ì…ë ¥ëœ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ì´ ì²­í¬ê°€ ë¡œë“œë˜ì–´ì•¼ ë˜ëŠ”ì§€ ì—¬ë¶€ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="pos">ÇÃ·¹ÀÌ¾î À§Ä¡</param>
-    /// <returns>·Îµå ¿©ºÎ</returns>
+    /// <param name="pos">í”Œë ˆì´ì–´ ìœ„ì¹˜</param>
+    /// <returns>ë¡œë“œ ì—¬ë¶€</returns>
     public bool CheckLoad(Vector2 pos)
     {
         return Mathf.Abs(pos.x - center.vector.x) <= GameManager.instance.half_ChunkLoadRange

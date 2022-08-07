@@ -5173,8 +5173,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 294e4f0c1cc24d04b9895c27b79a16d0, type: 2}
   worldRoot: {fileID: 1236331380}
   worldPrefab: {fileID: 3882782164361037413, guid: 4989cd94d77e6aa45aab9f0284aae1c7, type: 3}
-  half_MinBiomeSize: 3
-  half_MaxBiomeSize: 5
+  half_MinBiomeSize_Chunk: 1
+  half_MaxBiomeSize_Chunk: 3
+  maxAffectedBiomeAmount: 16
   chunkPrefab: {fileID: 61806345724639106, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
   half_ChunkUpdateRange: 180
   half_ChunkSaveRange: 150
@@ -5262,7 +5263,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -284.6, y: -35.859985}
+  m_AnchoredPosition: {x: -284.6, y: -35.860107}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1526811635

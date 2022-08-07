@@ -4,43 +4,41 @@ using UnityEngine;
 using NaughtyAttributes;
 
 /// <summary>
-/// Ã»Å©ÀÇ ¹ÙÀÌ¿È Á¤º¸
+/// ì²­í¬ì˜ ë°”ì´ì˜´ ì •ë³´
 /// </summary>
 public class BiomeInfo {
 
     /// <summary>
-    /// ÀÌ Ã»Å©ÀÇ À§Ä¡ <br></br>
-    /// ÁÖÀÇ! °è»ê ¿Ï·á Àü¿¡ <code>location.chunk</code>¸¦ È£ÃâÇÏ¸é ¹«ÇÑ·çÇÁ¿¡ ºüÁø´Ù
+    /// ì´ ì²­í¬ì˜ ìœ„ì¹˜ <br></br>
+    /// ì£¼ì˜! ê³„ì‚° ì™„ë£Œ ì „ì— <code>location.chunk</code>ë¥¼ í˜¸ì¶œí•˜ë©´ ë¬´í•œë£¨í”„ì— ë¹ ì§„ë‹¤
     /// </summary>
-    [System.NonSerialized]
     public readonly ChunkLocation location;
 
     /// <summary>
-    /// ÀÌ Ã»Å©ÀÇ ±â¿ø ¹ÙÀÌ¿È Á¤º¸°¡ È®Á¤ µÇ¾ú´ÂÁö ¿©ºÎ <br></br>
-    /// 'ÀÌ ¹ÙÀÌ¿È'ÀÇ '±â¿ø ¹ÙÀÌ¿È' ¼³Á¤ ¿©ºÎ¸¸ µûÁø´Ù <br></br>
-    /// µû¶ó¼­ ÀÌ °ªÀÌ trueÀÌ´õ¶óµµ <see cref="calculated"/>´Â falseÀÏ ¼ö ÀÖ´Ù
+    /// ì´ ì²­í¬ì˜ ê¸°ì› ë°”ì´ì˜´ ì •ë³´ê°€ í™•ì • ë˜ì—ˆëŠ”ì§€ ì—¬ë¶€ <br></br>
+    /// 'ì´ ë°”ì´ì˜´'ì˜ 'ê¸°ì› ë°”ì´ì˜´' ì„¤ì • ì—¬ë¶€ë§Œ ë”°ì§„ë‹¤ <br></br>
+    /// ë”°ë¼ì„œ ì´ ê°’ì´ trueì´ë”ë¼ë„ <see cref="calculated"/>ëŠ” falseì¼ ìˆ˜ ìˆë‹¤
     /// </summary>
     public bool defined { get; private set; }
     /// <summary>
-    /// ÀÌ Ã»Å©ÀÇ ¹ÙÀÌ¿È Á¤º¸°¡ °è»ê µÇ¾ú´ÂÁö ¿©ºÎ <br></br>
-    /// ÁÖº¯ ¸ğµç Ã»Å©ÀÇ ±â¿ø ¹ÙÀÌ¿È Á¤º¸°¡ °è»ê µÇ¾ú±â ¶§¹®¿¡ ´õÀÌ»ó ¼öÁ¤µÇÁö ¾Ê´Â´Ù <br></br>
-    /// µû¶ó¼­ ÀÌ °ªÀÌ trueÀÎ °æ¿ì <see cref="defined"/>µµ Ç×»ó trueÀÌ´Ù.
+    /// ì´ ì²­í¬ì˜ ë°”ì´ì˜´ ì •ë³´ê°€ ê³„ì‚° ë˜ì—ˆëŠ”ì§€ ì—¬ë¶€ <br></br>
+    /// ì£¼ë³€ ëª¨ë“  ì²­í¬ì˜ ê¸°ì› ë°”ì´ì˜´ ì •ë³´ê°€ ê³„ì‚° ë˜ì—ˆê¸° ë•Œë¬¸ì— ë”ì´ìƒ ìˆ˜ì •ë˜ì§€ ì•ŠëŠ”ë‹¤ <br></br>
+    /// ë”°ë¼ì„œ ì´ ê°’ì´ trueì¸ ê²½ìš° <see cref="defined"/>ë„ í•­ìƒ trueì´ë‹¤.
     /// </summary>
     public bool calculated { get; private set; }
     /// <summary>
-    /// ÀÌ Ã»Å©°¡ ±â¿ø ¹ÙÀÌ¿ÈÀÎÁö ¿©ºÎ
+    /// ì´ ì²­í¬ê°€ ê¸°ì› ë°”ì´ì˜´ì¸ì§€ ì—¬ë¶€
     /// </summary>
     public bool isSource { get; private set; }
     /// <summary>
-    /// ±â¿ø ¹ÙÀÌ¿È Á¤º¸ <br></br>
-    /// <see cref="isSource"/>°¡ false¶ó¸é nullÀÌ´Ù.
+    /// ê¸°ì› ë°”ì´ì˜´ ì •ë³´ <br></br>
+    /// <see cref="isSource"/>ê°€ falseë¼ë©´ nullì´ë‹¤.
     /// </summary>
     public Biome sourceBiome { get; private set; }
 
     /// <summary>
-    /// ÀÌ Ã»Å©¿¡ ¿µÇâÀ» ÁÖ´Â ¹ÙÀÌ¿Èµé (ÀÌ Ã»Å©°¡ ±â¿øÀÎ ¹ÙÀÌ¿Èµµ Æ÷ÇÔ)
+    /// ì´ ì²­í¬ì— ì˜í–¥ì„ ì£¼ëŠ” ë°”ì´ì˜´ë“¤ (ì´ ì²­í¬ê°€ ê¸°ì›ì¸ ë°”ì´ì˜´ë„ í¬í•¨)
     /// </summary>
-    [System.NonSerialized]
     public readonly Dictionary<Biome, float> affectedBiomes;
 
     public BiomeInfo(ChunkLocation location) {
@@ -52,7 +50,7 @@ public class BiomeInfo {
     }
 
     /// <summary>
-    /// ÀÌ Ã»Å©ÀÇ ¹ÙÀÌ¿È Á¤º¸¸¦ °è»êÇÑ´Ù
+    /// ì´ ì²­í¬ì˜ ë°”ì´ì˜´ ì •ë³´ë¥¼ ê³„ì‚°í•œë‹¤
     /// </summary>
     public void Calculate() {
         if(calculated) {
@@ -62,107 +60,90 @@ public class BiomeInfo {
         this.calculated = true;
         World world = this.location.world;
 
-        //ÁÖº¯ÀÇ ±â¿ø ¹ÙÀÌ¿È Á¤º¸¸¦ °¡Á®¿Â´Ù
-        List<Vector2> sourceChunks = new List<Vector2>();
+        //ì£¼ë³€ì˜ ê¸°ì› ë°”ì´ì˜´ ì •ë³´ë¥¼ ê°€ì ¸ì˜¨ë‹¤
+        List<Vector2> sourceBiomeChunks = new List<Vector2>();
+        List<BiomeInfo> undefinedChunks = new List<BiomeInfo>();
         Vector2 offset = this.location.vector;
-        int half = GameManager.instance.half_MaxBiomeSize;
+        int half = GameManager.instance.half_MaxBiomeSize_Chunk - 1;
         for(int x = -half; x <= half; x++) {
             for(int y = -half; y <= half; y++) {
                 BiomeInfo info = world.GetBiomeInfo(new ChunkLocation(world, new Vector2(x + offset.x, y + offset.y)));
                 if(info.isSource) {
-                    sourceChunks.Add(info.location.vector);
+                    sourceBiomeChunks.Add(info.location.vector);
+                }
+                if(!info.defined) {
+                    undefinedChunks.Add(info);
                 }
             }
         }
 
-        //ÁÖº¯¿¡ ½ºÆùÇÒ ¹ÙÀÌ¿ÈÀÇ °³¼ö ¼³Á¤ (·£´ı)
-        int nearBiomes = Random.instance.RandRange(0, Mathf.FloorToInt(Mathf.Pow(( GameManager.instance.half_MaxBiomeSize / GameManager.instance.half_MinBiomeSize ) + 1, 2)));
-        if(sourceChunks.Count < nearBiomes) {
-            //¸ğÀÚ¸£´Ù¸é ½ºÆù
-            int generation = nearBiomes - sourceChunks.Count;
-            List<Vector2> points = Util.SpreadLocation(generation, offset, GameManager.instance.half_MinBiomeSize, GameManager.instance.half_MaxBiomeSize, sourceChunks);
+        //ì£¼ë³€ì— ìŠ¤í°í•  ë°”ì´ì˜´ì˜ ê°œìˆ˜ ì„¤ì • (ëœë¤)
+        int nearBiomes = Random.instance.RandRange(1, Random.instance.RandRange(1, GameManager.instance.maxAffectedBiomeAmount));
+        if(sourceBiomeChunks.Count < nearBiomes) {
+            //ëª¨ìë¥´ë‹¤ë©´ ìŠ¤í°
+            int generation = nearBiomes - sourceBiomeChunks.Count;
+            List<Vector2> points = Util.SpreadLocationForChunk(generation, offset, (GameManager.instance.half_MinBiomeSize_Chunk - 1 ) * 2, GameManager.instance.half_MaxBiomeSize_Chunk - 1, sourceBiomeChunks);
 
-            //À¯È¿¼º È®ÀÎ(ÃÖ¼Ò°Å¸® ¹× È®Á¤¿©ºÎ)
-            foreach(Vector2 point in points) {
+            //ìœ íš¨ì„± í™•ì¸(ìµœì†Œê±°ë¦¬ ë° í™•ì •ì—¬ë¶€)
+            for(int index = 0; index < points.Count; index++) {
+                Vector2 point = new ChunkLocation(world, points[index]).vector;
                 bool valid = true;
 
-                //ÀÌ¹Ì È®Á¤µÈ Ã»Å©¿´´Ù¸é À¯È¿ÇÏÁö ¾ÊÀ½
+                //ì´ë¯¸ í™•ì •ëœ ì²­í¬ì˜€ë‹¤ë©´ ìœ íš¨í•˜ì§€ ì•ŠìŒ
                 ChunkLocation location = new ChunkLocation(world, point);
                 BiomeInfo info = world.GetBiomeInfo(location);
                 if(info.defined) {
-                    valid = false;
                     break;
                 }
 
-                foreach(Vector2 checkPoint in points) {
-                    if(point.Equals(checkPoint)) {
-                        continue;
-                    }
+                for(int checkIndex = index + 1; checkIndex < points.Count; checkIndex++) {
+                    Vector2 checkPoint = points[checkIndex];
 
-                    //ÀÎÁ¢ ¹ÙÀÌ¿È°úÀÇ °Å¸®°¡ ÃÖ¼Ò °Å¸®º¸´Ù ´õ ÀÛ´Ù¸é À¯È¿ÇÏÁö ¾ÊÀ½
-                    float distance = Vector2.Distance(point, checkPoint);
-                    if(distance < GameManager.instance.half_MinBiomeSize) {
+                    //ì¸ì ‘ ë°”ì´ì˜´ê³¼ì˜ ê±°ë¦¬ê°€ ìµœì†Œ ê±°ë¦¬ë³´ë‹¤ ë” ì‘ë‹¤ë©´ ìœ íš¨í•˜ì§€ ì•ŠìŒ
+                    float distance = Util.DistanceSquare(point, checkPoint);
+                    if(distance < ( GameManager.instance.half_MinBiomeSize_Chunk - 1 ) * 2) {
                         valid = false;
                         break;
                     }
                 }
 
-                //À¯È¿ÇÑ °æ¿ì¿¡¸¸ Àû¿ë
+                //ìœ íš¨í•œ ê²½ìš°ì—ë§Œ ì ìš©
                 if(valid) {
                     info.defined = true;
-                    info.sourceBiome = Random.instance.RandRange(0, 1) == 0 ? Biome.Forest : Biome.Plain;     //TODO ¹ÙÀÌ¿È ·£´ı »ı¼º
+                    info.sourceBiome = Random.instance.RandRange(0, 1) == 0 ? Biome.Forest : Biome.Plain;     //TODO ë°”ì´ì˜´ ëœë¤ ìƒì„±
                     info.isSource = true;
-                    sourceChunks.Add(location.vector);
+                    sourceBiomeChunks.Add(info.location.vector);
                 }
             }
         }
 
-        //ÁÖº¯ Ã»Å©ÀÇ ±â¿ø ¹ÙÀÌ¿ÈÀ» ÀüºÎ È®Á¤ Ã³¸®
-        for(int x = -half; x <= half; x++) {
-            for(int y = -half; y <= half; y++) {
-                BiomeInfo info = world.GetBiomeInfo(new ChunkLocation(world, new Vector2(x + offset.x, y + offset.y)));
-                info.defined = true;
+        int forceSpawnIndex = -1;
+        //ê¸°ì› ë°”ì´ì˜´ì´ í•˜ë‚˜ë„ ì—†ë‹¤ë©´
+        if(sourceBiomeChunks.Count <= 0) {
+            //ê°•ì œë¡œ í•œê°œ ìƒì„±
+            forceSpawnIndex = Random.instance.RandInt(0, undefinedChunks.Count);
+        }
+
+        //ì£¼ë³€ ì²­í¬ì˜ ê¸°ì› ë°”ì´ì˜´ì„ ì „ë¶€ í™•ì • ì²˜ë¦¬
+        for(int index = 0; index < undefinedChunks.Count; index++) {
+            BiomeInfo info = undefinedChunks[index];
+            info.defined = true;
+
+            if(forceSpawnIndex == index) {
+                info.sourceBiome = Random.instance.RandRange(0, 1) == 0 ? Biome.Forest : Biome.Plain;     //TODO ë°”ì´ì˜´ ëœë¤ ìƒì„±
+                info.isSource = true;
+                sourceBiomeChunks.Add(info.location.vector);
             }
         }
 
-        //°è»ê ¿Ï·á
-        foreach(Vector2 vec in sourceChunks) {
+        //ê³„ì‚° ê²°ê³¼ ë°˜ì˜
+        foreach(Vector2 vec in sourceBiomeChunks) {
+            //ì´ ì²­í¬ì— ëŒ€í•œ ë°”ì´ì˜´ ì˜í–¥ë¥  ê³„ì‚°
             BiomeInfo info = world.GetBiomeInfo(new ChunkLocation(world, vec));
-            float distance = Vector2.Distance(location.vector, info.location.vector);
+            float distance = Util.DistanceSquare(location.vector, vec);
             if(!affectedBiomes.ContainsKey(info.sourceBiome)) {
-                affectedBiomes.Add(info.sourceBiome, LerpBiomeEffect(distance));
+                affectedBiomes.Add(info.sourceBiome, distance);
             }
         }
-    }
-
-    /// <summary>
-    /// ÇØ´ç °Å¸®¿¡ ÀÖ´Â Ã»Å©ÀÇ ¿µÇâ·ÂÀ» ¹İÈ¯ÇÕ´Ï´Ù <br></br>
-    /// ¼±Çü º¸°£À¸·Î ÀÛµ¿ÇÕ´Ï´Ù (2022-08-07 ±âÁØ)
-    /// </summary>
-    /// <param name="distance">°Å¸®</param>
-    /// <returns>¿µÇâ·Â</returns>
-    public static float LerpBiomeEffect(float distance) {
-        if(distance <= GameManager.instance.half_MinBiomeSize) {
-            return 1;
-        }else if(distance >= GameManager.instance.half_MinBiomeSize) {
-            return 0;
-        }
-
-        //TODO °¢ÀÚ °Å¸® ºñ±³ÇØ¼­ ¾ğÁ¦³ª ÇÕ°è´Â 1ÀÌ µÇµµ·Ï
-        return ( distance - GameManager.instance.half_MinBiomeSize ) / (GameManager.instance.half_MaxBiomeSize - GameManager.instance.half_MinBiomeSize);
-    }
-
-    /// <summary>
-    /// ÀÌ Ã»Å©¿¡ ´ëÇÑ ÇØ´ç ¹ÙÀÌ¿ÈÀÇ ¿µÇâ·ÂÀ» ¹İÈ¯ÇÕ´Ï´Ù <br></br>
-    /// ¹İÈ¯°ªÀº [0-1]ÀÇ °ªÀÔ´Ï´Ù
-    /// </summary>
-    /// <param name="biome">°í·ÁÇÒ ¹ÙÀÌ¿È</param>
-    /// <returns>ÇØ´ç ¹ÙÀÌ¿ÈÀÇ ¿µÇâ·Â</returns>
-    public float getEffect(Biome biome) {
-        if(!affectedBiomes.ContainsKey(biome)) {
-            return 0;
-        }
-
-        return affectedBiomes[biome];
     }
 }

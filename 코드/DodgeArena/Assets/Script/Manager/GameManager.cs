@@ -34,10 +34,19 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     [BoxGroup("Biome")]
-    public int half_MinBiomeSize;
+    [OnValueChanged(nameof(setMaxAffectedBiomeAmount))]
+    public int half_MinBiomeSize_Chunk;
     [SerializeField]
     [BoxGroup("Biome")]
-    public int half_MaxBiomeSize;
+    [OnValueChanged(nameof(setMaxAffectedBiomeAmount))]
+    public int half_MaxBiomeSize_Chunk;
+    [ReadOnly]
+    [SerializeField]
+    [BoxGroup("Biome")]
+    public int maxAffectedBiomeAmount;
+    public void setMaxAffectedBiomeAmount() {
+        maxAffectedBiomeAmount = Mathf.FloorToInt(Mathf.Pow(( half_MaxBiomeSize_Chunk / ( (half_MinBiomeSize_Chunk - 1) * 2 + 1 ) ) + 1, 2));
+    }
 
     [SerializeField]
     [BoxGroup("Chunk")]
@@ -114,8 +123,8 @@ public class GameManager : MonoBehaviour
         }
 
         string biomeInfo = "";
-        foreach(Biome biome in player.location.chunk.biomeInfo.affectedBiomes.Keys) {
-            biomeInfo += biome.type.ToString();
+        foreach(Biome biome in player.chunk.biomeInfo.affectedBiomes.Keys) {
+            biomeInfo += biome.type.ToString() + ", ";
         }
 
         debugText.text = player.hp.ToString() + "\n" + biomeInfo;
@@ -165,10 +174,10 @@ public class GameManager : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// ÇØ´ç Ã»Å©¿¡ ´ëÇØ »ç¿ë °¡´ÉÇÑ <see cref="ChunkDataGenerator"/>µéÀÇ ¸ñ·ÏÀ» ¹İÈ¯ÇÕ´Ï´Ù
+    /// í•´ë‹¹ ì²­í¬ì— ëŒ€í•´ ì‚¬ìš© ê°€ëŠ¥í•œ <see cref="ChunkDataGenerator"/>ë“¤ì˜ ëª©ë¡ì„ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="chunk">È®ÀÎÇÒ Ã»Å©</param>
-    /// <returns>°¡´ÉÇÑ ¸ñ·Ï</returns>
+    /// <param name="chunk">í™•ì¸í•  ì²­í¬</param>
+    /// <returns>ê°€ëŠ¥í•œ ëª©ë¡</returns>
     public List<ChunkDataGenerator> GetPossibleChunkDataGenerators(Chunk chunk) {
         List<ChunkDataGenerator> output = new List<ChunkDataGenerator>();
         foreach(ChunkDataGenerator generator in chunkDataGenerators) {
@@ -180,10 +189,10 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇØ´ç Ã»Å©¿¡ ´ëÇÑ ·£´ıÇÑ <see cref="ChunkDataGenerator"/>¸¦ ¹İÈ¯ÇÕ´Ï´Ù
+    /// í•´ë‹¹ ì²­í¬ì— ëŒ€í•œ ëœë¤í•œ <see cref="ChunkDataGenerator"/>ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="chunk">È®ÀÎÇÒ Ã»Å©</param>
-    /// <returns>¹İÈ¯µÈ »ı¼ºÀÚ</returns>
+    /// <param name="chunk">í™•ì¸í•  ì²­í¬</param>
+    /// <returns>ë°˜í™˜ëœ ìƒì„±ì</returns>
     public ChunkDataGenerator GetChunkDataGenerator(Chunk chunk) {
         return Util.GetByWeigth(GetPossibleChunkDataGenerators(chunk), val => val.weight);
     }

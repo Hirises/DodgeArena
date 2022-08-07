@@ -6,36 +6,52 @@ using System;
 public class Util
 {
     /// <summary>
-    /// 3D���� ���͸� 2D �������� �����մϴ�. <br/>
-    /// ������ x, y ������ �̿��մϴ�
+    /// 해당 리스트를 Debug.Log로 출력합니다
     /// </summary>
-    /// <param name="vector">������ ����</param>
-    /// <returns>����� ����</returns>
+    /// <typeparam name="T">리스트 타입</typeparam>
+    /// <param name="list">출력할 리스트</param>
+    public static void Logging<T>(List<T> list) {
+        string log = "";
+        foreach(T item in list) {
+            log += item.ToString() + ", ";
+        }
+        if(log.Length > 0) {
+            log = log.Substring(0, log.Length - 2);
+        }
+        Debug.Log(log);
+    }
+
+    /// <summary>
+    /// 3D기준 백터를 2D 기준으로 변경합니다. <br/>
+    /// 백터의 x, y 성분을 이용합니다
+    /// </summary>
+    /// <param name="vector">변경할 백터</param>
+    /// <returns>변경된 백터</returns>
     public static Vector2 FlattenLocation(Vector3 vector)
     {
         return new Vector2(vector.x, vector.y);
     }
 
     /// <summary>
-    /// �Էµ� ����� �ٶ󺸴� ȸ������ ���Ϸ� ������ ��ȯ�մϴ�. <br/>
-    /// 2D �������� ����ϸ�, Zȸ���� 0�� �� �������� �ٶ󺸰� �ִٰ� �����մϴ�.
+    /// 입력된 대상을 바라보는 회전값을 오일러 각도로 반환합니다. <br/>
+    /// 2D 기준으로 계산하며, Z회전이 0일 때 오른쪽을 바라보고 있다고 가정합니다.
     /// </summary>
-    /// <param name="selfPos">�ڽ��� ��ġ</param>
-    /// <param name="targetPos">�ٶ� ����� ��ġ</param>
-    /// <returns>����� �ٶ󺸴� ȸ����</returns>
+    /// <param name="selfPos">자신의 위치</param>
+    /// <param name="targetPos">바라볼 대상의 위치</param>
+    /// <returns>대상을 바라보는 회전값</returns>
     public static Vector3 LootAtRotation(Vector3 selfPos, Vector3 targetPos)
     {
         return LootAtRotation(selfPos, targetPos, Vector2.right);
     }
 
     /// <summary>
-    /// �Էµ� ����� �ٶ󺸴� ȸ������ ���Ϸ� ������ ��ȯ�մϴ�. <br/>
-    /// 2D �������� ����մϴ�.
+    /// 입력된 대상을 바라보는 회전값을 오일러 각도로 반환합니다. <br/>
+    /// 2D 기준으로 계산합니다.
     /// </summary>
-    /// <param name="selfPos">�ڽ��� ��ġ</param>
-    /// <param name="targetPos">�ٶ� ����� ��ġ</param>
-    /// <param name="zeroRotation">Zȸ���� 0�϶� �ٶ󺸴� ����</param>
-    /// <returns>����� �ٶ󺸴� ȸ����</returns>
+    /// <param name="selfPos">자신의 위치</param>
+    /// <param name="targetPos">바라볼 대상의 위치</param>
+    /// <param name="zeroRotation">Z회전이 0일때 바라보는 방향</param>
+    /// <returns>대상을 바라보는 회전값</returns>
     public static Vector3 LootAtRotation(Vector3 selfPos, Vector3 targetPos, Vector2 zeroRotation)
     {
         Vector2 dir = ToVector(selfPos, targetPos);
@@ -45,58 +61,58 @@ public class Util
     }
 
     /// <summary>
-    /// �Էµ� ����� �ٶ󺸴� ���͸� ��ȯ�մϴ� <br/>
-    /// 2D �������� ����մϴ�
+    /// 입력된 대상을 바라보는 벡터를 반환합니다 <br/>
+    /// 2D 기준으로 계산합니다
     /// </summary>
-    /// <param name="selfPos">�ڽ��� ��ġ</param>
-    /// <param name="targetPos">�ٶ� ����� ��ġ</param>
-    /// <returns>����� �ٶ󺸴� ����</returns>
+    /// <param name="selfPos">자신의 위치</param>
+    /// <param name="targetPos">바라볼 대상의 위치</param>
+    /// <returns>대상을 바라보는 백터</returns>
     public static Vector2 ToVector(Vector3 selfPos, Vector3 targetPos)
     {
         return new Vector2(targetPos.x - selfPos.x, targetPos.y - selfPos.y);
     }
 
     /// <summary>
-    /// �����ϰ� ������ ��Ѹ��ϴ� <br></br>
-    /// �Էµ� �߽����� ���������ϴ� ���簢�� ����� ������ �����մϴ� <br></br>
-    /// ��� ��쿡 �Ϻ��ϰ� ��ѷ����� ���� �� �ֽ��ϴ�
+    /// 랜덤하게 점들을 흩뿌립니다 <br></br>
+    /// 입력된 중심점을 기준으로하는 정사각형 모양의 공간을 가정합니다 <br></br>
+    /// 몇몇 경우에 완벽하게 흩뿌려지지 않을 수 있습니다
     /// </summary>
-    /// <param name="count">��Ѹ� ���� ����</param>
-    /// <param name="center">�߽���</param>
-    /// <param name="minDistance">���� ������ �ּҰŸ�</param>
-    /// <param name="width">������ �ѷ��� ������ ������</param>
-    /// <returns>��ѷ��� ���� ��ġ</returns>
+    /// <param name="count">흩뿌릴 점의 개수</param>
+    /// <param name="center">중심점</param>
+    /// <param name="minDistance">점들 사이의 최소거리</param>
+    /// <param name="width">점들이 뿌려질 공간의 반지름</param>
+    /// <returns>흩뿌려진 점의 위치</returns>
     public static List<Vector2> SpreadLocation(int count, Vector2 center, float minDistance, float width) {
         return SpreadLocation(count, center, minDistance, width, new List<Vector2>());
     }
 
     /// <summary>
-    /// �����ϰ� ������ ��Ѹ��ϴ� <br></br>
-    /// �Էµ� �߽����� ���������ϴ� ���簢�� ����� ������ �����մϴ� <br></br>
-    /// ��� ��쿡 �Ϻ��ϰ� ��ѷ����� ���� �� �ֽ��ϴ�
+    /// 랜덤하게 점들을 흩뿌립니다 <br></br>
+    /// 입력된 중심점을 기준으로하는 정사각형 모양의 공간을 가정합니다 <br></br>
+    /// 몇몇 경우에 완벽하게 흩뿌려지지 않을 수 있습니다
     /// </summary>
-    /// <param name="preset">��Ѹ� ��</param>
-    /// <param name="center">�߽���</param>
-    /// <param name="minDistance">���� ������ �ּҰŸ�</param>
-    /// <param name="width">������ �ѷ��� ������ ������</param>
-    /// <returns>��ѷ��� ���� ��ġ</returns>
+    /// <param name="preset">흩뿌릴 점</param>
+    /// <param name="center">중심점</param>
+    /// <param name="minDistance">점들 사이의 최소거리</param>
+    /// <param name="width">점들이 뿌려질 공간의 반지름</param>
+    /// <returns>흩뿌려진 점의 위치</returns>
     public static List<Vector2> SpreadLocation(List<Vector2> preset, int count, Vector2 center, float minDistance, float width) {
         return SpreadLocation(preset, center, minDistance, width, new List<Vector2>());
     }
 
     /// <summary>
-    /// �����ϰ� ������ ��Ѹ��ϴ� <br></br>
-    /// �Էµ� �߽����� ���������ϴ� ���簢�� ����� ������ �����մϴ� <br></br>
-    /// ��� ��쿡 �Ϻ��ϰ� ��ѷ����� ���� �� �ֽ��ϴ�
+    /// 랜덤하게 점들을 흩뿌립니다 <br></br>
+    /// 입력된 중심점을 기준으로하는 정사각형 모양의 공간을 가정합니다 <br></br>
+    /// 몇몇 경우에 완벽하게 흩뿌려지지 않을 수 있습니다
     /// </summary>
-    /// <param name="count">��Ѹ� ���� ����</param>
-    /// <param name="center">�߽���</param>
-    /// <param name="minDistance">���� ������ �ּҰŸ�</param>
-    /// <param name="width">������ �ѷ��� ������ ������</param>
-    /// <param name="obstacles">�̹� ������ ����(���������� ������ ���������)</param>
-    /// <returns>��ѷ��� ���� ��ġ</returns>
+    /// <param name="count">흩뿌릴 점의 개수</param>
+    /// <param name="center">중심점</param>
+    /// <param name="minDistance">점들 사이의 최소거리</param>
+    /// <param name="width">점들이 뿌려질 공간의 반지름</param>
+    /// <param name="obstacles">이미 고정된 점들(움직이지는 않으나 고려대상임)</param>
+    /// <returns>흩뿌려진 점의 위치</returns>
     public static List<Vector2> SpreadLocation(int count, Vector2 center, float minDistance, float width, List<Vector2> obstacles) {
-        //�⺻ ��ġ ���� (����)
+        //기본 위치 설정 (랜덤)
         List<Vector2> positions = new List<Vector2>();
         for(int index = 0; index < count; index++) {
             positions.Add(Randomize(center, width));
@@ -106,37 +122,37 @@ public class Util
     }
 
     /// <summary>
-    /// �����ϰ� ������ ��Ѹ��ϴ� <br></br>
-    /// �Էµ� �߽����� ���������ϴ� ���簢�� ����� ������ �����մϴ� <br></br>
-    /// ��� ��쿡 �Ϻ��ϰ� ��ѷ����� ���� �� �ֽ��ϴ�
+    /// 랜덤하게 점들을 흩뿌립니다 <br></br>
+    /// 입력된 중심점을 기준으로하는 정사각형 모양의 공간을 가정합니다 <br></br>
+    /// 몇몇 경우에 완벽하게 흩뿌려지지 않을 수 있습니다
     /// </summary>
-    /// <param name="preset">��Ѹ� ��</param>
-    /// <param name="center">�߽���</param>
-    /// <param name="minDistance">���� ������ �ּҰŸ�</param>
-    /// <param name="width">������ �ѷ��� ������ ������</param>
-    /// <param name="obstacles">�̹� ������ ����(���������� ������ ���������)</param>
-    /// <returns>��ѷ��� ���� ��ġ</returns>
+    /// <param name="preset">흩뿌릴 점</param>
+    /// <param name="center">중심점</param>
+    /// <param name="minDistance">점들 사이의 최소거리</param>
+    /// <param name="width">점들이 뿌려질 공간의 반지름</param>
+    /// <param name="obstacles">이미 고정된 점들(움직이지는 않으나 고려대상임)</param>
+    /// <returns>흩뿌려진 점의 위치</returns>
     public static List<Vector2> SpreadLocation(List<Vector2> preset, Vector2 center, float minDistance, float width, List<Vector2> obstacles) {
 
-        const int MAX_TRY_COUNT = 1000; //�ִ� �õ�Ƚ��
+        const int MAX_TRY_COUNT = 1000; //최대 시도횟수
 
         for(int tryCount = 0; tryCount < MAX_TRY_COUNT; tryCount++) {
-            bool success = true;    //�������� �÷��� �ʱ�ȭ
+            bool success = true;    //성공여부 플레그 초기화
 
-            //�� �÷��̾ ���� ����
+            //각 플레이어에 대해 검증
             for(int index = 0; index < preset.Count; index++) {
-                //�ʱ�ȭ
+                //초기화
                 Vector2 position = preset[index];
                 int occupiedCount = 0;
                 Vector2 avoidForce = new Vector2();
 
                 for(int checkIndex = 0; checkIndex < preset.Count + obstacles.Count; checkIndex++) {
                     if(checkIndex == index) {
-                        //���� ���� �����ϴٸ� ��ŵ
+                        //검증 대상과 동일하다면 스킵
                         continue;
                     }
 
-                    //�� ������ �Ÿ� ���ϱ�
+                    //둘 사이의 거리 구하기
                     Vector2 checkPosition;
                     if(checkIndex < preset.Count) {
                         checkPosition = preset[checkIndex];
@@ -145,44 +161,44 @@ public class Util
                     }
                     float distance = Vector2.Distance(position, checkPosition);
 
-                    //���� �� ������ �Ÿ��� �ּҰŸ����� �۴ٸ�
+                    //만약 둘 사이의 거리가 최소거리보다 작다면
                     if(distance < minDistance) {
-                        //ȸ�� ���� ����
+                        //회피 방향 적용
                         occupiedCount += 1;
                         avoidForce += checkPosition - position;
                     }
                 }
 
-                //��ġ�� ���� 1�� �̻� �־��ٸ�
+                //겹치는 점이 1개 이상 있었다면
                 if(occupiedCount > 0) {
                     avoidForce /= occupiedCount;
                     float length = avoidForce.magnitude;
 
-                    if(length > 0f) {   //���̰� �ִٸ�
-                        //�ݴ� �������� �̵�
+                    if(length > 0f) {   //길이가 있다면
+                        //반대 방향으로 이동
                         position -= avoidForce.normalized;
-                    } else {    //���̰� ���ٸ�
-                        //�ٽ� �����ϰ� ����
+                    } else {    //길이가 없다면
+                        //다시 랜덤하게 설정
                         position = Randomize(center, width);
                     }
 
-                    //���� ����
+                    //실패 판정
                     success = false;
                 }
 
-                //�ش� ���� ������ ����ٸ�
+                //해당 점이 공간을 벗어났다면
                 if(!IsIn(position, center, width)) {
-                    //�ٽ� �����ϰ� ����
+                    //다시 랜덤하게 설정
                     position = Randomize(center, width);
 
-                    //���� ����
+                    //실패 판정
                     success = false;
                 }
 
                 preset[index] = position;
             }
 
-            //������ Ż��
+            //성공시 탈출
             if(success) {
                 break;
             }
@@ -192,12 +208,103 @@ public class Util
     }
 
     /// <summary>
-    /// �Էµ� ���͸� ������ �������� �̵���ŵ�ϴ� <br></br>
-    /// �Էµ� ���ͷκ��� ���簢�� ������ �����մϴ�
+    /// 랜덤하게 점들을 흩뿌립니다 <br></br>
+    /// 입력된 중심점을 기준으로하는 정사각형 모양의 공간을 가정합니다 <br></br>
+    /// 몇몇 경우에 완벽하게 흩뿌려지지 않을 수 있습니다
     /// </summary>
-    /// <param name="input">�̵���ų ����</param>
-    /// <param name="half">�ִ� �̵��� �Ÿ� (������)</param>
-    /// <returns>�̵��� ����</returns>
+    /// <param name="count">흩뿌릴 점의 개수</param>
+    /// <param name="center">중심점</param>
+    /// <param name="minDistance">점들 사이의 최소거리</param>
+    /// <param name="width">점들이 뿌려질 공간의 반지름</param>
+    /// <param name="obstacles">이미 고정된 점들(움직이지는 않으나 고려대상임)</param>
+    /// <returns>흩뿌려진 점의 위치</returns>
+    public static List<Vector2> SpreadLocationForChunk(int count, Vector2 center, int minDistance, int width, List<Vector2> obstacles) {
+        //기본 위치 설정 (랜덤)
+        List<Vector2> preset = new List<Vector2>();
+        for(int index = 0; index < count; index++) {
+            preset.Add(Randomize(center, width));
+        }
+
+        const int MAX_TRY_COUNT = 1000; //최대 시도횟수
+
+        for(int tryCount = 0; tryCount < MAX_TRY_COUNT; tryCount++) {
+            bool success = true;    //성공여부 플레그 초기화
+
+            //각 플레이어에 대해 검증
+            for(int index = 0; index < preset.Count; index++) {
+                //초기화
+                Vector2 position = preset[index];
+                int occupiedCount = 0;
+                Vector2 avoidForce = new Vector2();
+
+                for(int checkIndex = 0; checkIndex < preset.Count + obstacles.Count; checkIndex++) {
+                    if(checkIndex == index) {
+                        //검증 대상과 동일하다면 스킵
+                        continue;
+                    }
+
+                    //둘 사이의 거리 구하기
+                    Vector2 checkPosition;
+                    if(checkIndex < preset.Count) {
+                        checkPosition = preset[checkIndex];
+                    } else {
+                        checkPosition = obstacles[checkIndex - preset.Count];
+                    }
+                    float distance = DistanceSquare(position, checkPosition);
+
+                    //만약 둘 사이의 거리가 최소거리보다 작다면
+                    if(distance < minDistance) {
+                        //회피 방향 적용
+                        occupiedCount += 1;
+                        avoidForce += checkPosition - position;
+                    }
+                }
+
+                //겹치는 점이 1개 이상 있었다면
+                if(occupiedCount > 0) {
+                    avoidForce /= occupiedCount;
+                    float length = avoidForce.magnitude;
+
+                    if(length > 0f) {   //길이가 있다면
+                        //반대 방향으로 이동
+                        position -= avoidForce.normalized;
+                    } else {    //길이가 없다면
+                        //다시 랜덤하게 설정
+                        position = Randomize(center, width);
+                    }
+
+                    //실패 판정
+                    success = false;
+                }
+
+                //해당 점이 공간을 벗어났다면
+                if(!IsIn(position, center, width)) {
+                    //다시 랜덤하게 설정
+                    position = Randomize(center, width);
+
+                    //실패 판정
+                    success = false;
+                }
+
+                preset[index] = position;
+            }
+
+            //성공시 탈출
+            if(success) {
+                break;
+            }
+        }
+
+        return preset;
+    }
+
+    /// <summary>
+    /// 입력된 벡터를 랜덤한 방향으로 이동시킵니다 <br></br>
+    /// 입력된 벡터로부터 정사각형 공간을 가정합니다
+    /// </summary>
+    /// <param name="input">이동시킬 벡터</param>
+    /// <param name="half">최대 이동할 거리 (반지름)</param>
+    /// <returns>이동된 벡터</returns>
     public static Vector2 Randomize(Vector2 input, float half) {
         if(half == 0) {
             return input;
@@ -208,12 +315,12 @@ public class Util
     }
 
     /// <summary>
-    /// �Էµ� ���Ͱ� �ش� ���� �ȿ� �ִ��� �Ǵ��մϴ� <br></br>
-    /// ���������κ��� ���簢�� ������ �����մϴ�
+    /// 입력된 벡터가 해당 공간 안에 있는지 판단합니다 <br></br>
+    /// 기준점으로부터 정사각형 공간을 가정합니다
     /// </summary>
-    /// <param name="input">Ȯ���� ����</param>
-    /// <param name="center">������</param>
-    /// <param name="half">������</param>
+    /// <param name="input">확인할 벡터</param>
+    /// <param name="center">기준점</param>
+    /// <param name="half">반지름</param>
     /// <returns></returns>
     public static bool IsIn(Vector2 input, Vector2 center, float half) {
         return input.x >= center.x - half && input.x >= center.x - half
@@ -221,12 +328,12 @@ public class Util
     }
 
     /// <summary>
-    /// ����ġ�� ���� ����Ʈ���� ������ ��Ҹ� �����մϴ�
+    /// 가중치에 따라 리스트에서 랜덤한 요소를 선택합니다
     /// </summary>
-    /// <typeparam name="T">������ ����� Ÿ��</typeparam>
-    /// <param name="objects">������ ��ҵ�</param>
-    /// <param name="weightFuction">��ҿ��� ����ġ�� ��ȯ�ϴ� �Լ�</param>
-    /// <returns>���õ� ���</returns>
+    /// <typeparam name="T">선택할 요소의 타입</typeparam>
+    /// <param name="objects">선택할 요소들</param>
+    /// <param name="weightFuction">요소에서 가중치를 반환하는 함수</param>
+    /// <returns>선택된 요소</returns>
     public static T GetByWeigth<T>(List<T> objects, Func<T, int> weightFuction) {
         List<int> weights = new List<int>();
         int weight;
@@ -243,5 +350,9 @@ public class Util
             }
         }
         return objects[0];
+    }
+
+    public static int DistanceSquare(Vector2 vec1, Vector2 vec2) {
+        return Mathf.Max(0, Mathf.Max(Mathf.Abs(Mathf.RoundToInt(vec1.x) - Mathf.RoundToInt(vec2.x)), Mathf.Abs(Mathf.RoundToInt(vec1.y) - Mathf.RoundToInt(vec2.y))) - 1);
     }
 }
