@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
 
         string biomeInfo = "";
         foreach(Biome biome in player.chunk.biomeInfo.affectedBiomes.Keys) {
-            biomeInfo += biome.type.ToString() + ", ";
+            biomeInfo += biome.type.ToString() + " " + player.chunk.biomeInfo.affectedBiomes[biome] + "\n";
         }
 
         debugText.text = player.hp.ToString() + "\n" + biomeInfo;

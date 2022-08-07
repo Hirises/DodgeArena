@@ -137,13 +137,29 @@ public class BiomeInfo {
         }
 
         //계산 결과 반영
+        float total = 0;
         foreach(Vector2 vec in sourceBiomeChunks) {
-            //이 청크에 대한 바이옴 영향률 계산
+            //이 청크에 대한 바이옴 영향 계산
             BiomeInfo info = world.GetBiomeInfo(new ChunkLocation(world, vec));
-            float distance = Util.DistanceSquare(location.vector, vec);
+            float distance = 1.0f / (Util.DistanceSquare(location.vector, vec) - ( GameManager.instance.half_MinBiomeSize_Chunk - 1 ) + 1);
+            if(distance < GameManager.instance.half_MinBiomeSize_Chunk) { //바이옴의 최소 거리 안쪽이면
+                //해당 바이옴만 적용됨
+                affectedBiomes.Clear();
+                affectedBiomes.Add(info.sourceBiome, 1);
+                total = 1;
+                break;
+            }
             if(!affectedBiomes.ContainsKey(info.sourceBiome)) {
                 affectedBiomes.Add(info.sourceBiome, distance);
+            } else {
+                affectedBiomes.Add(info.sourceBiome, affectedBiomes[info.sourceBiome] + distance);
             }
+            total += distance;
+        }
+        List<Biome> copy = new List<Biome>();
+        copy.AddRange(affectedBiomes.Keys);
+        foreach(Biome biome in copy) {
+            affectedBiomes[biome] = affectedBiomes[biome] / total;
         }
     }
 }
