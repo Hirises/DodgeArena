@@ -152,7 +152,7 @@ public class BiomeInfo {
             if(!affectedBiomes.ContainsKey(info.sourceBiome)) {
                 affectedBiomes.Add(info.sourceBiome, distance);
             } else {
-                affectedBiomes.Add(info.sourceBiome, affectedBiomes[info.sourceBiome] + distance);
+                affectedBiomes[info.sourceBiome] = affectedBiomes[info.sourceBiome] + distance;
             }
             total += distance;
         }

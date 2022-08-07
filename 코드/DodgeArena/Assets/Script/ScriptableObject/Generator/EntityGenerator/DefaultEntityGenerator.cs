@@ -7,7 +7,7 @@ using NaughtyAttributes;
 public class DefaultEntityGenerator : EntityGenerator
 {
     [BoxGroup("Common")]
-    public int weight;
+    public int weight = 100;
 
     [BoxGroup("Environment")]
     public bool whiteListForWorld = false;

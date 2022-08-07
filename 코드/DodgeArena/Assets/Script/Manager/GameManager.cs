@@ -85,6 +85,13 @@ public class GameManager : MonoBehaviour
             _state = value;
         }
     }
+    public void GameEnd() {
+        state = GameState.Stop;
+        foreach(WorldType type in worlds.Keys) {
+            UnloadWorld(type);
+        }
+        SceneManager.LoadScene(Scene.MainScene.name);
+    }
 
     #region UnityLifecycle
     private void Awake() {
@@ -175,6 +182,8 @@ public class GameManager : MonoBehaviour
         GetWorld(type).Unload();
     }
     #endregion
+
+    #region Generator
     /// <summary>
     /// 해당 청크에 대해 사용 가능한 <see cref="BiomeGenerator"/>들의 목록을 반환합니다
     /// </summary>
@@ -223,11 +232,28 @@ public class GameManager : MonoBehaviour
         return Util.GetByWeigth(GetPossibleChunkDataGenerators(chunk), val => val.GetWeight(chunk));
     }
 
-    public void GameEnd() {
-        state = GameState.Stop;
-        foreach(WorldType type in worlds.Keys) {
-            UnloadWorld(type);
+    /// <summary>
+    /// 해당 청크에 대해 사용 가능한 <see cref="EntityGenerator"/>들의 목록을 반환합니다
+    /// </summary>
+    /// <param name="chunk">확인할 청크</param>
+    /// <returns>가능한 목록</returns>
+    public List<EntityGenerator> GetPossibleEntityGenerators(Chunk chunk) {
+        List<EntityGenerator> output = new List<EntityGenerator>();
+        foreach(EntityGenerator generator in entityGenerators) {
+            if(generator.CheckConditions(chunk)) {
+                output.Add(generator);
+            }
         }
-        SceneManager.LoadScene(Scene.MainScene.name);
+        return output;
     }
+
+    /// <summary>
+    /// 해당 청크에 대한 랜덤한 <see cref="EntityGenerator"/>를 반환합니다
+    /// </summary>
+    /// <param name="chunk">확인할 청크</param>
+    /// <returns>반환된 생성자</returns>
+    public EntityGenerator GetEntityGenerator(Chunk chunk) {
+        return Util.GetByWeigth(GetPossibleEntityGenerators(chunk), val => val.GetWeight(chunk));
+    } 
+    #endregion
 }

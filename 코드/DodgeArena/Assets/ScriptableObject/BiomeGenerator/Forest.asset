@@ -9,15 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c6991db9542c9c4eb3d8195b0537f33, type: 3}
-  m_Name: Default
+  m_Script: {fileID: 11500000, guid: f3d67450b2af579448eeae1069f15422, type: 3}
+  m_Name: Forest
   m_EditorClassIdentifier: 
-  weight: 100
+  weight: 50
   whiteListForWorld: 0
   worlds: 
-  whiteListForBiomes: 0
-  biomes: 
-  minRisk: 100
-  maxRisk: 180
-  minReturn: 20
-  maxReturn: 50
+  biome: 0

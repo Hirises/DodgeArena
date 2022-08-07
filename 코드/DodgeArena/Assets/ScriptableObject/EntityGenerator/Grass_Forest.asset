@@ -10,22 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 488d6d7d703e0a44981966c9e10d387e, type: 3}
-  m_Name: WildBoar
+  m_Name: Grass_Forest
   m_EditorClassIdentifier: 
+  weight: 100
   whiteListForWorld: 0
   worlds: 
-  whiteListForBiomes: 0
-  biomes: 
-  UseRate: 0
-  rate: 0.5
-  risk: 10
-  returns: 0
-  minGroup: 3
-  maxGrounp: 12
-  half_GroupDistance: 7
+  biome: 0
+  risk: 0
+  returns: 1
+  minGroup: 9
+  maxGrounp: 27
+  half_GroupDistance: 5
   minCount: 1
   maxCount: 3
-  half_Distance: 2
-  half_Width: 5
+  half_Distance: 0.5
+  half_Width: 1.5
   variants:
-  - {fileID: 1697931047449044391, guid: e1e4cce6851f1604aaf487e64166e83f, type: 3}
+  - {fileID: 6185907691642991307, guid: 6db13d99d709f184c997b9480d3a11af, type: 3}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
+[CreateAssetMenu(fileName = "Default", menuName = "BiomeGenerator/Default")]
 public class DefaultBiomeGenerator : BiomeGenerator {
     [BoxGroup("Common")]
     public int weight = 100;
