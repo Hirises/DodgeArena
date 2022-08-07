@@ -17,7 +17,7 @@ public class DefaultBiomeGenerator : BiomeGenerator {
     public Biome.Type biome;
     public override bool CheckConditions(Chunk chunk) {
         bool flag = true;
-        flag &= !( whiteListForWorld ^ worlds.Contains(chunk.world.type.type) );
+        flag &= !( whiteListForWorld ^ worlds.Contains(chunk.world.type) );
         return flag;
     }
 

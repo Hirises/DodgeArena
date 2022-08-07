@@ -18,7 +18,7 @@ public class ItemType : MonoBehaviour
     public static readonly ItemType WildBoarsHair = new ItemType(Type.WildBoarsHair);
     public static readonly ItemType WildBoarsCanine = new ItemType(Type.WildBoarsCanine);
 
-    public readonly Type type;
+    private readonly Type type;
 
     public ItemType(Type type) {
         this.type = type;
@@ -26,6 +26,13 @@ public class ItemType : MonoBehaviour
         itemTypeMap.Add(type, this);
     }
 
+    public static implicit operator ItemType.Type(ItemType self) {
+        return self.type;
+    }
+
+    public static implicit operator ItemType(ItemType.Type self) {
+        return itemTypeMap[self];
+    }
     public override bool Equals(object obj) {
         if(( obj == null ) || !this.GetType().Equals(obj.GetType())) {
             return false;
@@ -37,5 +44,9 @@ public class ItemType : MonoBehaviour
 
     public override int GetHashCode() {
         return HashCode.Combine(type);
+    }
+
+    public override string ToString() {
+        return type.ToString();
     }
 }

@@ -41,7 +41,7 @@ public class DefaultEntityGenerator : EntityGenerator
     public override bool CheckConditions(Chunk chunk)
     {
         bool flag = true;
-        flag &= !(whiteListForWorld ^ worlds.Contains(chunk.world.type.type));
+        flag &= !(whiteListForWorld ^ worlds.Contains(chunk.world.type));
         flag &= chunk.biomeInfo.affectedBiomes.ContainsKey(biome);
         return flag;
     }

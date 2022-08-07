@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -21,7 +21,7 @@ public class World : MonoBehaviour {
         gameObject.SetActive(false);
         this.initiated = true;
 #if UNITY_EDITOR
-        gameObject.name = type.type.ToString();
+        gameObject.name = type.ToString();
 #endif
     }
 

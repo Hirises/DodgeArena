@@ -18,12 +18,20 @@ public class WorldType
     public static readonly WorldType Main = new WorldType(Type.Main);
     public static readonly WorldType Sub = new WorldType(Type.Sub);
 
-    public readonly Type type;
+    private readonly Type type;
 
     public WorldType(Type type) {
         this.type = type;
 
         worldTypeMap.Add(type, this);
+    }
+
+    public static implicit operator WorldType.Type(WorldType self) {
+        return self.type;
+    }
+
+    public static implicit operator WorldType(WorldType.Type self) {
+        return worldTypeMap[self];
     }
 
     public override bool Equals(object obj) {

@@ -22,13 +22,21 @@ public class EntityType
     public static readonly EntityType Grass = new EntityType(Type.Grass);
     public static readonly EntityType WildBoar = new EntityType(Type.WildBoar);
 
-    public readonly Type type;
+    private readonly Type type;
 
     public EntityType(Type type)
     {
         this.type = type;
 
         entityTypeMap.Add(type, this);
+    }
+
+    public static implicit operator EntityType.Type(EntityType self) {
+        return self.type;
+    }
+
+    public static implicit operator EntityType(EntityType.Type self) {
+        return entityTypeMap[self];
     }
 
     public override bool Equals(object obj)
@@ -47,5 +55,9 @@ public class EntityType
     public override int GetHashCode()
     {
         return HashCode.Combine(type);
+    }
+
+    public override string ToString() {
+        return type.ToString();
     }
 }

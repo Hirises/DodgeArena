@@ -18,7 +18,7 @@ public class Biome
     public static readonly Biome Forest = new Biome(Type.Forest);
     public static readonly Biome Plain = new Biome(Type.Plain);
 
-    public readonly Type type;
+    private readonly Type type;
 
     public Biome(Type type) {
         this.type = type;
