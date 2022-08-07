@@ -15,12 +15,14 @@ public class EntityType
     {
         Player,
         Grass,
-        WildBoar
+        WildBoar,
+        Tree
     }
 
     public static readonly EntityType Player = new EntityType(Type.Player);
     public static readonly EntityType Grass = new EntityType(Type.Grass);
     public static readonly EntityType WildBoar = new EntityType(Type.WildBoar);
+    public static readonly EntityType Tree = new EntityType(Type.Tree);
 
     private readonly Type type;
 

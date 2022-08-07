@@ -16,7 +16,12 @@ MonoBehaviour:
   whiteListForWorld: 0
   worlds: 
   biome: 0
+  minDense: 0
+  maxDense: 0
   minRisk: 100
   maxRisk: 180
   minReturn: 20
   maxReturn: 50
+  tags:
+  - tag: tree
+    rate: 0.8

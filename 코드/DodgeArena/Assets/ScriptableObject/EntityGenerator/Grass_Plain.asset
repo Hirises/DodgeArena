@@ -16,10 +16,14 @@ MonoBehaviour:
   whiteListForWorld: 0
   worlds: 
   biome: 1
+  dense: 0
   risk: 0
-  returns: 1
-  minGroup: 9
-  maxGrounp: 27
+  returns: 5
+  useTag: 0
+  containAll: 0
+  tags: []
+  minGroup: 1
+  maxGrounp: 3
   half_GroupDistance: 5
   minCount: 1
   maxCount: 3

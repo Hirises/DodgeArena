@@ -3,33 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ½ºÆù°ú °ü·ÃµÈ Ã»Å©ÀÇ ¿©·¯ Á¤º¸
+/// ìŠ¤í°ê³¼ ê´€ë ¨ëœ ì²­í¬ì˜ ì—¬ëŸ¬ ì •ë³´
 /// </summary>
 [System.Serializable]
 public class ChunkData{
     /// <summary>
-    /// ÇØ´ç ½ºÆù Áö¿ªÀÇ À§Çèµµ <br/>
-    /// ÀÌ ¼öÄ¡±îÁö¸¸ ÀûÀÌ ½ºÆùµÈ´Ù
+    /// í•´ë‹¹ ìŠ¤í° ì§€ì—­ì˜ ë°€ë„ <br/>
+    /// ì´ ìˆ˜ì¹˜ê¹Œì§€ë§Œ ì˜¤ë¸Œì íŠ¸ê°€
+    /// </summary>
+    public int initialDense;
+    public int dense;
+    /// <summary>
+    /// í•´ë‹¹ ìŠ¤í° ì§€ì—­ì˜ ìœ„í—˜ë„ <br/>
+    /// ì´ ìˆ˜ì¹˜ê¹Œì§€ë§Œ ì ì´ ìŠ¤í°ëœë‹¤
     /// </summary>
     public int initialRisk;
     public int risk;
     /// <summary>
-    /// ÇØ´ç ½ºÆù Áö¿ªÀÇ º¸»ó <br/>
-    /// ÀÌ ¼öÄ¡±îÁö¸¸ º¸»óÀÌ ½ºÆùµÈ´Ù <br/>
-    /// ÀÌ ¼öÄ¡°¡ ³ôÀ¸¸é À§Çèµµµµ ÇÔ²² Áõ°¡ÇÑ´Ù
+    /// í•´ë‹¹ ìŠ¤í° ì§€ì—­ì˜ ë³´ìƒ <br/>
+    /// ì´ ìˆ˜ì¹˜ê¹Œì§€ë§Œ ë³´ìƒì´ ìŠ¤í°ëœë‹¤ <br/>
+    /// ì´ ìˆ˜ì¹˜ê°€ ë†’ìœ¼ë©´ ìœ„í—˜ë„ë„ í•¨ê»˜ ì¦ê°€í•œë‹¤
     /// </summary>
     public int initialReturns;
     public int returns;
+    /// <summary>
+    /// ì´ ìŠ¤í°ì§€ì—­ì˜ íƒœê·¸
+    /// </summary>
+    public List<string> initialTag;
+    public List<string> tags;
 
-    public ChunkData(int risk, int returns) {
+    public ChunkData(int dense, int risk, int returns, List<string> tag) {
+        this.initialDense = dense;
         this.initialRisk = risk;
         this.initialReturns = returns;
+        this.initialTag = tag;
 
         Reset();
     }
 
     public void Reset() {
+        this.dense = 0;
         this.risk = 0;
         this.returns = 0;
+        this.tags = new List<string>();
+        tags.AddRange(initialTag);
     }
 }

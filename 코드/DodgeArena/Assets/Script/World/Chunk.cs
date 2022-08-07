@@ -101,9 +101,12 @@ public class Chunk : MonoBehaviour
     //이 청크에 오브잭트들을 소환
     public void SpawnObjects()
     {
-        foreach(EntityGenerator spawner in GameManager.instance.entityGenerators)
-        {
-            spawner.Generate(this);
+        while(true) {
+            List<EntityGenerator> generators = GameManager.instance.GetPossibleEntityGenerators(this);
+            if(generators.Count <= 0) {
+                break;
+            }
+            Util.GetByWeigth(generators, val => val.GetWeight(this)).Generate(this);
         }
     }
 

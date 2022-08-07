@@ -16,6 +16,10 @@ public class DefaultChunkDataGenerator : ChunkDataGenerator {
     public Biome.Type biome;
 
     [BoxGroup("EntityGenerate")]
+    public int minDense;
+    [BoxGroup("EntityGenerate")]
+    public int maxDense;
+    [BoxGroup("EntityGenerate")]
     public int minRisk;
     [BoxGroup("EntityGenerate")]
     public int maxRisk;
@@ -23,6 +27,13 @@ public class DefaultChunkDataGenerator : ChunkDataGenerator {
     public int minReturn;
     [BoxGroup("EntityGenerate")]
     public int maxReturn;
+    [BoxGroup("EntityGenerate")]
+    public List<TagData> tags;
+    [System.Serializable]
+    public struct TagData {
+        public string tag;
+        public float rate;
+    }
 
     public override bool CheckConditions(Chunk chunk) {
         bool flag = true;
@@ -36,6 +47,12 @@ public class DefaultChunkDataGenerator : ChunkDataGenerator {
     }
 
     public override ChunkData Generate(Chunk chunk) {
-        return new ChunkData(Random.instance.RandRange(minRisk, maxRisk), Random.instance.RandRange(minReturn, maxReturn));
+        List<string> tag = new List<string>();
+        foreach(TagData data in tags) {
+            if(Random.instance.CheckRate(data.rate)) {
+                tag.Add(data.tag);
+            }
+        }
+        return new ChunkData(Random.instance.RandRange(minDense, maxDense), Random.instance.RandRange(minRisk, maxRisk), Random.instance.RandRange(minReturn, maxReturn), tag);
     }
 }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 488d6d7d703e0a44981966c9e10d387e, type: 3}
-  m_Name: Grass_Forest
+  m_Name: Tree_Forest_Default
   m_EditorClassIdentifier: 
   weight: 100
   whiteListForWorld: 0
@@ -18,16 +18,17 @@ MonoBehaviour:
   biome: 0
   dense: 0
   risk: 0
-  returns: 5
-  useTag: 0
+  returns: 0
+  useTag: 1
   containAll: 0
-  tags: []
-  minGroup: 1
-  maxGrounp: 3
-  half_GroupDistance: 5
+  tags:
+  - tree
+  minGroup: 5
+  maxGrounp: 10
+  half_GroupDistance: 7
   minCount: 1
-  maxCount: 3
-  half_Distance: 0.5
-  half_Width: 1.5
+  maxCount: 2
+  half_Distance: 1
+  half_Width: 5
   variants:
-  - {fileID: 6185907691642991307, guid: 6db13d99d709f184c997b9480d3a11af, type: 3}
+  - {fileID: 5694222733819670207, guid: 44cd1962e7934204598c750590ec40a9, type: 3}
