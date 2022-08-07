@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-// (0,0) ±âÁØ Á¤»ç°¢Çü ¹è¿­
+// (0,0) ê¸°ì¤€ ì •ì‚¬ê°í˜• ë°°ì—´
 public class Chunk : MonoBehaviour
 {
     public bool loaded { get; private set; }
@@ -24,7 +24,7 @@ public class Chunk : MonoBehaviour
     public ChunkData chunkData;
 
     /// <summary>
-    /// Ã»Å© ¸®¼Â (Ã³À½ »ı¼º½Ã)
+    /// ì²­í¬ ë¦¬ì…‹ (ì²˜ìŒ ìƒì„±ì‹œ)
     /// </summary>
     public void ResetProperties(ChunkLocation position, BiomeInfo biomeInfo)
     {
@@ -40,7 +40,7 @@ public class Chunk : MonoBehaviour
         world = position.world;
         entities = new List<Entity>();
         this.biomeInfo = biomeInfo;
-        biomeInfo.Calculate();
+        biomeInfo.Calculate(this);
         this.chunkData = GameManager.instance.GetChunkDataGenerator(this).Generate(this);
         valid = true;
 #if UNITY_EDITOR
@@ -49,7 +49,7 @@ public class Chunk : MonoBehaviour
     }
 
     /// <summary>
-    /// Ã»Å© ÃÊ±âÈ­ (Ã³À½ LoadµÉ ¶§)
+    /// ì²­í¬ ì´ˆê¸°í™” (ì²˜ìŒ Loadë  ë•Œ)
     /// </summary>
     public void Initiate()
     {
@@ -98,7 +98,7 @@ public class Chunk : MonoBehaviour
         world.RemoveChunk(this);
     }
 
-    //ÀÌ Ã»Å©¿¡ ¿ÀºêÀèÆ®µéÀ» ¼ÒÈ¯
+    //ì´ ì²­í¬ì— ì˜¤ë¸Œì­íŠ¸ë“¤ì„ ì†Œí™˜
     public void SpawnObjects()
     {
         foreach(EntityGenerator spawner in GameManager.instance.entityGenerators)
@@ -107,7 +107,7 @@ public class Chunk : MonoBehaviour
         }
     }
 
-    // Ã»Å©³»ÀÇ ·£´ıÇÑ À§Ä¡¸¦ ¹İÈ¯
+    // ì²­í¬ë‚´ì˜ ëœë¤í•œ ìœ„ì¹˜ë¥¼ ë°˜í™˜
     public WorldLocation RandomLocation()
     {
         return RandomLocation(0);

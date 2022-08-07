@@ -26,6 +26,14 @@ public class Biome
         biomeTypeMap.Add(type, this);
     }
 
+    public static implicit operator Biome.Type(Biome self) {
+        return self.type;
+    }
+
+    public static implicit operator Biome(Biome.Type self) {
+        return biomeTypeMap[self];
+    }
+
     public override bool Equals(object obj) {
         if(( obj == null ) || !this.GetType().Equals(obj.GetType())) {
             return false;
@@ -37,5 +45,9 @@ public class Biome
 
     public override int GetHashCode() {
         return HashCode.Combine(type);
+    }
+
+    public override string ToString() {
+        return type.ToString();
     }
 }

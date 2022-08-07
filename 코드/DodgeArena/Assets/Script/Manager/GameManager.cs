@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     [BoxGroup("Generator")]
+    public BiomeGenerator[] biomeGenerators;
+    [SerializeField]
+    [BoxGroup("Generator")]
     public ChunkDataGenerator[] chunkDataGenerators;
     [SerializeField]
     [BoxGroup("Generator")]
@@ -124,7 +127,7 @@ public class GameManager : MonoBehaviour
 
         string biomeInfo = "";
         foreach(Biome biome in player.chunk.biomeInfo.affectedBiomes.Keys) {
-            biomeInfo += biome.type.ToString() + " " + player.chunk.biomeInfo.affectedBiomes[biome] + "\n";
+            biomeInfo += biome.ToString() + " " + player.chunk.biomeInfo.affectedBiomes[biome] + "\n";
         }
 
         debugText.text = player.hp.ToString() + "\n" + biomeInfo;
@@ -172,6 +175,29 @@ public class GameManager : MonoBehaviour
         GetWorld(type).Unload();
     }
     #endregion
+    /// <summary>
+    /// 해당 청크에 대해 사용 가능한 <see cref="BiomeGenerator"/>들의 목록을 반환합니다
+    /// </summary>
+    /// <param name="chunk">확인할 청크</param>
+    /// <returns>가능한 목록</returns>
+    public List<BiomeGenerator> GetPossibleBiomeGenerators(Chunk chunk) {
+        List<BiomeGenerator> output = new List<BiomeGenerator>();
+        foreach(BiomeGenerator generator in biomeGenerators) {
+            if(generator.CheckConditions(chunk)) {
+                output.Add(generator);
+            }
+        }
+        return output;
+    }
+
+    /// <summary>
+    /// 해당 청크에 대한 랜덤한 <see cref="BiomeGenerator"/>를 반환합니다
+    /// </summary>
+    /// <param name="chunk">확인할 청크</param>
+    /// <returns>반환된 생성자</returns>
+    public BiomeGenerator GetBiomeGenerator(Chunk chunk) {
+        return Util.GetByWeigth(GetPossibleBiomeGenerators(chunk), val => val.GetWeight(chunk));
+    }
 
     /// <summary>
     /// 해당 청크에 대해 사용 가능한 <see cref="ChunkDataGenerator"/>들의 목록을 반환합니다
@@ -194,7 +220,7 @@ public class GameManager : MonoBehaviour
     /// <param name="chunk">확인할 청크</param>
     /// <returns>반환된 생성자</returns>
     public ChunkDataGenerator GetChunkDataGenerator(Chunk chunk) {
-        return Util.GetByWeigth(GetPossibleChunkDataGenerators(chunk), val => val.weight);
+        return Util.GetByWeigth(GetPossibleChunkDataGenerators(chunk), val => val.GetWeight(chunk));
     }
 
     public void GameEnd() {

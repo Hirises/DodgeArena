@@ -6,20 +6,15 @@ using NaughtyAttributes;
 [CreateAssetMenu(fileName = "Default", menuName = "EntityGenerator/Default")]
 public class DefaultEntityGenerator : EntityGenerator
 {
+    [BoxGroup("Common")]
+    public int weight;
+
     [BoxGroup("Environment")]
     public bool whiteListForWorld = false;
     [BoxGroup("Environment")]
     public List<WorldType.Type> worlds;
     [BoxGroup("Environment")]
-    public bool whiteListForBiomes = false;
-    [BoxGroup("Environment")]
-    public List<Biome.Type> biomes;
-
-    [BoxGroup("Rate")]
-    public bool UseRate = false;
-    [BoxGroup("Rate")]
-    [ShowIf("UseRate")]
-    public float rate;
+    public Biome.Type biome;
 
     [BoxGroup("Limit")]
     public int risk;
@@ -43,64 +38,54 @@ public class DefaultEntityGenerator : EntityGenerator
     [BoxGroup("Variant")]
     public Entity[] variants;
 
-    private bool CheckConditions(Chunk chunk)
+    public override bool CheckConditions(Chunk chunk)
     {
         bool flag = true;
-        if (UseRate)
-        {
-            flag &= Random.instance.CheckRate(rate);
-        }
         flag &= !(whiteListForWorld ^ worlds.Contains(chunk.world.type.type));
+        flag &= chunk.biomeInfo.affectedBiomes.ContainsKey(biome);
         return flag;
     }
 
+    public override int GetWeight(Chunk chunk) {
+        return Mathf.CeilToInt(weight * chunk.biomeInfo.affectedBiomes[biome]);
+    }
     public override List<Entity> Generate(Chunk chunk)
     {
-        if (CheckConditions(chunk))
-        {
-            List<Entity> entities = new List<Entity>();
-            World world = chunk.world;
+        List<Entity> entities = new List<Entity>();
+        World world = chunk.world;
 
-            //±×·ìº° »ý¼º
-            int group = Random.instance.RandRange(minGroup, maxGrounp);
-            List<Vector2> groupLocations = Util.SpreadLocation(group, chunk.location.center.vector2, half_GroupDistance, GameManager.instance.half_ChunkWeidth - half_Width);
-            for(int i = 0; i < group; i++)
-            {
-                //±×·ì ±âÁØ À§Ä¡ ¼³Á¤ & ±×·ì¿¡ »ý¼ºµÉ °³Ã¤¼ö ¼³Á¤
-                WorldLocation groupLocation = new WorldLocation(world, groupLocations[i]);
-                int count = Random.instance.RandRange(minCount, maxCount);
+        //ê·¸ë£¹ë³„ ìƒì„±
+        int group = Random.instance.RandRange(minGroup, maxGrounp);
+        List<Vector2> groupLocations = Util.SpreadLocation(group, chunk.location.center.vector2, half_GroupDistance, GameManager.instance.half_ChunkWeidth - half_Width);
+        for(int i = 0; i < group; i++) {
+            //ê·¸ë£¹ ê¸°ì¤€ ìœ„ì¹˜ ì„¤ì • & ê·¸ë£¹ì— ìƒì„±ë  ê°œì±„ìˆ˜ ì„¤ì •
+            WorldLocation groupLocation = new WorldLocation(world, groupLocations[i]);
+            int count = Random.instance.RandRange(minCount, maxCount);
 
-                //º¸»ó(¸®ÅÏ) ¼öÄ¡ È®ÀÎ
-                if (returns > 0)
-                {
-                    if (chunk.chunkData.returns + (returns * count) > chunk.chunkData.initialReturns)
-                    {
-                        break;
-                    }
-                    chunk.chunkData.returns += (returns * count);
-                    chunk.chunkData.risk -= (returns * count);
+            //ë³´ìƒ(ë¦¬í„´) ìˆ˜ì¹˜ í™•ì¸
+            if(returns > 0) {
+                if(chunk.chunkData.returns + ( returns * count ) > chunk.chunkData.initialReturns) {
+                    break;
                 }
-                //¸®½ºÅ© ¼öÄ¡ È®ÀÎ
-                if (risk > 0)
-                {
-                    if (chunk.chunkData.risk + (risk * count) > chunk.chunkData.initialRisk)
-                    {
-                        break;
-                    }
-                    chunk.chunkData.risk += (risk * count);
+                chunk.chunkData.returns += ( returns * count );
+                chunk.chunkData.risk -= ( returns * count );
+            }
+            //ë¦¬ìŠ¤í¬ ìˆ˜ì¹˜ í™•ì¸
+            if(risk > 0) {
+                if(chunk.chunkData.risk + ( risk * count ) > chunk.chunkData.initialRisk) {
+                    break;
                 }
-
-                //½ÇÁ¦ °³Ã¼ »ý¼º
-                List<Vector2> locations = Util.SpreadLocation(count, groupLocation.vector2, half_Distance, half_Width);
-                for (int j = 0; j < count; j++)
-                {
-                    WorldLocation location = new WorldLocation(world, locations[j]);
-                    chunk.world.Spawn(variants[Random.instance.RandInt(0, variants.Length)], location);
-                }
+                chunk.chunkData.risk += ( risk * count );
             }
 
-            return entities;
+            //ì‹¤ì œ ê°œì²´ ìƒì„±
+            List<Vector2> locations = Util.SpreadLocation(count, groupLocation.vector2, half_Distance, half_Width);
+            for(int j = 0; j < count; j++) {
+                WorldLocation location = new WorldLocation(world, locations[j]);
+                chunk.world.Spawn(variants[Random.instance.RandInt(0, variants.Length)], location);
+            }
         }
-        return new List<Entity>();
+
+        return entities;
     }
 }

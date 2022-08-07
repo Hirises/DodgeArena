@@ -52,7 +52,7 @@ public class BiomeInfo {
     /// <summary>
     /// 이 청크의 바이옴 정보를 계산한다
     /// </summary>
-    public void Calculate() {
+    public void Calculate(Chunk chunk) {
         if(calculated) {
             return;
         }
@@ -110,7 +110,7 @@ public class BiomeInfo {
                 //유효한 경우에만 적용
                 if(valid) {
                     info.defined = true;
-                    info.sourceBiome = Random.instance.RandRange(0, 1) == 0 ? Biome.Forest : Biome.Plain;     //TODO 바이옴 랜덤 생성
+                    info.sourceBiome = GameManager.instance.GetBiomeGenerator(chunk).Generate(chunk);
                     info.isSource = true;
                     sourceBiomeChunks.Add(info.location.vector);
                 }
@@ -130,7 +130,7 @@ public class BiomeInfo {
             info.defined = true;
 
             if(forceSpawnIndex == index) {
-                info.sourceBiome = Random.instance.RandRange(0, 1) == 0 ? Biome.Forest : Biome.Plain;     //TODO 바이옴 랜덤 생성
+                info.sourceBiome = GameManager.instance.GetBiomeGenerator(chunk).Generate(chunk);
                 info.isSource = true;
                 sourceBiomeChunks.Add(info.location.vector);
             }

@@ -5,14 +5,15 @@ using NaughtyAttributes;
 
 [CreateAssetMenu(fileName = "Default", menuName = "ChunkDataGenerator/Default")]
 public class DefaultChunkDataGenerator : ChunkDataGenerator {
+    [BoxGroup("Common")]
+    public int weight = 100;
+
     [BoxGroup("Environment")]
     public bool whiteListForWorld = false;
     [BoxGroup("Environment")]
     public List<WorldType.Type> worlds;
     [BoxGroup("Environment")]
-    public bool whiteListForBiomes = false;
-    [BoxGroup("Environment")]
-    public List<Biome.Type> biomes;
+    public Biome.Type biome;
 
     [BoxGroup("EntityGenerate")]
     public int minRisk;
@@ -26,7 +27,12 @@ public class DefaultChunkDataGenerator : ChunkDataGenerator {
     public override bool CheckConditions(Chunk chunk) {
         bool flag = true;
         flag &= !( whiteListForWorld ^ worlds.Contains(chunk.world.type.type) );
+        flag &= chunk.biomeInfo.affectedBiomes.ContainsKey(biome);
         return flag;
+    }
+
+    public override int GetWeight(Chunk chunk) {
+        return Mathf.CeilToInt(weight * chunk.biomeInfo.affectedBiomes[biome]);
     }
 
     public override ChunkData Generate(Chunk chunk) {
