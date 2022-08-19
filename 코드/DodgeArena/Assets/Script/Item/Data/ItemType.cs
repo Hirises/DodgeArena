@@ -11,10 +11,12 @@ public class ItemType : MonoBehaviour
     }
 
     public enum Type {
+        IronOre,
         WildBoarsHair,
         WildBoarsCanine
     }
 
+    public static readonly ItemType IronOre = new ItemType(Type.IronOre);
     public static readonly ItemType WildBoarsHair = new ItemType(Type.WildBoarsHair);
     public static readonly ItemType WildBoarsCanine = new ItemType(Type.WildBoarsCanine);
 

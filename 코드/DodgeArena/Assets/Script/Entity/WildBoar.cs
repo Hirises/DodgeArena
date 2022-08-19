@@ -4,39 +4,40 @@ using UnityEngine;
 using NaughtyAttributes;
 
 /// <summary>
-/// ∏‰µ≈¡ˆ ∞¥√º
+/// Î©ßÎèºÏßÄ Í∞ùÏ≤¥
 /// </summary>
 public class WildBoar : LivingEntity {
     [SerializeField]
     [BoxGroup("WildBoar")]
-    private Sprite normal;
+    protected Sprite normal;
     [SerializeField]
     [BoxGroup("WildBoar")]
-    private Sprite attack;
+    protected Sprite attack;
     [SerializeField]
     [BoxGroup("WildBoar")]
-    private float awarenessDistance;
+    protected float awarenessDistance;
     [SerializeField]
     [BoxGroup("WildBoar")]
-    private float threateningDuration;
+    protected float threateningDuration;
     [SerializeField]
     [BoxGroup("WildBoar")]
-    private float dashSpeed;
+    protected float dashSpeed;
     [SerializeField]
     [BoxGroup("WildBoar")]
-    private float dashDistance;
+    protected float dashDistance;
     [SerializeField]
     [BoxGroup("WildBoar")]
-    private int dashDamage;
+    protected int dashDamage;
     [SerializeField]
     [BoxGroup("WildBoar")]
-    private float restDuration;
+    protected float restDuration;
     [ShowNativeProperty]
     public State state {
         get;
         private set;
     }
-    private Timer timer = new Timer();
+    protected Timer timer = new Timer();
+    protected int collide;
 
     public enum State
     {
@@ -52,6 +53,7 @@ public class WildBoar : LivingEntity {
             return false;
         }
 
+        collide = 0;
         StartCoroutine("Stand");
 
         return true;
@@ -65,11 +67,12 @@ public class WildBoar : LivingEntity {
         }
 
         StopAllCoroutines();
+        collide = 0;
 
         return true;
     }
 
-    //º≠¿÷±‚
+    //ÏÑúÏûàÍ∏∞
     public IEnumerator Stand()
     {
         state = State.Stand;
@@ -85,7 +88,7 @@ public class WildBoar : LivingEntity {
         }
     }
 
-    //¿ß«˘
+    //ÏúÑÌòë
     public IEnumerator Threaten()
     {
         state = State.Threaten;
@@ -104,35 +107,44 @@ public class WildBoar : LivingEntity {
         StartCoroutine("Dash");
     }
 
-    //µπ¡¯
+    //ÎèåÏßÑ
     public IEnumerator Dash()
     {
-        state = State.Dash;
-        Vector3 dir = transform.right;
-        float distance = Util.ToVector(transform.position, GameManager.instance.player.gameObject.transform.position).magnitude + dashDistance;
-        float dashDuration = distance / dashSpeed;
-        timer.Reset();
-        while (true)
-        {
-            rigidbody.velocity = dir * dashSpeed;
-            yield return null;
-            timer.Tick();
-            if (timer.Check(dashDuration))
-            {
-                break;
+        if(collide <= 0) {
+            state = State.Dash;
+            Vector3 dir = transform.right;
+            float distance = Util.ToVector(transform.position, GameManager.instance.player.gameObject.transform.position).magnitude + dashDistance;
+            float dashDuration = distance / dashSpeed;
+            timer.Reset();
+            while(true) {
+                rigidbody.velocity = dir * dashSpeed;
+                yield return null;
+                timer.Tick();
+                if(timer.Check(dashDuration)) {
+                    break;
+                }
             }
         }
         StartCoroutine("Rest");
     }
 
     public override void OnStartCollide(Entity other) {
-        if(state == State.Dash && other.type == EntityType.Type.Player) {
-            Player player = (Player) other;
-            player.Damage(dashDamage);
+        collide += 1;
+        if(state == State.Dash) {
+            if(other.type == EntityType.Type.Player) {
+                Player player = (Player) other;
+                player.Damage(dashDamage);
+            }
+            StopCoroutine("Dash");
+            StartCoroutine("Rest");
         }
     }
 
-    //»ﬁΩƒ
+    public override void OnEndCollide(Entity other) {
+        collide -= 1;
+    }
+
+    //Ìú¥Ïãù
     public IEnumerator Rest()
     {
         state = State.Rest;

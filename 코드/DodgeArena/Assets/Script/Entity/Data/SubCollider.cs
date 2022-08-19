@@ -3,28 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Äİ¶óÀÌ´õÀÇ ·¹ÀÌ¾î¸¦ ºĞ¸®ÇÒ¶§ ÀÌº¥Æ®¸¦ µû·Î ¹ŞÀ» ¼ö ÀÖµµ·Ï ÇØÁÖ´Â ÄÄÆ÷³ÍÆ®
+/// ì½œë¼ì´ë”ì˜ ë ˆì´ì–´ë¥¼ ë¶„ë¦¬í• ë•Œ ì´ë²¤íŠ¸ë¥¼ ë”°ë¡œ ë°›ì„ ìˆ˜ ìˆë„ë¡ í•´ì£¼ëŠ” ì»´í¬ë„ŒíŠ¸
 /// </summary>
 public class SubCollider : MonoBehaviour
 {
     public GameObject root;
     public delegate void EventHandler(Collider2D collision);
     /// <summary>
-    /// ÇØ´ç Äİ¶óÀÌ´õ¿¡ ´ëÇÑ OnTriggerEnter2D ÀÌº¥Æ®
+    /// í•´ë‹¹ ì½œë¼ì´ë”ì— ëŒ€í•œ OnTriggerEnter2D ì´ë²¤íŠ¸
     /// </summary>
     public event EventHandler onTriggerEnter;
     /// <summary>
-    /// ÇØ´ç Äİ¶óÀÌ´õ¿¡ ´ëÇÑ OnTriggerStay2D ÀÌº¥Æ®
+    /// í•´ë‹¹ ì½œë¼ì´ë”ì— ëŒ€í•œ OnTriggerStay2D ì´ë²¤íŠ¸
     /// </summary>
     public event EventHandler onTriggerStay;
     /// <summary>
-    /// ÇØ´ç Äİ¶óÀÌ´õ¿¡ ´ëÇÑ OnTriggerExit2D ÀÌº¥Æ®
+    /// í•´ë‹¹ ì½œë¼ì´ë”ì— ëŒ€í•œ OnTriggerExit2D ì´ë²¤íŠ¸
     /// </summary>
     public event EventHandler onTriggerExit;
+    /// <summary>
+    /// í˜„ì¬ ì¶©ëŒì¤‘ì¸ ì˜¤ë¸Œì íŠ¸ë“¤
+    /// </summary>
+    public List<GameObject> collides;
         
     private void OnTriggerEnter2D(Collider2D collision) {
         if(onTriggerEnter != null) {
             onTriggerEnter(collision);
+            collides.Add(collision.gameObject);
         }
     }
 
@@ -37,6 +42,7 @@ public class SubCollider : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision) {
         if(onTriggerExit != null) {
             onTriggerExit(collision);
+            collides.Remove(collision.gameObject);
         }
     }
 }
