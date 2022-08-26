@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-[CreateAssetMenu(fileName = "Default", menuName = "EntityGenerator/Default")]
+[CreateAssetMenu(fileName = "Default", menuName = "Generator/EntityGenerator/Default")]
 public class DefaultEntityGenerator : EntityGenerator
 {
     [BoxGroup("Common")]

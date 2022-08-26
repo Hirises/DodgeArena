@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-[CreateAssetMenu(fileName = "Default", menuName = "ChunkDataGenerator/Default")]
+[CreateAssetMenu(fileName = "Default", menuName = "Generator/ChunkDataGenerator/Default")]
 public class DefaultChunkDataGenerator : ChunkDataGenerator {
     [BoxGroup("Common")]
     public int weight = 100;

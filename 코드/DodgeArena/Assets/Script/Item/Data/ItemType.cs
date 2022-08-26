@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ItemType : MonoBehaviour
+[CreateAssetMenu(fileName = "ItemType", menuName = "Item")]
+public class ItemType : ScriptableObject
 {
     private static Dictionary<Type, ItemType> itemTypeMap = new Dictionary<Type, ItemType>();
     public ItemType this[Type t] {
