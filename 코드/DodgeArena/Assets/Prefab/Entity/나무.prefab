@@ -1,5 +1,68 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1045043351517795078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5063475639923472069}
+  - component: {fileID: 6168677991143911525}
+  - component: {fileID: 5003189577924902239}
+  m_Layer: 6
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5063475639923472069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045043351517795078}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5694222733819670201}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &6168677991143911525
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045043351517795078}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.03, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.18
+--- !u!114 &5003189577924902239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045043351517795078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b659eacdee65f74479b5bbd31fe12154, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 5694222733819670207}
+  isTrackCollide: 0
 --- !u!1 &5694222733819670203
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +74,6 @@ GameObject:
   - component: {fileID: 5694222733819670201}
   - component: {fileID: 5694222733819670202}
   - component: {fileID: 5694222733819670207}
-  - component: {fileID: 5694222733819670200}
   - component: {fileID: 5694222733819670206}
   m_Layer: 6
   m_Name: "\uB098\uBB34"
@@ -33,6 +95,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5694222734117744129}
+  - {fileID: 5063475639923472069}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -103,23 +166,8 @@ MonoBehaviour:
   type: 3
   spriteRenderer: {fileID: 5694222733819670202}
   rigidbody: {fileID: 5694222733819670206}
-  triggerCollider: {fileID: 5694222734117744135}
---- !u!58 &5694222733819670200
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5694222733819670203}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.03, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.18
+  trigger: {fileID: 5694222734117744135}
+  collider: {fileID: 5003189577924902239}
 --- !u!50 &5694222733819670206
 Rigidbody2D:
   serializedVersion: 4
@@ -153,7 +201,7 @@ GameObject:
   - component: {fileID: 5694222734117744128}
   - component: {fileID: 5694222734117744135}
   m_Layer: 10
-  m_Name: Collider
+  m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -202,4 +250,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b659eacdee65f74479b5bbd31fe12154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  root: {fileID: 5694222733819670203}
+  root: {fileID: 5694222733819670207}
+  isTrackCollide: 0

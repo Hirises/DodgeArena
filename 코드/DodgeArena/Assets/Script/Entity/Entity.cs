@@ -5,7 +5,7 @@ using NaughtyAttributes;
 using System;
 
 /// <summary>
-/// ¾À¿¡ ½ºÆùµÇ´Â ¸ğµç °´Ã¼ÀÇ ºÎ¸ğ
+/// ì”¬ì— ìŠ¤í°ë˜ëŠ” ëª¨ë“  ê°ì²´ì˜ ë¶€ëª¨
 /// </summary>
 public abstract class Entity : MonoBehaviour {
     [SerializeField]
@@ -19,7 +19,10 @@ public abstract class Entity : MonoBehaviour {
     protected new Rigidbody2D rigidbody;
     [SerializeField]
     [BoxGroup("Entity")]
-    protected SubCollider triggerCollider;
+    protected SubCollider trigger;
+    [SerializeField]
+    [BoxGroup("Entity")]
+    protected new SubCollider collider;
 
     public WorldLocation location { get; protected set; }
     public Chunk chunk { get; private set; }
@@ -37,8 +40,13 @@ public abstract class Entity : MonoBehaviour {
         this.location = location;
         this.chunk = location.chunk;
         this.loaded = false;
-        this.triggerCollider.onTriggerEnter += OnColliderEnter;
-        this.triggerCollider.onTriggerExit += OnColliderExit;
+        this.trigger.onTriggerEnter += OnStartTrigger;
+        this.trigger.onTriggerStay += OnStayTrigger;
+        this.trigger.onTriggerExit += OnEndTrigger;
+        this.collider.onColliderEnter += OnStartCollide;
+        this.collider.onColliderStay += OnStayCollide;
+        this.collider.onColliderExit += OnEndCollide;
+
         FixFlip();
         chunk.entities.Add(this);
         transform.parent = chunk.gameObject.transform;
@@ -46,16 +54,16 @@ public abstract class Entity : MonoBehaviour {
 
     #region Controll
     /// <summary>
-    /// ÀÌ °³Ã¼¸¦ ´Ù¸¥ À§Ä¡·Î ¼ø°£ÀÌµ¿½ÃÅµ´Ï´Ù
+    /// ì´ ê°œì²´ë¥¼ ë‹¤ë¥¸ ìœ„ì¹˜ë¡œ ìˆœê°„ì´ë™ì‹œí‚µë‹ˆë‹¤
     /// </summary>
-    /// <param name="location">´ë»ó À§Ä¡</param>
+    /// <param name="location">ëŒ€ìƒ ìœ„ì¹˜</param>
     public virtual void Teleport(WorldLocation location) {
         this.transform.position = location.vector;
         FixPosition();
     }
 
     /// <summary>
-    /// ÇØ´ç ¿£Æ¼Æ¼¸¦ ¿ùµå¿¡¼­ Á¦°ÅÇÕ´Ï´Ù
+    /// í•´ë‹¹ ì—”í‹°í‹°ë¥¼ ì›”ë“œì—ì„œ ì œê±°í•©ë‹ˆë‹¤
     /// </summary>
     public void Remove() {
         OnDespawn();
@@ -66,16 +74,16 @@ public abstract class Entity : MonoBehaviour {
 
     #region Utils
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®¸¦ ºñ±³ÇÕ´Ï´Ù
+    /// í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ë¥¼ ë¹„êµí•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="distance">ÀÓ°è °Å¸®</param>
+    /// <param name="distance">ì„ê³„ ê±°ë¦¬</param>
     /// <returns></returns>
     public bool CheckPlayerDistance(float distance) {
         return CheckDistance(GameManager.instance.player.gameObject.transform.position, distance);
     }
 
     /// <summary>
-    /// ´ë»ó°úÀÇ °Å¸®¸¦ ºñ±³ÇÕ´Ï´Ù
+    /// ëŒ€ìƒê³¼ì˜ ê±°ë¦¬ë¥¼ ë¹„êµí•©ë‹ˆë‹¤
     /// </summary>
     /// <param name="position"></param>
     /// <param name="distance"></param>
@@ -85,19 +93,19 @@ public abstract class Entity : MonoBehaviour {
     }
 
     /// <summary>
-    /// 2D±âÁØÀ¸·Î ´ë»óÀ» ¹Ù¶óº¾´Ï´Ù. <br/>
-    /// ZÈ¸ÀüÀÌ 0ÀÏ¶§ ¿À¸¥ÂÊÀ» ¹Ù¶óº»´Ù°í °¡Á¤ÇÕ´Ï´Ù.
+    /// 2Dê¸°ì¤€ìœ¼ë¡œ ëŒ€ìƒì„ ë°”ë¼ë´…ë‹ˆë‹¤. <br/>
+    /// ZíšŒì „ì´ 0ì¼ë•Œ ì˜¤ë¥¸ìª½ì„ ë°”ë¼ë³¸ë‹¤ê³  ê°€ì •í•©ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="targetPos">¹Ù¶óº¼ ´ë»óÀÇ À§Ä¡</param>
+    /// <param name="targetPos">ë°”ë¼ë³¼ ëŒ€ìƒì˜ ìœ„ì¹˜</param>
     public void LookAt(Vector3 targetPos) {
         LookAt(targetPos, Vector2.right);
     }
 
     /// <summary>
-    /// 2D±âÁØÀ¸·Î ´ë»óÀ» ¹Ù¶óº¾´Ï´Ù.
+    /// 2Dê¸°ì¤€ìœ¼ë¡œ ëŒ€ìƒì„ ë°”ë¼ë´…ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="targetPos">¹Ù¶óº¼ ´ë»óÀÇ À§Ä¡</param>
-    /// <param name="zeroRotation">ZÈ¸ÀüÀÌ 0ÀÏ¶§ ¹Ù¶óº¸´Â ¹æÇâ</param>
+    /// <param name="targetPos">ë°”ë¼ë³¼ ëŒ€ìƒì˜ ìœ„ì¹˜</param>
+    /// <param name="zeroRotation">ZíšŒì „ì´ 0ì¼ë•Œ ë°”ë¼ë³´ëŠ” ë°©í–¥</param>
     public void LookAt(Vector3 targetPos, Vector2 zeroRotation) {
         Vector3 angle = Util.LootAtRotation(transform.position, targetPos, zeroRotation);
         transform.rotation = Quaternion.Euler(angle);
@@ -112,25 +120,25 @@ public abstract class Entity : MonoBehaviour {
     }
 
     /// <summary>
-    /// ÇöÀç À§Ä¡¸¦ º¸Á¤ÇÕ´Ï´Ù.
+    /// í˜„ì¬ ìœ„ì¹˜ë¥¼ ë³´ì •í•©ë‹ˆë‹¤.
     /// </summary>
     protected void FixPosition() {
         FixPosition(new WorldLocation(location.world, this.transform.position));
     }
 
     /// <summary>
-    /// À§Ä¡¸¦ º¸Á¤ÇÕ´Ï´Ù.
+    /// ìœ„ì¹˜ë¥¼ ë³´ì •í•©ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="currentLocation">ÇöÀç À§Ä¡</param>
+    /// <param name="currentLocation">í˜„ì¬ ìœ„ì¹˜</param>
     protected void FixPosition(WorldLocation currentLocation) {
-        //À§Ä¡ ÀçÁ¤·Ä
+        //ìœ„ì¹˜ ì¬ì •ë ¬
         //int order = Mathf.FloorToInt(( currentLocation.vector.y - spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit - GameManager.instance.player.transform.position.y )
         //    * spriteRenderer.sprite.pixelsPerUnit);
         //spriteRenderer.sortingOrder = order;
         this.transform.position = currentLocation.vector - new Vector3(0, 0, spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit);
         location = currentLocation;
 
-        //Ã»Å© ¾÷µ¥ÀÌÆ®
+        //ì²­í¬ ì—…ë°ì´íŠ¸
         Chunk newChunk = currentLocation.chunk;
         if(!newChunk.Equals(chunk)) {
             newChunk.entities.Add(this);
@@ -140,7 +148,7 @@ public abstract class Entity : MonoBehaviour {
             transform.parent = newChunk.gameObject.transform;
             chunk = newChunk;
 
-            //Ã»Å© »óÅÂ ¹İ¿µ
+            //ì²­í¬ ìƒíƒœ ë°˜ì˜
             if(newChunk.loaded) {
                 OnLoad();
             } else {
@@ -150,7 +158,7 @@ public abstract class Entity : MonoBehaviour {
     }
 
     /// <summary>
-    /// 2D È¸Àü½Ã À§¾Æ·¡ ¹İÀüÀ» º¸Á¤ÇÕ´Ï´Ù
+    /// 2D íšŒì „ì‹œ ìœ„ì•„ë˜ ë°˜ì „ì„ ë³´ì •í•©ë‹ˆë‹¤
     /// </summary>
     protected void FixFlip() {
         if(transform.right.x < 0 != filped) {
@@ -162,44 +170,18 @@ public abstract class Entity : MonoBehaviour {
 
     #region Virtual
     /// <summary>
-    /// ´Ù¸¥ ¹°Ã¼¿Í Ãæµ¹ÇßÀ» ¶§ (ÀÌº¥Æ®¿¡ µî·Ï)
-    /// </summary>
-    private void OnColliderEnter(Collider2D collision) {
-        if(collision.gameObject.TryGetComponent(out Entity other)) {
-            OnStartCollide(other);
-        } else if(collision.gameObject.TryGetComponent(out SubCollider sub)) {
-            if(sub.root.TryGetComponent(out Entity parent)) {
-                OnStartCollide(parent);
-            }
-        }
-    }
-
-    /// <summary>
-    /// ´Ù¸¥ ¹°Ã¼¿Í Ãæµ¹ÀÌ ³¡³µÀ» ¶§ (ÀÌº¥Æ®¿¡ µî·Ï)
-    /// </summary>
-    private void OnColliderExit(Collider2D collision) {
-        if(collision.gameObject.TryGetComponent(out Entity other)) {
-            OnEndCollide(other);
-        } else if(collision.gameObject.TryGetComponent(out SubCollider sub)) {
-            if(sub.root.TryGetComponent(out Entity parent)) {
-                OnEndCollide(parent);
-            }
-        }
-    }
-
-    /// <summary>
-    /// ÀÌ °³Ã¼°¡ Ã³À½ »ı¼ºµÇ¾úÀ»¶§ È£ÃâµË´Ï´Ù <br/>
-    /// <see cref="OnLoad()"/>º¸´Ù ¸ÕÀú È£ÃâµË´Ï´Ù
+    /// ì´ ê°œì²´ê°€ ì²˜ìŒ ìƒì„±ë˜ì—ˆì„ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤ <br/>
+    /// <see cref="OnLoad()"/>ë³´ë‹¤ ë¨¼ì € í˜¸ì¶œë©ë‹ˆë‹¤
     /// </summary>
     public virtual void OnSpawn() {
 
     }
 
     /// <summary>
-    /// ÀÌ °³Ã¼°¡ Æ÷ÇÔµÈ Ã»Å©°¡ ·ÎµåµÇ¾úÀ»¶§ È£ÃâµË´Ï´Ù <br/>
-    /// Ç×»ó base.OnLoad()¸¦ È£ÃâÇÑ ÈÄ ¼º°ø¿©ºÎ¸¦ È®ÀÎÇØ¾ßÇÕ´Ï´Ù
+    /// ì´ ê°œì²´ê°€ í¬í•¨ëœ ì²­í¬ê°€ ë¡œë“œë˜ì—ˆì„ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤ <br/>
+    /// í•­ìƒ base.OnLoad()ë¥¼ í˜¸ì¶œí•œ í›„ ì„±ê³µì—¬ë¶€ë¥¼ í™•ì¸í•´ì•¼í•©ë‹ˆë‹¤
     /// </summary>
-    /// <returns>¼º°øÀûÀ¸·Î ½ÇÇàµÇ¾ú´ÂÁö ¿©ºÎ<br/>false ¹İÈ¯½Ã ´õÀÌ»ó ½ÇÇàÇÏÁö ¾Ê´Â´Ù</returns>
+    /// <returns>ì„±ê³µì ìœ¼ë¡œ ì‹¤í–‰ë˜ì—ˆëŠ”ì§€ ì—¬ë¶€<br/>false ë°˜í™˜ì‹œ ë”ì´ìƒ ì‹¤í–‰í•˜ì§€ ì•ŠëŠ”ë‹¤</returns>
     public virtual bool OnLoad() {
         if(loaded) {
             return false;
@@ -210,10 +192,10 @@ public abstract class Entity : MonoBehaviour {
     }
 
     /// <summary>
-    /// ÀÌ °³Ã¼°¡ Æ÷ÇÔµÈ Ã»Å©°¡ ¾ğ·ÎµåµÇ¾úÀ»¶§ È£ÃâµË´Ï´Ù <br/>
-    /// Ç×»ó base.OnUnload()¸¦ È£ÃâÇÑ ÈÄ ¼º°ø¿©ºÎ¸¦ È®ÀÎÇØ¾ßÇÕ´Ï´Ù
+    /// ì´ ê°œì²´ê°€ í¬í•¨ëœ ì²­í¬ê°€ ì–¸ë¡œë“œë˜ì—ˆì„ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤ <br/>
+    /// í•­ìƒ base.OnUnload()ë¥¼ í˜¸ì¶œí•œ í›„ ì„±ê³µì—¬ë¶€ë¥¼ í™•ì¸í•´ì•¼í•©ë‹ˆë‹¤
     /// </summary>
-    /// <returns>¼º°øÀûÀ¸·Î ½ÇÇàµÇ¾ú´ÂÁö ¿©ºÎ<br/>false ¹İÈ¯½Ã ´õÀÌ»ó ½ÇÇàÇÏÁö ¾Ê´Â´Ù</returns>
+    /// <returns>ì„±ê³µì ìœ¼ë¡œ ì‹¤í–‰ë˜ì—ˆëŠ”ì§€ ì—¬ë¶€<br/>false ë°˜í™˜ì‹œ ë”ì´ìƒ ì‹¤í–‰í•˜ì§€ ì•ŠëŠ”ë‹¤</returns>
     public virtual bool OnUnload() {
         if(!loaded) {
             return false;
@@ -224,8 +206,8 @@ public abstract class Entity : MonoBehaviour {
     }
 
     /// <summary>
-    /// ÀÌ °³Ã¼°¡ ¿ÏÀüÈ÷ ÆÄ±«µÉ ¶§ È£ÃâµË´Ï´Ù
-    /// Ç×»ó <see cref="OnUnload()"/> ÀÌÈÄ¿¡ È£ÃâµË´Ï´Ù
+    /// ì´ ê°œì²´ê°€ ì™„ì „íˆ íŒŒê´´ë  ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤
+    /// í•­ìƒ <see cref="OnUnload()"/> ì´í›„ì— í˜¸ì¶œë©ë‹ˆë‹¤
     /// </summary>
     public virtual void OnDespawn() {
         if(loaded) {
@@ -234,19 +216,57 @@ public abstract class Entity : MonoBehaviour {
     }
 
     /// <summary>
-    /// ÀÌ °³Ã¼°¡ ´Ù¸¥ °³Ã¼¿Í Ãæµ¹ÇßÀ» ¶§ È£ÃâµË´Ï´Ù
+    /// ì´ ê°œì²´ê°€ ë‹¤ë¥¸ ê°œì²´ì™€ ì¶©ëŒí–ˆì„ ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="other">Ãæµ¹ÇÑ °³Ã¼</param>
-    public virtual void OnStartCollide(Entity other) {
+    /// <param name="other">ì¶©ëŒí•œ ê°œì²´</param>
+    /// <param name="collision">ì¶©ëŒ ë§¥ë½</param>
+    public virtual void OnStartCollide(Entity other, Collision2D collision) {
 
     }
 
     /// <summary>
-    /// ÀÌ °³Ã¼¿Í ´Ù¸¥ °³Ã¼¿ÍÀÇ Ãæµ¹ÀÌ ³¡³µÀ» ¶§ È£ÃâµË´Ï´Ù
+    /// ì´ ê°œì²´ê°€ ë‹¤ë¥¸ ê°œì²´ì™€ ì¶©ëŒì¤‘ì¼ ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="other">Ãæµ¹ÇÑ °³Ã¼</param>
-    public virtual void OnEndCollide(Entity other) {
+    /// <param name="other">ì¶©ëŒì¤‘ì¸ ê°œì²´</param>
+    /// <param name="collision">ì¶©ëŒ ë§¥ë½</param>
+    public virtual void OnStayCollide(Entity other, Collision2D collision) {
 
-    } 
+    }
+
+    /// <summary>
+    /// ì´ ê°œì²´ì™€ ë‹¤ë¥¸ ê°œì²´ì™€ì˜ ì¶©ëŒì´ ëë‚¬ì„ ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤
+    /// </summary>
+    /// <param name="other">ì¶©ëŒí•œ ê°œì²´</param>
+    /// <param name="collision">ì¶©ëŒ ë§¥ë½</param>
+    public virtual void OnEndCollide(Entity other, Collision2D collision) {
+
+    }
+
+    /// <summary>
+    /// ì´ ê°œì²´ê°€ ë‹¤ë¥¸ ê°œì²´ì™€ ê²¹ì³¤ì„ ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤
+    /// </summary>
+    /// <param name="other">ê²¹ì¹œ ê°œì²´</param>
+    /// <param name="collider">ëŒ€ìƒ ì½œë¼ì´ë”</param>
+    public virtual void OnStartTrigger(Entity other, Collider2D collider) {
+
+    }
+
+    /// <summary>
+    /// ì´ ê°œì²´ê°€ ë‹¤ë¥¸ ê°œì²´ì™€ ê²¹ì³ìˆëŠ” ì¤‘ì¼ ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤
+    /// </summary>
+    /// <param name="other">ê²¹ì¹œ ê°œì²´</param>
+    /// <param name="collider">ëŒ€ìƒ ì½œë¼ì´ë”</param>
+    public virtual void OnStayTrigger(Entity other, Collider2D collider) {
+
+    }
+
+    /// <summary>
+    /// ì´ ê°œì²´ì™€ ë‹¤ë¥¸ ê°œì²´ì™€ì˜ ê²¹ì¹¨ì´ ëë‚¬ì„ ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤
+    /// </summary>
+    /// <param name="other">ê²¹ì¹œ ê°œì²´</param>
+    /// <param name="collider">ëŒ€ìƒ ì½œë¼ì´ë”</param>
+    public virtual void OnEndTrigger(Entity other, Collider2D collider) {
+
+    }
     #endregion
 }

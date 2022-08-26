@@ -110,7 +110,7 @@ public class WildBoar : LivingEntity {
     //돌진
     public IEnumerator Dash()
     {
-        if(collide <= 0) {
+        if(collider.collided.Count == 0) {
             state = State.Dash;
             Vector3 dir = transform.right;
             float distance = Util.ToVector(transform.position, GameManager.instance.player.gameObject.transform.position).magnitude + dashDistance;
@@ -128,20 +128,20 @@ public class WildBoar : LivingEntity {
         StartCoroutine("Rest");
     }
 
-    public override void OnStartCollide(Entity other) {
-        collide += 1;
+    public override void OnStartCollide(Entity other, Collision2D collision) {
         if(state == State.Dash) {
-            if(other.type == EntityType.Type.Player) {
-                Player player = (Player) other;
-                player.Damage(dashDamage);
-            }
             StopCoroutine("Dash");
             StartCoroutine("Rest");
         }
     }
 
-    public override void OnEndCollide(Entity other) {
-        collide -= 1;
+    public override void OnStartTrigger(Entity other, Collider2D collider) {
+        if(state == State.Dash) {
+            if(other.type == EntityType.Type.Player) {
+                Player player = (Player) other;
+                player.Damage(dashDamage);
+            }
+        }
     }
 
     //휴식
