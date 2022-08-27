@@ -10,9 +10,10 @@ using System;
 public abstract class Entity : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Entity")]
-    public EntityType originData;
+    [Label("originData")]
+    public EntityType _type;
     public EntityType type {
-        get => originData.enumType;
+        get => _type.enumType;
     }
     [SerializeField]
     [BoxGroup("Entity")]
@@ -20,9 +21,17 @@ public abstract class Entity : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Entity")]
     protected new Rigidbody2D rigidbody;
+    /// <summary>
+    /// 트리거 용도로 작동하는 콜라이더
+    /// 원활한 감지를 위해 <see cref="collider"/>보다 더 큰 크기여야한다
+    /// </summary>
     [SerializeField]
     [BoxGroup("Entity")]
     protected SubCollider trigger;
+    /// <summary>
+    /// 충돌 용도로 작동하는 콜라이더
+    /// 원활한 감지를 위해 <see cref="trigger"/>보다 작은 크기여야한다
+    /// </summary>
     [SerializeField]
     [BoxGroup("Entity")]
     protected new SubCollider collider;

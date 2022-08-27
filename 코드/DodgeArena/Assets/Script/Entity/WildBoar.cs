@@ -88,7 +88,7 @@ public class WildBoar : LivingEntity {
     {
         state = State.Threaten;
         LookAt(GameManager.instance.player.gameObject.transform.position);
-        spriteRenderer.sprite = originData.GetSprite("attack");
+        spriteRenderer.sprite = _type.GetSprite("attack");
         timer.Reset();
         timer.target = threateningDuration;
         while (true)
@@ -146,7 +146,7 @@ public class WildBoar : LivingEntity {
     {
         state = State.Rest;
         rigidbody.velocity = Vector2.zero;
-        spriteRenderer.sprite = originData.GetSprite("normal");
+        spriteRenderer.sprite = _type.GetSprite("normal");
         timer.Reset();
         timer.target = restDuration;
         while (true)

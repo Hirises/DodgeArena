@@ -115,10 +115,21 @@ public class ItemStack : ScriptableObject
         return of(type, amount);
     }
 
+    /// <summary>
+    /// 해당 아이템과 겹칠 수 있는지 여부
+    /// </summary>
+    /// <param name="item">대상 아이템</param>
+    /// <returns>결과</returns>
     public bool Stackable(ItemStack item) {
         return IsEmpty() || StackableRestrict(item);
     }
 
+    /// <summary>
+    /// 해당 아이템과 겹칠 수 있는지 여부
+    /// 단, 이 아이템이 Empty인 경우는 제외
+    /// </summary>
+    /// <param name="item">대상 아이템</param>
+    /// <returns>결과</returns>
     public bool StackableRestrict(ItemStack item) {
         return item.type == type;
     }

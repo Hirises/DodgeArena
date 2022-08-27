@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ¾À ÀÌ¸§ enumÈ­ (¿ÀÀÔ·Â ¹æÁö)
+/// ì”¬ ì´ë¦„ enumí™” (ì˜¤ì…ë ¥ ë°©ì§€)
 /// </summary>
-public class Scene
+public class SceneEnum
 {
-    public static readonly Scene GameScene = new Scene("GameScene");
-    public static readonly Scene MainScene = new Scene("TempMenuScene");
+    public static readonly SceneEnum GameScene = new SceneEnum("GameScene");
+    public static readonly SceneEnum MainScene = new SceneEnum("TempMenuScene");
 
     public readonly string name;
 
-    public Scene(string name) {
+    public SceneEnum(string name) {
         this.name = name;
     }
 }

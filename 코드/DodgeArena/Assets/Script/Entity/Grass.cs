@@ -13,6 +13,6 @@ public class Grass : LandScape
     public override void OnSpawn()
     {
         base.OnSpawn();
-        spriteRenderer.sprite = originData.GetSprite("variant" + Random.instance.RandRange(1, Convert.ToInt32(originData.GetData("variants"))));
+        spriteRenderer.sprite = _type.GetSprite("variant" + Random.instance.RandRange(1, Convert.ToInt32(_type.GetData("variants"))));
     }
 }

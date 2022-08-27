@@ -20,9 +20,10 @@ public class World : MonoBehaviour {
         this.loaded = false;
         gameObject.SetActive(false);
         this.initiated = true;
-#if UNITY_EDITOR
-        gameObject.name = type.ToString();
-#endif
+
+        #if UNITY_EDITOR
+            gameObject.name = type.ToString();
+        #endif
     }
 
     public void Load() {

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.Progress;
 
+/// <summary>
+/// 아이템을 보관합니다
+/// </summary>
 public class Container {
     private List<ItemStack> content;
 

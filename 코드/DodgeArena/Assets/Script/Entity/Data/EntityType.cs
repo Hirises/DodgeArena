@@ -4,6 +4,10 @@ using UnityEngine;
 using System;
 using RotaryHeart.Lib.SerializableDictionary;
 
+/// <summary>
+/// 엔티티의 타입
+/// 엔티티에 대한 기초 정보를 담고 있다.
+/// </summary>
 [CreateAssetMenu(fileName = "EntityData", menuName = "Entity/EntityData")]
 public class EntityType : ScriptableObject
 {

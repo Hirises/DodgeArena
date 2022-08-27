@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
         foreach(WorldType type in worlds.Keys) {
             UnloadWorld(type);
         }
-        UnityEngine.SceneManagement.SceneManager.LoadScene(Scene.MainScene.name);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(SceneEnum.MainScene.name);
     }
 
     public void Test() {
