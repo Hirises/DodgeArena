@@ -19,6 +19,7 @@ public class Player : LivingEntity {
     [BoxGroup("Player")]
     private int initialHp;
     public int hp { get; private set; }
+    public Container backpack;
 
     public override void OnSpawn() {
         base.OnSpawn();
@@ -26,9 +27,9 @@ public class Player : LivingEntity {
     }
 
     /// <summary>
-    /// ÀÌ °³Ã¼¸¦ ´Ù¸¥ À§Ä¡·Î ¼ø°£ÀÌµ¿½ÃÅµ´Ï´Ù
+    /// ì´ ê°œì²´ë¥¼ ë‹¤ë¥¸ ìœ„ì¹˜ë¡œ ìˆœê°„ì´ë™ì‹œí‚µë‹ˆë‹¤
     /// </summary>
-    /// <param name="location">´ë»ó À§Ä¡</param>
+    /// <param name="location">ëŒ€ìƒ ìœ„ì¹˜</param>
     public override void Teleport(WorldLocation location) {
         if(location.world.Equals(this.location.world)) {
             this.transform.position = location.vector;

@@ -54,6 +54,7 @@ public class WildBoar : LivingEntity {
         }
 
         collide = 0;
+        timer.count = Timer.Count.Up;
         StartCoroutine("Stand");
 
         return true;
@@ -95,11 +96,12 @@ public class WildBoar : LivingEntity {
         LookAt(GameManager.instance.player.gameObject.transform.position);
         spriteRenderer.sprite = attack;
         timer.Reset();
+        timer.target = threateningDuration;
         while (true)
         {
             yield return null;
             timer.Tick();
-            if (timer.Check(threateningDuration))
+            if (timer.Check())
             {
                 break;
             }
@@ -116,11 +118,12 @@ public class WildBoar : LivingEntity {
             float distance = Util.ToVector(transform.position, GameManager.instance.player.gameObject.transform.position).magnitude + dashDistance;
             float dashDuration = distance / dashSpeed;
             timer.Reset();
+            timer.target = dashDuration;
             while(true) {
                 rigidbody.velocity = dir * dashSpeed;
                 yield return null;
                 timer.Tick();
-                if(timer.Check(dashDuration)) {
+                if(timer.Check()) {
                     break;
                 }
             }
@@ -151,11 +154,12 @@ public class WildBoar : LivingEntity {
         rigidbody.velocity = Vector2.zero;
         spriteRenderer.sprite = normal;
         timer.Reset();
+        timer.target = restDuration;
         while (true)
         {
             yield return null;
             timer.Tick();
-            if (timer.Check(restDuration))
+            if (timer.Check())
             {
                 break;
             }

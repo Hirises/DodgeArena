@@ -90,23 +90,31 @@ public class GameManager : MonoBehaviour
         foreach(WorldType type in worlds.Keys) {
             UnloadWorld(type);
         }
-        SceneManager.LoadScene(Scene.MainScene.name);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(Scene.MainScene.name);
     }
 
     #region UnityLifecycle
-    private void Awake() {
+    private void OnEnable() {
         if(instance == null) {
             instance = this;
         } else {
             Destroy(transform);
         }
+    }
 
+    private void Awake() {
         state = GameState.Stop;
         LoadWorld(WorldType.Main);
         WorldLocation startLocation = new WorldLocation(GetWorld(WorldType.Main), new Vector2(0, 0));
         player.Initiated(startLocation);
         player.OnSpawn();
         state = GameState.Run;
+    }
+
+    private void OnDisable() {
+        if(instance == this) {
+            instance = null;
+        }
     }
 
     private void Update() {

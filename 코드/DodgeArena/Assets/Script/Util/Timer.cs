@@ -10,30 +10,68 @@ public class Timer
     {
         get => _time;
     }
+    public float target;
+    public enum Count {
+        Up,
+        Down
+    }
+    public Count count = Count.Up;
+    public float rate {
+        get {
+            return time / target;
+        }
+    }
+    public IEnumerator instance;
 
     public Timer()
     {
         Reset();
     }
 
+    public Timer(float time) {
+        Reset(time);
+    }
+
     public void Reset()
     {
-        this._time = 0;
+        Reset(0);
     }
 
-    public IEnumerable Start()
-    {
-        yield return null;
-        Tick();
+    public void Reset(float time) {
+        this._time = time;
     }
 
-    public void Tick()
-    {
-        this._time += Time.deltaTime;
+    public IEnumerator Start(Action<float> callback, GameData.Runnable finish) {
+        instance = Run(callback, finish).GetEnumerator();
+        return instance;
     }
 
-    public bool Check(float value)
-    {
-        return time >= value;
+    private IEnumerable Run(Action<float> callback, GameData.Runnable finish) {
+        while(Check()) {
+            yield return null;
+            Tick();
+            if(callback != null) {
+                callback(time);
+            }
+        }
+        if(finish != null) {
+            finish();
+        }
+    }
+
+    public void Tick() {
+        if(count == Count.Up) {
+            this._time += Time.deltaTime;
+        } else {
+            this._time -= Time.deltaTime;
+        }
+    }
+
+    public bool Check() {
+        if(count == Count.Up) {
+            return this._time >= target;
+        } else {
+            return this._time <= target;
+        }
     }
 }
