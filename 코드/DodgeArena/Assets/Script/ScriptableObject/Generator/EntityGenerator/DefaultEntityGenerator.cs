@@ -14,7 +14,9 @@ public class DefaultEntityGenerator : EntityGenerator
     [BoxGroup("Environment")]
     public List<WorldType.Type> worlds;
     [BoxGroup("Environment")]
-    public Biome.Type biome;
+    public bool whiteListForBiome = false;
+    [BoxGroup("Environment")]
+    public List<BiomeTypeEnum> biomes;
 
     [BoxGroup("Limit")]
     public int dense;
@@ -53,7 +55,7 @@ public class DefaultEntityGenerator : EntityGenerator
     {
         bool flag = true;
         flag &= !(whiteListForWorld ^ worlds.Contains(chunk.world.type));
-        flag &= chunk.biomeInfo.affectedBiomes.ContainsKey(biome);
+        flag &= !( whiteListForBiome ^ biomes.Contains(chunk.biome.enumType) );
         flag &= chunk.chunkData.dense + dense <= chunk.chunkData.initialDense;
         flag &= chunk.chunkData.risk + risk <= chunk.chunkData.initialRisk;
         flag &= chunk.chunkData.returns + returns <= chunk.chunkData.initialReturns;
@@ -77,8 +79,8 @@ public class DefaultEntityGenerator : EntityGenerator
         return flag;
     }
 
-    public override int GetWeight(Chunk chunk) {
-        return Mathf.CeilToInt(weight * chunk.biomeInfo.affectedBiomes[biome]);
+    public override int GetWeight() {
+        return weight;
     }
     public override List<Entity> Generate(Chunk chunk)
     {

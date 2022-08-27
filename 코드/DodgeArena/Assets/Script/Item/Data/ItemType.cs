@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using RotaryHeart.Lib.SerializableDictionary;
 
-[CreateAssetMenu(fileName = "ItemType", menuName = "Item/ItemType")]
+[CreateAssetMenu(fileName = "ItemType", menuName = "Data/ItemType")]
 public class ItemType : ScriptableObject
 {
     public static Dictionary<ItemTypeEnum, ItemType> itemTypeMap = new Dictionary<ItemTypeEnum, ItemType>();

@@ -4,8 +4,8 @@ using UnityEngine;
 using System;
 
 /// <summary>
-/// Random °ü·Ã À¯Æ¿ ¸Ş¼ÒµåµéÀ» Á¦°ø <br/>
-/// À¯´ÏÆ¼ ±âº» Á¦°ø Random Å¬·¡½º°¡ ºÎ½ÇÇØ¼­ »õ·Î Á¦ÀÛÇÔ
+/// Random ê´€ë ¨ ìœ í‹¸ ë©”ì†Œë“œë“¤ì„ ì œê³µ <br/>
+/// ìœ ë‹ˆí‹° ê¸°ë³¸ ì œê³µ Random í´ë˜ìŠ¤ê°€ ë¶€ì‹¤í•´ì„œ ìƒˆë¡œ ì œì‘í•¨
 /// </summary>
 public class Random
 {
@@ -25,51 +25,59 @@ public class Random
     public void Seed(int seed)
     {
         this.random = new System.Random(seed);
+    }    
+    
+    /// <summary>
+    /// ëœë¤ intê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤
+    /// </summary>
+    /// <returns>ëœë¤ê°’</returns>
+    public int NextInt() {
+        return random.Next();
     }
 
     /// <summary>
-    /// [0-1) »çÀÌÀÇ float °ªÀ» ¹İÈ¯ÇÕ´Ï´Ù
+    /// [0-1) ì‚¬ì´ì˜ float ê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <returns>·£´ı°ª</returns>
+    /// <returns>ëœë¤ê°’</returns>
     public float NextFloat()
     {
         return Convert.ToSingle(random.NextDouble());
     }
 
     /// <summary>
-    /// [0-1) »çÀÌÀÇ double °ªÀ» ¹İÈ¯ÇÕ´Ï´Ù
+    /// [0-1) ì‚¬ì´ì˜ double ê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <returns>·£´ı°ª</returns>
+    /// <returns>ëœë¤ê°’</returns>
     public double NextDouble()
     {
         return random.NextDouble();
     }
 
     /// <summary>
-    /// ·£´ıÇÑ true, false °ªÀ» ¹İÈ¯ÇÕ´Ï´Ù
+    /// ëœë¤í•œ true, false ê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <returns>·£´ı°ª</returns>
+    /// <returns>ëœë¤ê°’</returns>
     public bool NextBool()
     {
         return RandRange(0, 1) == 0;
     }
 
     /// <summary>
-    /// ·£´ıÇÑ ºÎÈ£°ªÀ» ¹İÈ¯ÇÕ´Ï´Ù <br/>
+    /// ëœë¤í•œ ë¶€í˜¸ê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤ <br/>
     /// </summary>
-    /// <returns>1 ¶Ç´Â -1</returns>
+    /// <returns>1 ë˜ëŠ” -1</returns>
     public int NextSign()
     {
         return NextBool() ? -1 : 1;
     }
 
     /// <summary>
-    /// [min, max] »çÀÌÀÇ int °ªÀ» ¹İÈ¯ÇÕ´Ï´Ù <br/>
-    /// ÀÚµ¿À¸·Î min°ª°ú max°ªÀÇ ´ë¼Ò¸¦ ¼³Á¤ÇÕ´Ï´Ù
+    /// [min, max] ì‚¬ì´ì˜ int ê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤ <br/>
+    /// ìë™ìœ¼ë¡œ minê°’ê³¼ maxê°’ì˜ ëŒ€ì†Œë¥¼ ì„¤ì •í•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="min">ÃÖ¼Ò°ª</param>
-    /// <param name="max">ÃÖ´ë°ª</param>
-    /// <returns>·£´ı°ª</returns>
+    /// <param name="min">ìµœì†Œê°’</param>
+    /// <param name="max">ìµœëŒ€ê°’</param>
+    /// <returns>ëœë¤ê°’</returns>
     public int RandRange(int min, int max)
     {
         if(min > max)
@@ -86,11 +94,11 @@ public class Random
     }
 
     /// <summary>
-    /// [from, to) »çÀÌÀÇ int °ªÀ» ¹İÈ¯ÇÕ´Ï´Ù
+    /// [from, to) ì‚¬ì´ì˜ int ê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="from">½ÃÀÛÁ¡</param>
-    /// <param name="to">³¡Á¡</param>
-    /// <returns>·£´ı°ª</returns>
+    /// <param name="from">ì‹œì‘ì </param>
+    /// <param name="to">ëì </param>
+    /// <returns>ëœë¤ê°’</returns>
     public int RandInt(int from, int to)
     {
         int range = to - from;
@@ -99,11 +107,11 @@ public class Random
     }
 
     /// <summary>
-    /// [from, to) »çÀÌÀÇ float °ªÀ» ¹İÈ¯ÇÕ´Ï´Ù
+    /// [from, to) ì‚¬ì´ì˜ float ê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="from">½ÃÀÛÁ¡</param>
-    /// <param name="to">³¡Á¡</param>
-    /// <returns>·£´ı°ª</returns>
+    /// <param name="from">ì‹œì‘ì </param>
+    /// <param name="to">ëì </param>
+    /// <returns>ëœë¤ê°’</returns>
     public float RandFloat(float from, float to)
     {
         float range = to - from;
@@ -112,11 +120,11 @@ public class Random
     }
 
     /// <summary>
-    /// [from, to) »çÀÌÀÇ double °ªÀ» ¹İÈ¯ÇÕ´Ï´Ù
+    /// [from, to) ì‚¬ì´ì˜ double ê°’ì„ ë°˜í™˜í•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="from">½ÃÀÛÁ¡</param>
-    /// <param name="to">³¡Á¡</param>
-    /// <returns>·£´ı°ª</returns>
+    /// <param name="from">ì‹œì‘ì </param>
+    /// <param name="to">ëì </param>
+    /// <returns>ëœë¤ê°’</returns>
     public double RandDouble(double from, double to)
     {
         double range = to - from;
@@ -125,10 +133,10 @@ public class Random
     }
 
     /// <summary>
-    /// [0, 1]»çÀÌÀÇ È®·ü°ªÀ» ¹Ş¾Æ¼­ °ËÁõÇÕ´Ï´Ù
+    /// [0, 1]ì‚¬ì´ì˜ í™•ë¥ ê°’ì„ ë°›ì•„ì„œ ê²€ì¦í•©ë‹ˆë‹¤
     /// </summary>
-    /// <param name="rate">È®·ü</param>
-    /// <returns>¼º°ø ¿©ºÎ</returns>
+    /// <param name="rate">í™•ë¥ </param>
+    /// <returns>ì„±ê³µ ì—¬ë¶€</returns>
     public bool CheckRate(double rate)
     {
         return NextDouble() < rate;

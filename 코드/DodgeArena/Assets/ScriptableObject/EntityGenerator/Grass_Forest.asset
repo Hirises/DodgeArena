@@ -15,7 +15,8 @@ MonoBehaviour:
   weight: 100
   whiteListForWorld: 0
   worlds: 
-  biome: 0
+  whiteListForBiome: 1
+  biomes: 01000000
   dense: 0
   risk: 0
   returns: 5

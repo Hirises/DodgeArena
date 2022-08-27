@@ -3,34 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Biome
+[CreateAssetMenu(fileName = "BiomeInfo", menuName = "Data/BiomeInfo")]
+public class Biome : ScriptableObject
 {
-    private static Dictionary<Type, Biome> biomeTypeMap = new Dictionary<Type, Biome>();
-    public Biome this[Type t] {
+    public static Dictionary<BiomeTypeEnum, Biome> biomeTypeMap = new Dictionary<BiomeTypeEnum, Biome>();
+    public Biome this[BiomeTypeEnum t] {
         get => biomeTypeMap[t];
     }
 
-    public enum Type {
-        Forest,
-        Plain
+    public BiomeTypeEnum enumType;
+
+    public static implicit operator BiomeTypeEnum(Biome self) {
+        return self.enumType;
     }
 
-    public static readonly Biome Forest = new Biome(Type.Forest);
-    public static readonly Biome Plain = new Biome(Type.Plain);
-
-    private readonly Type type;
-
-    public Biome(Type type) {
-        this.type = type;
-
-        biomeTypeMap.Add(type, this);
-    }
-
-    public static implicit operator Biome.Type(Biome self) {
-        return self.type;
-    }
-
-    public static implicit operator Biome(Biome.Type self) {
+    public static implicit operator Biome(BiomeTypeEnum self) {
         return biomeTypeMap[self];
     }
 
@@ -39,15 +26,15 @@ public class Biome
             return false;
         } else {
             Biome t = (Biome) obj;
-            return t.type == type;
+            return t.enumType == enumType;
         }
     }
 
     public override int GetHashCode() {
-        return HashCode.Combine(type);
+        return HashCode.Combine(enumType);
     }
 
     public override string ToString() {
-        return type.ToString();
+        return enumType.ToString();
     }
 }

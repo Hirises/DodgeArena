@@ -15,7 +15,8 @@ MonoBehaviour:
   weight: 100
   whiteListForWorld: 0
   worlds: 
-  biome: 0
+  whiteListForBiome: 1
+  biomes: 01000000
   minDense: 0
   maxDense: 0
   minRisk: 100
@@ -23,5 +24,31 @@ MonoBehaviour:
   minReturn: 20
   maxReturn: 50
   tags:
-  - tag: tree
-    rate: 0.8
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues:
+    - tree
+    _keys:
+    - tree
+    _values:
+    - 0.8

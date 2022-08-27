@@ -8,7 +8,7 @@ using RotaryHeart.Lib.SerializableDictionary;
 /// 엔티티의 타입
 /// 엔티티에 대한 기초 정보를 담고 있다.
 /// </summary>
-[CreateAssetMenu(fileName = "EntityData", menuName = "Entity/EntityData")]
+[CreateAssetMenu(fileName = "EntityData", menuName = "Data/EntityData")]
 public class EntityType : ScriptableObject
 {
     public static Dictionary<EntityTypeEnum, EntityType> entityTypeMap = new Dictionary<EntityTypeEnum, EntityType>();

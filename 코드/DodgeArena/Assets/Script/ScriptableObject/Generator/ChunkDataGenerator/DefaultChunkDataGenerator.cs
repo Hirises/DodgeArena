@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using RotaryHeart.Lib.SerializableDictionary;
 
 [CreateAssetMenu(fileName = "Default", menuName = "Generator/ChunkDataGenerator/Default")]
 public class DefaultChunkDataGenerator : ChunkDataGenerator {
@@ -13,7 +14,9 @@ public class DefaultChunkDataGenerator : ChunkDataGenerator {
     [BoxGroup("Environment")]
     public List<WorldType.Type> worlds;
     [BoxGroup("Environment")]
-    public Biome.Type biome;
+    public bool whiteListForBiome = false;
+    [BoxGroup("Environment")]
+    public List<BiomeTypeEnum> biomes;
 
     [BoxGroup("EntityGenerate")]
     public int minDense;
@@ -28,31 +31,26 @@ public class DefaultChunkDataGenerator : ChunkDataGenerator {
     [BoxGroup("EntityGenerate")]
     public int maxReturn;
     [BoxGroup("EntityGenerate")]
-    public List<TagData> tags;
-    [System.Serializable]
-    public struct TagData {
-        public string tag;
-        public float rate;
-    }
+    public SerializableDictionaryBase<string, float> tags;
 
     public override bool CheckConditions(Chunk chunk) {
         bool flag = true;
         flag &= !( whiteListForWorld ^ worlds.Contains(chunk.world.type) );
-        flag &= chunk.biomeInfo.affectedBiomes.ContainsKey(biome);
+        flag &= !( whiteListForBiome ^ biomes.Contains(chunk.biome.enumType) );
         return flag;
     }
 
-    public override int GetWeight(Chunk chunk) {
-        return Mathf.CeilToInt(weight * chunk.biomeInfo.affectedBiomes[biome]);
+    public override int GetWeight() {
+        return weight;
     }
 
     public override ChunkData Generate(Chunk chunk) {
-        List<string> tag = new List<string>();
-        foreach(TagData data in tags) {
-            if(Random.instance.CheckRate(data.rate)) {
-                tag.Add(data.tag);
+        List<string> tagList = new List<string>();
+        foreach(string tag in tags.Keys) {
+            if(Random.instance.CheckRate(tags[tag])) {
+                tagList.Add(tag);
             }
         }
-        return new ChunkData(Random.instance.RandRange(minDense, maxDense), Random.instance.RandRange(minRisk, maxRisk), Random.instance.RandRange(minReturn, maxReturn), tag);
+        return new ChunkData(Random.instance.RandRange(minDense, maxDense), Random.instance.RandRange(minRisk, maxRisk), Random.instance.RandRange(minReturn, maxReturn), tagList);
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-public abstract class ChunkDataGenerator : Generator<ChunkData> {
-    public override abstract bool CheckConditions(Chunk chunk);
+public abstract class ChunkDataGenerator : ScriptableObject, IHasWeight {
+    public abstract bool CheckConditions(Chunk chunk);
 
-    public override abstract int GetWeight(Chunk chunk);
+    public abstract int GetWeight();
 
-    public override abstract ChunkData Generate(Chunk chunk);
+    public abstract ChunkData Generate(Chunk chunk);
 }

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace RotaryHeart.Lib
 {
-    [CreateAssetMenu(fileName = "DataBase.asset", menuName = "Data Base")]
     public class DataBaseExample : ScriptableObject
     {
         public enum EnumExample

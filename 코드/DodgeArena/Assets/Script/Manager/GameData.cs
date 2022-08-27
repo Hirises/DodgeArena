@@ -15,6 +15,10 @@ public class GameData : MonoBehaviour {
     public List<ItemType> allItems;
 
     [SerializeField]
+    [BoxGroup("Biome")]
+    public List<Biome> allBiomes;
+
+    [SerializeField]
     [BoxGroup("Generator")]
     public List<BiomeGenerator> biomeGenerators;
     [SerializeField]
@@ -43,5 +47,11 @@ public class GameData : MonoBehaviour {
         }
         allEntities.Clear();
         allEntities = null;
+
+        foreach(Biome biome in allBiomes) {
+            Biome.biomeTypeMap.Add(biome.enumType, biome);
+        }
+        allBiomes.Clear();
+        allBiomes = null;
     }
 }

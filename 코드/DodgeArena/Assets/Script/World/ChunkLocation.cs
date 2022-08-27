@@ -5,6 +5,12 @@ public class ChunkLocation
 {
     public readonly Vector2 vector;
     public readonly World world;
+    public int x {
+        get => Convert.ToInt32(vector.x);
+    }
+    public int y {
+        get => Convert.ToInt32(vector.y);
+    }
     public Chunk chunk
     {
         get => world.GetChunk(this);
@@ -12,6 +18,10 @@ public class ChunkLocation
     public WorldLocation center
     {
         get => new WorldLocation(world, vector * GameManager.instance.half_ChunkWeidth * 2);
+    }
+
+    public ChunkLocation(World world, int x, int y) : this(world, new Vector2(x, y)) {
+
     }
 
     public ChunkLocation(World world, Vector2 location) {
@@ -45,6 +55,10 @@ public class ChunkLocation
     {
         return Mathf.Abs(pos.x - center.vector.x) <= GameManager.instance.half_ChunkLoadRange
            && Mathf.Abs(pos.y - center.vector.y) <= GameManager.instance.half_ChunkLoadRange;
+    }
+
+    public ChunkLocation Add(int x, int y) {
+        return new ChunkLocation(this.world, this.x + x, this.y + y);
     }
 
     public override bool Equals(object obj)

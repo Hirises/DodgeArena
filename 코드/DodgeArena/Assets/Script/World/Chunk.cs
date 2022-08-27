@@ -11,6 +11,7 @@ public class Chunk : MonoBehaviour
     public bool initiated { get; private set; }
     public bool valid { get; private set; }
     public World world { private set; get; }
+    public Biome biome { private set; get; }
     public BiomeInfo biomeInfo { private set; get; }
     [SerializeField]
     [ReadOnly]
@@ -26,7 +27,7 @@ public class Chunk : MonoBehaviour
     /// <summary>
     /// 청크 리셋 (처음 생성시)
     /// </summary>
-    public void ResetProperties(ChunkLocation position, BiomeInfo biomeInfo)
+    public void ResetProperties(ChunkLocation position, Biome biome, BiomeInfo info)
     {
         if (valid)
         {
@@ -39,9 +40,9 @@ public class Chunk : MonoBehaviour
         this._location = position;
         world = position.world;
         entities = new List<Entity>();
-        this.biomeInfo = biomeInfo;
-        biomeInfo.Calculate(this);
-        this.chunkData = GameManager.instance.GetChunkDataGenerator(this).Generate(this);
+        this.biome = biome;
+        this.biomeInfo = info;
+        this.chunkData = Util.GetByWeigth(GameManager.instance.GetPossibleChunkDataGenerators(this)).Generate(this);
         valid = true;
 #if UNITY_EDITOR
         gameObject.name = position.vector.ToString();
@@ -106,7 +107,7 @@ public class Chunk : MonoBehaviour
             if(generators.Count <= 0) {
                 break;
             }
-            Util.GetByWeigth(generators, val => val.GetWeight(this)).Generate(this);
+            Util.GetByWeigth(generators).Generate(this);
         }
     }
 

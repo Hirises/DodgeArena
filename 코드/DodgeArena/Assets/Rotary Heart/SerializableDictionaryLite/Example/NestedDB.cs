@@ -1,10 +1,9 @@
-﻿using RotaryHeart.Lib.SerializableDictionary;
+using RotaryHeart.Lib.SerializableDictionary;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RotaryHeart.Lib
 {
-    [CreateAssetMenu(fileName = "NestedDB.asset", menuName = "Nested DB")]
     public class NestedDB : ScriptableObject
     {
         [SerializeField, ID("id")]

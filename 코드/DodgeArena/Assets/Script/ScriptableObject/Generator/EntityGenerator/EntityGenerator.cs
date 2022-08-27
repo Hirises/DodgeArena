@@ -4,11 +4,10 @@ using UnityEngine;
 using System;
 using NaughtyAttributes;
 
-public abstract class EntityGenerator : Generator<List<Entity>>
-{
-    public override abstract bool CheckConditions(Chunk chunk);
+public abstract class EntityGenerator : ScriptableObject, IHasWeight {
+    public abstract bool CheckConditions(Chunk chunk);
 
-    public override abstract int GetWeight(Chunk chunk);
+    public abstract int GetWeight();
 
-    public override abstract List<Entity> Generate(Chunk chunk);
+    public abstract List<Entity> Generate(Chunk chunk);
 }

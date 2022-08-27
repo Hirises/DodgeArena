@@ -5167,9 +5167,9 @@ MonoBehaviour:
   player: {fileID: 2559929718907907026}
   worldRoot: {fileID: 1236331380}
   worldPrefab: {fileID: 3882782164361037413, guid: 4989cd94d77e6aa45aab9f0284aae1c7, type: 3}
-  half_MinBiomeSize_Chunk: 1
-  half_MaxBiomeSize_Chunk: 3
-  maxAffectedBiomeAmount: 16
+  seed: 0
+  subSeed: 0
+  biomeSizeRank: 10
   chunkPrefab: {fileID: 61806345724639106, guid: 14be6a1e7c3b63e4690981826d62119e, type: 3}
   half_ChunkUpdateRange: 180
   half_ChunkSaveRange: 150
@@ -5183,8 +5183,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 583666925}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -50.408054, y: 0.3196683, z: 1.0078187}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5243,12 +5243,15 @@ MonoBehaviour:
   allItems:
   - {fileID: 11400000, guid: be1e445e05ed330459708d13c4e5480d, type: 2}
   - {fileID: 11400000, guid: 935d8c75c0d507546ae27fdcd0b7b333, type: 2}
+  allBiomes:
+  - {fileID: 11400000, guid: caea938c91534154eb9402cae9cd4c33, type: 2}
+  - {fileID: 11400000, guid: 44c073f258a202246bdf80aef8605b66, type: 2}
   biomeGenerators:
-  - {fileID: 11400000, guid: 9a78ad2e18e1a614c9c14a8b31d4e669, type: 2}
   - {fileID: 11400000, guid: e8d22b0fb3a259145a96d61dd0833ad8, type: 2}
+  - {fileID: 11400000, guid: 9a78ad2e18e1a614c9c14a8b31d4e669, type: 2}
   chunkDataGenerators:
-  - {fileID: 11400000, guid: 73bea87824f3d994f8c15b2e62402d04, type: 2}
   - {fileID: 11400000, guid: 6e73a66f97a737b4abd3ba3d7256c24d, type: 2}
+  - {fileID: 11400000, guid: 73bea87824f3d994f8c15b2e62402d04, type: 2}
   entityGenerators:
   - {fileID: 11400000, guid: c7bf75082f82eb647a4ec4c3f69b16ce, type: 2}
   - {fileID: 11400000, guid: 8f9f30741fe25f143bf9cd8ecc0afe2e, type: 2}
@@ -5316,7 +5319,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 774170815}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 50.408054, y: -0.3196683, z: -1.0078187}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6110,7 +6113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa04e81fef3748045bbb778404f338fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originData: {fileID: 11400000, guid: cb0a636aceb9522478a58c492586aaed, type: 2}
+  _type: {fileID: 11400000, guid: cb0a636aceb9522478a58c492586aaed, type: 2}
   spriteRenderer: {fileID: 2559929718907907021}
   rigidbody: {fileID: 2559929718907907025}
   trigger: {fileID: 2559929718620884663}

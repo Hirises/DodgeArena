@@ -12,20 +12,26 @@ public class DefaultBiomeGenerator : BiomeGenerator {
     public bool whiteListForWorld = false;
     [BoxGroup("Environment")]
     public List<WorldType.Type> worlds;
+    [BoxGroup("Environment")]
+    public Vector2 difficulty;
+    [BoxGroup("Environment")]
+    public Vector2 temperature;
 
     [BoxGroup("Biome")]
-    public Biome.Type biome;
-    public override bool CheckConditions(Chunk chunk) {
+    public BiomeTypeEnum biome;
+    public override bool CheckConditions(ChunkLocation location, BiomeInfo info) {
         bool flag = true;
-        flag &= !( whiteListForWorld ^ worlds.Contains(chunk.world.type) );
+        flag &= !( whiteListForWorld ^ worlds.Contains(location.world.type) );
+        flag &= difficulty.x <= info.dificulty && info.dificulty <= difficulty.y;
+        flag &= temperature.x <= info.temperature && info.temperature <= temperature.y;
         return flag;
     }
 
-    public override int GetWeight(Chunk chunk) {
+    public override int GetWeight() {
         return weight;
     }
 
-    public override Biome Generate(Chunk chunk) {
+    public override Biome Generate() {
         return biome;
     }
 }

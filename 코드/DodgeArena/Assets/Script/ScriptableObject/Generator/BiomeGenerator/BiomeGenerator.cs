@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-public abstract class BiomeGenerator : Generator<Biome>
+public abstract class BiomeGenerator : ScriptableObject, IHasWeight
 {
-    public override abstract bool CheckConditions(Chunk chunk);
+    public abstract bool CheckConditions(ChunkLocation chunk, BiomeInfo info);
 
-    public override abstract int GetWeight(Chunk chunk);
-    public override abstract Biome Generate(Chunk chunk);
+    public abstract int GetWeight();
+
+    public abstract Biome Generate();
 }

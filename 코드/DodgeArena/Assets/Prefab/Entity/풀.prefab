@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cb7c2d32af37af498930f5228e8d30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originData: {fileID: 11400000, guid: a5e2026a0e665864e8d0c25cdca90643, type: 2}
+  _type: {fileID: 11400000, guid: a5e2026a0e665864e8d0c25cdca90643, type: 2}
   spriteRenderer: {fileID: 5700230945087700101}
   rigidbody: {fileID: 2360380203078798310}
   trigger: {fileID: 6591019712053230608}

@@ -24,22 +24,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     [BoxGroup("World")]
     public World worldPrefab;
+    [SerializeField]
+    [BoxGroup("World")]
+    public int seed;
+    [ReadOnly]
+    [BoxGroup("World")]
+    public int subSeed;
 
     [SerializeField]
     [BoxGroup("Biome")]
-    [OnValueChanged(nameof(setMaxAffectedBiomeAmount))]
-    public int half_MinBiomeSize_Chunk;
-    [SerializeField]
-    [BoxGroup("Biome")]
-    [OnValueChanged(nameof(setMaxAffectedBiomeAmount))]
-    public int half_MaxBiomeSize_Chunk;
-    [ReadOnly]
-    [SerializeField]
-    [BoxGroup("Biome")]
-    public int maxAffectedBiomeAmount;
-    public void setMaxAffectedBiomeAmount() {
-        maxAffectedBiomeAmount = Mathf.FloorToInt(Mathf.Pow(( half_MaxBiomeSize_Chunk / ( (half_MinBiomeSize_Chunk - 1) * 2 + 1 ) ) + 1, 2));
-    }
+    public float biomeSizeRank;
 
     [SerializeField]
     [BoxGroup("Chunk")]
@@ -88,12 +82,7 @@ public class GameManager : MonoBehaviour
             player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
         }
 
-        string biomeInfo = "";
-        foreach(Biome biome in player.chunk.biomeInfo.affectedBiomes.Keys) {
-            biomeInfo += biome.ToString() + " " + player.chunk.biomeInfo.affectedBiomes[biome] + "\n";
-        }
-
-        debugText.text = player.hp.ToString() + "\n" + biomeInfo + "\n" + player.backpack.ToString();
+        debugText.text = player.hp.ToString() + "\n" + player.backpack.ToString();
     }
 
     #region UnityLifecycle
@@ -109,6 +98,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
+        subSeed = new Random(seed).NextInt();
         LoadWorld(WorldType.Main);
         WorldLocation startLocation = new WorldLocation(GetWorld(WorldType.Main), new Vector2(0, 0));
         player.Initiated(startLocation);
@@ -181,25 +171,17 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 해당 청크에 대해 사용 가능한 <see cref="BiomeGenerator"/>들의 목록을 반환합니다
     /// </summary>
-    /// <param name="chunk">확인할 청크</param>
+    /// <param name="location">확인할 청크 위치</param>
+    /// <param name="info">확인할 청크 정보</param>
     /// <returns>가능한 목록</returns>
-    public List<BiomeGenerator> GetPossibleBiomeGenerators(Chunk chunk) {
+    public List<BiomeGenerator> GetPossibleBiomeGenerators(ChunkLocation location, BiomeInfo info) {
         List<BiomeGenerator> output = new List<BiomeGenerator>();
         foreach(BiomeGenerator generator in GameData.instance.biomeGenerators) {
-            if(generator.CheckConditions(chunk)) {
+            if(generator.CheckConditions(location, info)) {
                 output.Add(generator);
             }
         }
         return output;
-    }
-
-    /// <summary>
-    /// 해당 청크에 대한 랜덤한 <see cref="BiomeGenerator"/>를 반환합니다
-    /// </summary>
-    /// <param name="chunk">확인할 청크</param>
-    /// <returns>반환된 생성자</returns>
-    public BiomeGenerator GetBiomeGenerator(Chunk chunk) {
-        return Util.GetByWeigth(GetPossibleBiomeGenerators(chunk), val => val.GetWeight(chunk));
     }
 
     /// <summary>
@@ -218,15 +200,6 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 해당 청크에 대한 랜덤한 <see cref="ChunkDataGenerator"/>를 반환합니다
-    /// </summary>
-    /// <param name="chunk">확인할 청크</param>
-    /// <returns>반환된 생성자</returns>
-    public ChunkDataGenerator GetChunkDataGenerator(Chunk chunk) {
-        return Util.GetByWeigth(GetPossibleChunkDataGenerators(chunk), val => val.GetWeight(chunk));
-    }
-
-    /// <summary>
     /// 해당 청크에 대해 사용 가능한 <see cref="EntityGenerator"/>들의 목록을 반환합니다
     /// </summary>
     /// <param name="chunk">확인할 청크</param>
@@ -240,14 +213,5 @@ public class GameManager : MonoBehaviour
         }
         return output;
     }
-
-    /// <summary>
-    /// 해당 청크에 대한 랜덤한 <see cref="EntityGenerator"/>를 반환합니다
-    /// </summary>
-    /// <param name="chunk">확인할 청크</param>
-    /// <returns>반환된 생성자</returns>
-    public EntityGenerator GetEntityGenerator(Chunk chunk) {
-        return Util.GetByWeigth(GetPossibleEntityGenerators(chunk), val => val.GetWeight(chunk));
-    } 
     #endregion
 }

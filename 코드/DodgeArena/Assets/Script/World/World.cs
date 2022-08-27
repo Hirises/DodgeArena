@@ -9,7 +9,6 @@ public class World : MonoBehaviour {
     public bool initiated { private set; get; }
     public bool loaded { private set; get; }
     private Dictionary<ChunkLocation, Chunk> chunks = new Dictionary<ChunkLocation, Chunk>();
-    private Dictionary<ChunkLocation, BiomeInfo> biomes = new Dictionary<ChunkLocation, BiomeInfo>();
 
     public void Initiate(WorldType type) {
         if(initiated) {
@@ -54,12 +53,12 @@ public class World : MonoBehaviour {
     public void UpdateChunkState(ChunkLocation location) {
         Vector2 pos = GameManager.instance.player.location.vector2;
         if(location.CheckLoad(pos)) {
-            if(!chunks.ContainsKey(location)) {
+            if(!IsChunkSpawned(location)) {
                 SpawnChunk(location);
             }
             LoadChunk(location);
         } else if(location.CheckKeep(pos)) {
-            if(!chunks.ContainsKey(location)) {
+            if(!IsChunkSpawned(location)) {
                 SpawnChunk(location);
                 return;
             }
@@ -70,7 +69,7 @@ public class World : MonoBehaviour {
     }
 
     public Chunk GetChunk(ChunkLocation location) {
-        if(!chunks.ContainsKey(location)) {
+        if(!IsChunkSpawned(location)) {
             return SpawnChunk(location);
         }
         Chunk chunk = chunks[location];
@@ -78,18 +77,58 @@ public class World : MonoBehaviour {
     }
 
     public Chunk SpawnChunk(ChunkLocation location) {
-        if(chunks.ContainsKey(location)) {
+        if(IsChunkSpawned(location)) {
             return GetChunk(location);
         }
 
         Chunk chunk = Instantiate(GameManager.instance.chunkPrefab, location.center.vector, Quaternion.identity, transform);
         chunks.Add(location, chunk);
-        chunk.ResetProperties(location, new BiomeInfo(location));
+        Biome biome = GenerateBiome(location, out BiomeInfo info);
+        chunk.ResetProperties(location, biome, info);
         return chunk;
     }
 
+    public Biome GenerateBiome(ChunkLocation location, out BiomeInfo output) {
+        World world = location.world;
+
+        float dificulty = Mathf.PerlinNoise(( location.x + GameManager.instance.seed ) / GameManager.instance.biomeSizeRank, ( location.y + GameManager.instance.seed ) / GameManager.instance.biomeSizeRank);
+        float temperature = Mathf.PerlinNoise(( location.x + GameManager.instance.subSeed ) / GameManager.instance.biomeSizeRank, ( location.x + GameManager.instance.subSeed ) / GameManager.instance.biomeSizeRank);
+
+        BiomeInfo biomeInfo = new BiomeInfo(dificulty, temperature);
+        List<BiomeGenerator> potential = GameManager.instance.GetPossibleBiomeGenerators(location, biomeInfo);
+        biomeInfo.potential = potential.ConvertAll(value => ((int)value.Generate().enumType));
+        output = biomeInfo;
+
+        if(world.IsChunkSpawned(location.Add(1, 0))) {
+            Chunk chunk = world.GetChunk(location.Add(1, 0));
+            if(Util.DeepEquals(chunk.biomeInfo.potential, biomeInfo.potential)){
+                return chunk.biome;
+            }
+        }
+        if(world.IsChunkSpawned(location.Add(-1, 0))) {
+            Chunk chunk = world.GetChunk(location.Add(-1, 0));
+            if(Util.DeepEquals(chunk.biomeInfo.potential, biomeInfo.potential)) {
+                return chunk.biome;
+            }
+        }
+        if(world.IsChunkSpawned(location.Add(0, 1))) {
+            Chunk chunk = world.GetChunk(location.Add(0, 1));
+            if(Util.DeepEquals(chunk.biomeInfo.potential, biomeInfo.potential)) {
+                return chunk.biome;
+            }
+        }
+        if(world.IsChunkSpawned(location.Add(0, -1))) {
+            Chunk chunk = world.GetChunk(location.Add(0, -1));
+            if(Util.DeepEquals(chunk.biomeInfo.potential, biomeInfo.potential)) {
+                return chunk.biome;
+            }
+        }
+
+        return Util.GetByWeigth(potential).Generate();
+    }
+
     public Chunk LoadChunk(ChunkLocation location) {
-        if(chunks.ContainsKey(location) && GetChunk(location).loaded) {
+        if(IsChunkSpawned(location) && GetChunk(location).loaded) {
             return GetChunk(location);
         }
         Chunk chunk = GetChunk(location);
@@ -97,8 +136,12 @@ public class World : MonoBehaviour {
         return chunk;
     }
 
+    public bool IsChunkSpawned(ChunkLocation location) {
+        return chunks.ContainsKey(location);
+    }
+
     public void UnloadChunk(ChunkLocation location) {
-        if(!chunks.ContainsKey(location) || !GetChunk(location).loaded) {
+        if(!IsChunkSpawned(location) || !GetChunk(location).loaded) {
             return;
         }
 
@@ -106,7 +149,7 @@ public class World : MonoBehaviour {
     }
 
     public void RemoveChunk(ChunkLocation location) {
-        if(!chunks.ContainsKey(location)) {
+        if(!IsChunkSpawned(location)) {
             return;
         }
 
@@ -124,19 +167,6 @@ public class World : MonoBehaviour {
         Destroy(chunk.gameObject);
     }
     #endregion
-
-    /// <summary>
-    /// 해당 청크에 대한 바이옴 정보를 가져옵니다
-    /// </summary>
-    /// <param name="location">가져올 청크 위치</param>
-    /// <returns>바이옴 정보</returns>
-    public BiomeInfo GetBiomeInfo(ChunkLocation location) {
-        if(!biomes.ContainsKey(location)) {
-            biomes.Add(location, new BiomeInfo(location));
-        }
-
-        return biomes[location];
-    }
 
     /// <summary>
     /// 입력된 개체를 월드에 생성합니다
