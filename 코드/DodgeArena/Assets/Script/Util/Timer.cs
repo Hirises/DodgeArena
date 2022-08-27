@@ -47,7 +47,7 @@ public class Timer
     }
 
     private IEnumerable Run(Action<float> callback, GameData.Runnable finish) {
-        while(Check()) {
+        while(!Check()) {
             yield return null;
             Tick();
             if(callback != null) {

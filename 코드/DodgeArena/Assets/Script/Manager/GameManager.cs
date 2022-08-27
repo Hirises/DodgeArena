@@ -93,28 +93,34 @@ public class GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(Scene.MainScene.name);
     }
 
+    public void Test() {
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
+        }
+
+        string biomeInfo = "";
+        foreach(Biome biome in player.chunk.biomeInfo.affectedBiomes.Keys) {
+            biomeInfo += biome.ToString() + " " + player.chunk.biomeInfo.affectedBiomes[biome] + "\n";
+        }
+
+        debugText.text = player.hp.ToString() + "\n" + biomeInfo + "\n" + player.backpack.ToString();
+    }
+
     #region UnityLifecycle
-    private void OnEnable() {
+
+    private void Awake() {
         if(instance == null) {
             instance = this;
         } else {
             Destroy(transform);
         }
-    }
 
-    private void Awake() {
         state = GameState.Stop;
         LoadWorld(WorldType.Main);
         WorldLocation startLocation = new WorldLocation(GetWorld(WorldType.Main), new Vector2(0, 0));
         player.Initiated(startLocation);
         player.OnSpawn();
         state = GameState.Run;
-    }
-
-    private void OnDisable() {
-        if(instance == this) {
-            instance = null;
-        }
     }
 
     private void Update() {
@@ -133,19 +139,6 @@ public class GameManager : MonoBehaviour
                 state = GameState.Run;
             }
         }
-    }
-
-    public void Test() {
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
-        }
-
-        string biomeInfo = "";
-        foreach(Biome biome in player.chunk.biomeInfo.affectedBiomes.Keys) {
-            biomeInfo += biome.ToString() + " " + player.chunk.biomeInfo.affectedBiomes[biome] + "\n";
-        }
-
-        debugText.text = player.hp.ToString() + "\n" + biomeInfo;
     }
 
     public void UpdateChunkState() {

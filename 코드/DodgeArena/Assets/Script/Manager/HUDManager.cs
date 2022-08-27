@@ -18,7 +18,7 @@ public class HUDManager : MonoBehaviour {
     private GameData.Runnable HarvestCallback;
     private Timer HarvestTimer = new Timer();
 
-    private void OnEnable() {
+    private void Awake() {
         if(instance == null) {
             instance = this;
         } else {
@@ -26,12 +26,6 @@ public class HUDManager : MonoBehaviour {
         }
 
         HarvestTimer.count = Timer.Count.Up;
-    }
-
-    private void OnDisable() {
-        if(instance == this) {
-            instance = null;
-        }
     }
 
     public bool StartHarvest(float time, GameData.Runnable harvestCallback) {
@@ -58,6 +52,7 @@ public class HUDManager : MonoBehaviour {
 
     public void StopHarvest() {
         StopCoroutine(HarvestTimer.instance);
+        this.HarvestHUD.SetActive(false);
     }
 
     public bool IsHarvest() {

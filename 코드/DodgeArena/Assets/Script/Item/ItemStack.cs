@@ -69,6 +69,10 @@ public class ItemStack : ScriptableObject
         if(!Stackable(item)) {
             return this;
         }
+        if(IsEmpty()) {
+            SetType(item.type);
+            SetAmount(0);
+        }
         int value = Math.Min(type.maxStackSize - this.amount, item.amount);
         OperateAmount(value);
         item.OperateAmount(-value);
@@ -130,5 +134,9 @@ public class ItemStack : ScriptableObject
 
     public override int GetHashCode() {
         return HashCode.Combine(type, amount);
+    }
+
+    public override string ToString() {
+        return type.ToString() + " X" + amount;
     }
 }

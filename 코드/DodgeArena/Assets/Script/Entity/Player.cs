@@ -24,6 +24,7 @@ public class Player : LivingEntity {
     public override void OnSpawn() {
         base.OnSpawn();
         this.hp = initialHp;
+        this.backpack = new Container(9);
     }
 
     /// <summary>

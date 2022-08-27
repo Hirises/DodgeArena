@@ -168,6 +168,9 @@ MonoBehaviour:
   rigidbody: {fileID: 5694222733819670206}
   trigger: {fileID: 5694222734117744135}
   collider: {fileID: 5003189577924902239}
+  time: 3
+  items:
+  - {fileID: 11400000, guid: 87636204816118343a34c745e4e3db24, type: 2}
 --- !u!50 &5694222733819670206
 Rigidbody2D:
   serializedVersion: 4
