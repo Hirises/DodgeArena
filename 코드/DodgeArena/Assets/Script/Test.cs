@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RotaryHeart.Lib;
+using RotaryHeart.Lib.SerializableDictionary;
 
-public class Test : MonoBehaviour
-{
+public class Test : MonoBehaviour {
     [SerializeField]
     new Rigidbody2D rigidbody;
     [SerializeField]
