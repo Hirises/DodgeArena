@@ -3,30 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tree : LandScape
+public class Tree : LandScape, IResourceSource
 {
     [SerializeField]
     [BoxGroup("ResourceSource")]
-    public float time;
+    protected float time;
     [SerializeField]
     [BoxGroup("ResourceSource")]
-    public List<ItemStack> items;
-    private bool success;
+    protected List<ItemStack> items;
+    protected bool harvesting;
 
-    public override void OnStartTrigger(Entity other, Collider2D collider) {
-        if(other is Player) {
-            success = HUDManager.instance.StartHarvest(time, GiveRandomItem);
-        }
-    }
+    float IResourceSource.time { get => time; set => time = value; }
+    List<ItemStack> IResourceSource.items { get => items; set => items = value; }
+    bool IResourceSource.harvesting { get => harvesting; set => harvesting = value; }
 
-    public override void OnEndTrigger(Entity other, Collider2D collider) {
-        if(success && other is Player) {
-            HUDManager.instance.StopHarvest();
-            success = false;
-        }
-    }
-
-    public void GiveRandomItem() {
-        GameManager.instance.player.backpack.AddItems(items);
+    public override void OnSpawn() {
+        ( (IResourceSource) this ).Enable(trigger);
     }
 }

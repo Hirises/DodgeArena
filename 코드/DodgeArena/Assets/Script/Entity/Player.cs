@@ -20,11 +20,13 @@ public class Player : LivingEntity {
     private int initialHp;
     public int hp { get; private set; }
     public Container backpack;
+    public bool isHarvesting;
 
     public override void OnSpawn() {
         base.OnSpawn();
         this.hp = initialHp;
         this.backpack = new Container(9);
+        this.isHarvesting = false;
     }
 
     /// <summary>

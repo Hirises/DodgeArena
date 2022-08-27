@@ -29,7 +29,7 @@ public class HUDManager : MonoBehaviour {
     }
 
     public bool StartHarvest(float time, GameData.Runnable harvestCallback) {
-        if(IsHarvest()) {
+        if(GameManager.instance.player.isHarvesting) {
             return false;
         }
         this.HarvestCallback = harvestCallback;
@@ -53,9 +53,5 @@ public class HUDManager : MonoBehaviour {
     public void StopHarvest() {
         StopCoroutine(HarvestTimer.instance);
         this.HarvestHUD.SetActive(false);
-    }
-
-    public bool IsHarvest() {
-        return HarvestHUD.activeSelf;
     }
 }
