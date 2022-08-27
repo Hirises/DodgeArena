@@ -19,16 +19,6 @@ public class GameManager : MonoBehaviour
     public Player player;
 
     [SerializeField]
-    [BoxGroup("Generator")]
-    public BiomeGenerator[] biomeGenerators;
-    [SerializeField]
-    [BoxGroup("Generator")]
-    public ChunkDataGenerator[] chunkDataGenerators;
-    [SerializeField]
-    [BoxGroup("Generator")]
-    public EntityGenerator[] entityGenerators;
-
-    [SerializeField]
     [BoxGroup("World")]
     public GameObject worldRoot;
     [SerializeField]
@@ -116,6 +106,9 @@ public class GameManager : MonoBehaviour
         }
 
         state = GameState.Stop;
+    }
+
+    private void Start() {
         LoadWorld(WorldType.Main);
         WorldLocation startLocation = new WorldLocation(GetWorld(WorldType.Main), new Vector2(0, 0));
         player.Initiated(startLocation);
@@ -192,7 +185,7 @@ public class GameManager : MonoBehaviour
     /// <returns>가능한 목록</returns>
     public List<BiomeGenerator> GetPossibleBiomeGenerators(Chunk chunk) {
         List<BiomeGenerator> output = new List<BiomeGenerator>();
-        foreach(BiomeGenerator generator in biomeGenerators) {
+        foreach(BiomeGenerator generator in GameData.instance.biomeGenerators) {
             if(generator.CheckConditions(chunk)) {
                 output.Add(generator);
             }
@@ -216,7 +209,7 @@ public class GameManager : MonoBehaviour
     /// <returns>가능한 목록</returns>
     public List<ChunkDataGenerator> GetPossibleChunkDataGenerators(Chunk chunk) {
         List<ChunkDataGenerator> output = new List<ChunkDataGenerator>();
-        foreach(ChunkDataGenerator generator in chunkDataGenerators) {
+        foreach(ChunkDataGenerator generator in GameData.instance.chunkDataGenerators) {
             if(generator.CheckConditions(chunk)) {
                 output.Add(generator);
             }
@@ -240,7 +233,7 @@ public class GameManager : MonoBehaviour
     /// <returns>가능한 목록</returns>
     public List<EntityGenerator> GetPossibleEntityGenerators(Chunk chunk) {
         List<EntityGenerator> output = new List<EntityGenerator>();
-        foreach(EntityGenerator generator in entityGenerators) {
+        foreach(EntityGenerator generator in GameData.instance.entityGenerators) {
             if(generator.CheckConditions(chunk)) {
                 output.Add(generator);
             }

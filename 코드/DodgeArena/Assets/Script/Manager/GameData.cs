@@ -10,6 +10,16 @@ public class GameData : MonoBehaviour {
     [BoxGroup("Item")]
     public List<ItemType> allItems;
 
+    [SerializeField]
+    [BoxGroup("Generator")]
+    public BiomeGenerator[] biomeGenerators;
+    [SerializeField]
+    [BoxGroup("Generator")]
+    public ChunkDataGenerator[] chunkDataGenerators;
+    [SerializeField]
+    [BoxGroup("Generator")]
+    public EntityGenerator[] entityGenerators;
+
     private void Awake() {
         if(instance == null) {
             instance = this;

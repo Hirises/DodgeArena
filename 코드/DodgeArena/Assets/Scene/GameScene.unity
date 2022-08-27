@@ -5165,17 +5165,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2559929718907907026}
-  biomeGenerators:
-  - {fileID: 11400000, guid: e8d22b0fb3a259145a96d61dd0833ad8, type: 2}
-  - {fileID: 11400000, guid: 9a78ad2e18e1a614c9c14a8b31d4e669, type: 2}
-  chunkDataGenerators:
-  - {fileID: 11400000, guid: 73bea87824f3d994f8c15b2e62402d04, type: 2}
-  - {fileID: 11400000, guid: 6e73a66f97a737b4abd3ba3d7256c24d, type: 2}
-  entityGenerators:
-  - {fileID: 11400000, guid: 8f9f30741fe25f143bf9cd8ecc0afe2e, type: 2}
-  - {fileID: 11400000, guid: 294e4f0c1cc24d04b9895c27b79a16d0, type: 2}
-  - {fileID: 11400000, guid: c7bf75082f82eb647a4ec4c3f69b16ce, type: 2}
-  - {fileID: 11400000, guid: c918867f3169bb1449f7a4612514d1e9, type: 2}
   worldRoot: {fileID: 1236331380}
   worldPrefab: {fileID: 3882782164361037413, guid: 4989cd94d77e6aa45aab9f0284aae1c7, type: 3}
   half_MinBiomeSize_Chunk: 1
@@ -5249,6 +5238,17 @@ MonoBehaviour:
   allItems:
   - {fileID: 11400000, guid: be1e445e05ed330459708d13c4e5480d, type: 2}
   - {fileID: 11400000, guid: 935d8c75c0d507546ae27fdcd0b7b333, type: 2}
+  biomeGenerators:
+  - {fileID: 11400000, guid: 9a78ad2e18e1a614c9c14a8b31d4e669, type: 2}
+  - {fileID: 11400000, guid: e8d22b0fb3a259145a96d61dd0833ad8, type: 2}
+  chunkDataGenerators:
+  - {fileID: 11400000, guid: 73bea87824f3d994f8c15b2e62402d04, type: 2}
+  - {fileID: 11400000, guid: 6e73a66f97a737b4abd3ba3d7256c24d, type: 2}
+  entityGenerators:
+  - {fileID: 11400000, guid: c7bf75082f82eb647a4ec4c3f69b16ce, type: 2}
+  - {fileID: 11400000, guid: 8f9f30741fe25f143bf9cd8ecc0afe2e, type: 2}
+  - {fileID: 11400000, guid: c918867f3169bb1449f7a4612514d1e9, type: 2}
+  - {fileID: 11400000, guid: 294e4f0c1cc24d04b9895c27b79a16d0, type: 2}
 --- !u!1 &764073762
 GameObject:
   m_ObjectHideFlags: 0
@@ -6114,6 +6114,7 @@ MonoBehaviour:
   normal: {fileID: 21300000, guid: da867b795d9a7b24493eada61eacad61, type: 3}
   hit: {fileID: 21300000, guid: f35625a005f5cfa4ea6a0de7cbb30329, type: 3}
   initialHp: 100
+  isHarvesting: 0
 --- !u!114 &5470653242405787207
 MonoBehaviour:
   m_ObjectHideFlags: 0
