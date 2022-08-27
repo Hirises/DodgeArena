@@ -15,7 +15,7 @@ public class HUDManager : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Harvest")]
     public Image HarvestHUDFill;
-    private GameData.Runnable HarvestCallback;
+    private Util.Runnable HarvestCallback;
     private Timer HarvestTimer = new Timer();
 
     private void Awake() {
@@ -28,16 +28,17 @@ public class HUDManager : MonoBehaviour {
         HarvestTimer.count = Timer.Count.Up;
     }
 
-    public bool StartHarvest(float time, GameData.Runnable harvestCallback) {
+    public bool StartHarvest(float time, Util.Runnable harvestCallback) {
         if(GameManager.instance.player.isHarvesting) {
             return false;
         }
+        GameManager.instance.player.isHarvesting = true;
         this.HarvestCallback = harvestCallback;
         this.HarvestTimer.Reset();
         this.HarvestTimer.target = time;
         HarvestHUDFill.fillAmount = 0;
         this.HarvestHUD.SetActive(true);
-        StartCoroutine(HarvestTimer.Start(DrawHarvest, EndHarvest));
+        HarvestTimer.Start(DrawHarvest, EndHarvest);
         return true;
     }
 
@@ -46,12 +47,15 @@ public class HUDManager : MonoBehaviour {
     }
 
     private void EndHarvest() {
+        HarvestTimer.Stop();
         this.HarvestHUD.SetActive(false);
         HarvestCallback();
+        GameManager.instance.player.isHarvesting = false;
     }
 
     public void StopHarvest() {
-        StopCoroutine(HarvestTimer.instance);
+        HarvestTimer.Stop();
         this.HarvestHUD.SetActive(false);
+        GameManager.instance.player.isHarvesting = false;
     }
 }

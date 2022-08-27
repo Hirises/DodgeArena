@@ -21,7 +21,7 @@ public class Timer
             return time / target;
         }
     }
-    public IEnumerator instance;
+    private IEnumerator instance;
 
     public Timer()
     {
@@ -41,12 +41,16 @@ public class Timer
         this._time = time;
     }
 
-    public IEnumerator Start(Action<float> callback, GameData.Runnable finish) {
+    public void Start(Action<float> callback, Util.Runnable finish) {
         instance = Run(callback, finish).GetEnumerator();
-        return instance;
+        GameManager.instance.StartCoroutine(instance);
     }
 
-    private IEnumerable Run(Action<float> callback, GameData.Runnable finish) {
+    public void Stop() {
+        GameManager.instance.StopCoroutine(instance);
+    }
+
+    private IEnumerable Run(Action<float> callback, Util.Runnable finish) {
         while(!Check()) {
             yield return null;
             Tick();

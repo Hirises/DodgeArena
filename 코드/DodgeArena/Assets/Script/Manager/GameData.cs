@@ -5,7 +5,6 @@ using NaughtyAttributes;
 
 public class GameData : MonoBehaviour {
     public static GameData instance { private set; get; }
-    public delegate void Runnable();
 
     [SerializeField]
     [BoxGroup("Item")]

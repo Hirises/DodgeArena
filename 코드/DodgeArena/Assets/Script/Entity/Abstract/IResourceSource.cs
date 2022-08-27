@@ -29,8 +29,11 @@ public interface IResourceSource {
     }
 
     protected void OnEnterHarvestingArea(Entity other, Collider2D collider) {
-        if(other is Player) {
-            harvesting = HUDManager.instance.StartHarvest(time, GiveRandomItem);
+        if(other is Player player) {
+            if(CanHarvest(player)) {
+                OnStartHarvesting();
+                harvesting = HUDManager.instance.StartHarvest(time, GiveRandomItem);
+            }
         }
     }
 
@@ -38,10 +41,20 @@ public interface IResourceSource {
         if(harvesting && other is Player) {
             HUDManager.instance.StopHarvest();
             harvesting = false;
+            OnStopHarvesting();
         }
     }
 
     public void GiveRandomItem() {
         GameManager.instance.player.backpack.AddItems(items);
+        OnSuccessHarvesting();
     }
+
+    public bool CanHarvest(Player player);
+
+    public void OnStartHarvesting();
+
+    public void OnSuccessHarvesting();
+
+    public void OnStopHarvesting();
 }

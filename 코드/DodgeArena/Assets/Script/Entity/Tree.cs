@@ -20,4 +20,19 @@ public class Tree : LandScape, IResourceSource
     public override void OnSpawn() {
         ( (IResourceSource) this ).Enable(trigger);
     }
+    public bool CanHarvest(Player player) {
+        return true;
+    }
+
+    public void OnStartHarvesting() {
+        return;
+    }
+
+    public void OnSuccessHarvesting() {
+        Remove();
+    }
+
+    public void OnStopHarvesting() {
+        return;
+    }
 }

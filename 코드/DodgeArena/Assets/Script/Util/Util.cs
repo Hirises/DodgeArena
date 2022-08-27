@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Util
-{
+public class Util {
+    public delegate void Runnable();
+
     /// <summary>
     /// 해당 리스트를 Debug.Log로 출력합니다
     /// </summary>
@@ -354,5 +355,14 @@ public class Util
 
     public static int DistanceSquare(Vector2 vec1, Vector2 vec2) {
         return Mathf.Max(0, Mathf.Max(Mathf.Abs(Mathf.RoundToInt(vec1.x) - Mathf.RoundToInt(vec2.x)), Mathf.Abs(Mathf.RoundToInt(vec1.y) - Mathf.RoundToInt(vec2.y))) - 1);
+    }
+
+    public static void RunLater(YieldInstruction time, Runnable run) {
+        GameManager.instance.StartCoroutine(Runner(time, run).GetEnumerator());
+    }
+
+    private static IEnumerable Runner(YieldInstruction time, Runnable run) {
+        yield return time;
+        run();
     }
 }
