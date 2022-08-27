@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using RotaryHeart.Lib.SerializableDictionary;
 
 [CreateAssetMenu(fileName = "ItemType", menuName = "Item/ItemType")]
 public class ItemType : ScriptableObject
@@ -18,6 +19,18 @@ public class ItemType : ScriptableObject
 
     public ItemTypeEnum enumType;
     public int maxStackSize;
+    [SerializeField]
+    private SerializableDictionaryBase<string, Sprite> sprites = new SerializableDictionaryBase<string, Sprite>();
+    [SerializeField]
+    private SerializableDictionaryBase<string, string> data = new SerializableDictionaryBase<string, string>();
+
+    public Sprite GetSprite(string tag) {
+        return sprites[tag];
+    }
+
+    public string GetData(string tag) {
+        return data[tag];
+    }
 
     private static ItemType Empty() {
         ItemType instance = CreateInstance<ItemType>();

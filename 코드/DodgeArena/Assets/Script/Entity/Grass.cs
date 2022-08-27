@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,6 @@ public class Grass : LandScape
     public override void OnSpawn()
     {
         base.OnSpawn();
-        spriteRenderer.sprite = originData.GetSprite(Random.instance.RandRange(0, 1) == 0 ? "variant0" : "variant1");
+        spriteRenderer.sprite = originData.GetSprite("variant" + Random.instance.RandRange(1, Convert.ToInt32(originData.GetData("variants"))));
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using RotaryHeart.Lib.SerializableDictionary;
 
 [CreateAssetMenu(fileName = "EntityData", menuName = "Entity/EntityData")]
 public class EntityType : ScriptableObject
@@ -18,12 +19,16 @@ public class EntityType : ScriptableObject
         get => _type;
     }
     [SerializeField]
-    private List<Sprite> sprites;
+    private SerializableDictionaryBase<string, Sprite> sprites = new SerializableDictionaryBase<string, Sprite>();
     [SerializeField]
-    private List<string> lable;
+    private SerializableDictionaryBase<string, string> data = new SerializableDictionaryBase<string, string>();
 
     public Sprite GetSprite(string tag) {
-        return sprites[lable.LastIndexOf(tag)];
+        return sprites[tag];
+    }
+
+    public string GetData(string tag) {
+        return data[tag];
     }
 
     public EntityType(EntityTypeEnum type)

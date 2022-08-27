@@ -14,8 +14,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 1
   sprites:
-  - {fileID: 21300000, guid: f9990f54e59272d4296174534cadec48, type: 3}
-  - {fileID: 21300000, guid: 112c418f73069344a8ea52c957b3307d, type: 3}
-  lable:
-  - variant0
-  - variant1
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues:
+    - variant
+    - variant2
+    _keys:
+    - variant
+    - variant2
+    _values:
+    - {fileID: 21300000, guid: f9990f54e59272d4296174534cadec48, type: 3}
+    - {fileID: 21300000, guid: 112c418f73069344a8ea52c957b3307d, type: 3}
+  data:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues:
+    - variants
+    _keys:
+    - variants
+    _values:
+    - 2
