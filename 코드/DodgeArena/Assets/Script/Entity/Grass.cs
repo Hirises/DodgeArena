@@ -4,17 +4,14 @@ using UnityEngine;
 using NaughtyAttributes;
 
 /// <summary>
-/// ¾îµğ¼­³ª º¼ ¼ö ÀÖ´Â ÈçÇÑ Ç®ÀÌ´Ù
+/// ì–´ë””ì„œë‚˜ ë³¼ ìˆ˜ ìˆëŠ” í”í•œ í’€ì´ë‹¤
 /// </summary>
 public class Grass : LandScape
 {
-    [SerializeField]
-    [BoxGroup("Grass")]
-    public Sprite[] variants;
 
     public override void OnSpawn()
     {
         base.OnSpawn();
-        spriteRenderer.sprite = variants[Random.instance.RandInt(0, variants.Length)];
+        spriteRenderer.sprite = originData.GetSprite(Random.instance.RandRange(0, 1) == 0 ? "variant0" : "variant1");
     }
 }

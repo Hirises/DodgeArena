@@ -12,9 +12,7 @@ public class Tree : LandScape, IResourceSource
     [BoxGroup("ResourceSource")]
     protected List<ItemStack> items;
     protected bool harvesting;
-
     float IResourceSource.time { get => time; set => time = value; }
-    List<ItemStack> IResourceSource.items { get => items; set => items = value; }
     bool IResourceSource.harvesting { get => harvesting; set => harvesting = value; }
 
     public override void OnSpawn() {
@@ -34,5 +32,9 @@ public class Tree : LandScape, IResourceSource
 
     public void OnStopHarvesting() {
         return;
+    }
+
+    public void GiveRandomItem() {
+        GameManager.instance.player.backpack.AddItems(items);
     }
 }

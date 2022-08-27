@@ -9,12 +9,6 @@ using NaughtyAttributes;
 public class WildBoar : LivingEntity {
     [SerializeField]
     [BoxGroup("WildBoar")]
-    protected Sprite normal;
-    [SerializeField]
-    [BoxGroup("WildBoar")]
-    protected Sprite attack;
-    [SerializeField]
-    [BoxGroup("WildBoar")]
     protected float awarenessDistance;
     [SerializeField]
     [BoxGroup("WildBoar")]
@@ -94,7 +88,7 @@ public class WildBoar : LivingEntity {
     {
         state = State.Threaten;
         LookAt(GameManager.instance.player.gameObject.transform.position);
-        spriteRenderer.sprite = attack;
+        spriteRenderer.sprite = originData.GetSprite("attack");
         timer.Reset();
         timer.target = threateningDuration;
         while (true)
@@ -140,7 +134,7 @@ public class WildBoar : LivingEntity {
 
     public override void OnStartTrigger(Entity other, Collider2D collider) {
         if(state == State.Dash) {
-            if(other.type == EntityType.Type.Player) {
+            if(other.type == EntityTypeEnum.Player) {
                 Player player = (Player) other;
                 player.Damage(dashDamage);
             }
@@ -152,7 +146,7 @@ public class WildBoar : LivingEntity {
     {
         state = State.Rest;
         rigidbody.velocity = Vector2.zero;
-        spriteRenderer.sprite = normal;
+        spriteRenderer.sprite = originData.GetSprite("normal");
         timer.Reset();
         timer.target = restDuration;
         while (true)

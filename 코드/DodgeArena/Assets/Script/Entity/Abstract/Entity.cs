@@ -10,7 +10,10 @@ using System;
 public abstract class Entity : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Entity")]
-    public EntityType.Type type;
+    public EntityType originData;
+    public EntityType type {
+        get => originData.enumType;
+    }
     [SerializeField]
     [BoxGroup("Entity")]
     protected SpriteRenderer spriteRenderer;

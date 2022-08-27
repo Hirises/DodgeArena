@@ -8,10 +8,6 @@ public interface IResourceSource {
         get;
         protected set;
     }
-    public List<ItemStack> items {
-        get;
-        protected set;
-    }
     protected bool harvesting {
         get;
         set;
@@ -32,7 +28,7 @@ public interface IResourceSource {
         if(other is Player player) {
             if(CanHarvest(player)) {
                 OnStartHarvesting();
-                harvesting = HUDManager.instance.StartHarvest(time, GiveRandomItem);
+                harvesting = HUDManager.instance.StartHarvest(time, EndHarveting);
             }
         }
     }
@@ -45,10 +41,12 @@ public interface IResourceSource {
         }
     }
 
-    public void GiveRandomItem() {
-        GameManager.instance.player.backpack.AddItems(items);
+    protected void EndHarveting() {
+        GiveRandomItem();
         OnSuccessHarvesting();
     }
+
+    public void GiveRandomItem();
 
     public bool CanHarvest(Player player);
 

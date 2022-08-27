@@ -7,18 +7,22 @@ public class GameData : MonoBehaviour {
     public static GameData instance { private set; get; }
 
     [SerializeField]
+    [BoxGroup("Entity")]
+    public List<EntityType> allEntities;
+
+    [SerializeField]
     [BoxGroup("Item")]
     public List<ItemType> allItems;
 
     [SerializeField]
     [BoxGroup("Generator")]
-    public BiomeGenerator[] biomeGenerators;
+    public List<BiomeGenerator> biomeGenerators;
     [SerializeField]
     [BoxGroup("Generator")]
-    public ChunkDataGenerator[] chunkDataGenerators;
+    public List<ChunkDataGenerator> chunkDataGenerators;
     [SerializeField]
     [BoxGroup("Generator")]
-    public EntityGenerator[] entityGenerators;
+    public List<EntityGenerator> entityGenerators;
 
     private void Awake() {
         if(instance == null) {
@@ -33,5 +37,11 @@ public class GameData : MonoBehaviour {
         }
         allItems.Clear();
         allItems = null;
+
+        foreach(EntityType entity in allEntities) {
+            EntityType.entityTypeMap.Add(entity.enumType, entity);
+        }
+        allEntities.Clear();
+        allEntities = null;
     }
 }
