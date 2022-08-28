@@ -92,7 +92,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 3416091851539164330}
   amount: {fileID: 7716582727800815383}
-  item: {fileID: 0}
+  itemstack: {fileID: 0}
+  showAmount: 1
 --- !u!1 &4797283842552003007
 GameObject:
   m_ObjectHideFlags: 0

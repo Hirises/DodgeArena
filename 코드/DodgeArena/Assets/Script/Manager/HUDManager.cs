@@ -32,6 +32,10 @@ public class HUDManager : MonoBehaviour {
     [BoxGroup("JoyStick")]
     public JoyStickHUD joyStick;
 
+    [HideInInspector]
+    public bool drag;
+    private ItemHUD cursor;
+
     private void Awake() {
         if(instance == null) {
             instance = this;
@@ -43,18 +47,24 @@ public class HUDManager : MonoBehaviour {
     }
 
     private void Update() {
-        if(GameManager.instance.state == GameManager.GameState.Run) {
-            if(Input.GetMouseButtonDown(0)) {
-                if(EventSystem.current.IsPointerOverGameObject() == false) {
-                    joyStick.Enable(Input.mousePosition);
+        switch (GameManager.instance.state) {
+            case GameManager.GameState.Run:
+                if(Input.GetMouseButtonDown(0)) {
+                    if(EventSystem.current.IsPointerOverGameObject() == false) {
+                        joyStick.Enable(Input.mousePosition);
+                    }
+                } else if(Input.GetMouseButton(0)) {
+                    joyStick.Run(Input.mousePosition);
+                } else if(Input.GetMouseButtonUp(0)) {
+                    joyStick.Disable();
                 }
-            } else if(Input.GetMouseButton(0)) {
-                joyStick.Run(Input.mousePosition);
-            } else if(Input.GetMouseButtonUp(0)) {
+                break;
+            case GameManager.GameState.UI:
                 joyStick.Disable();
-            }
-        } else {
-            joyStick.Disable();
+                break;
+            case GameManager.GameState.Stop:
+                joyStick.Disable();
+                break;
         }
     }
 
@@ -98,13 +108,15 @@ public class HUDManager : MonoBehaviour {
     }
 
     public void ShowBackpack() {
-        GameManager.instance.state = GameManager.GameState.Stop;
+        GameManager.instance.state = GameManager.GameState.UI;
         backpack.Init(GameManager.instance.player.backpack);
+        HideQuickBar();
         backpack.gameObject.SetActive(true);
     }
 
     public void HideBackpack() {
         backpack.gameObject.SetActive(false);
+        ShowQuickBar();
         GameManager.instance.state = GameManager.GameState.Run;
     }
 }

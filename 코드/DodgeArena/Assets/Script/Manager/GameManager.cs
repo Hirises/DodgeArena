@@ -9,8 +9,9 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public enum GameState {
+        Run,
         Stop,
-        Run
+        UI
     }
     public static GameManager instance;
 
@@ -67,10 +68,16 @@ public class GameManager : MonoBehaviour
     public GameState state {
         get => _state;
         set {
-            if(value == GameState.Run) {
-                Time.timeScale = 1;
-            }else if(value == GameState.Stop) {
-                Time.timeScale = 0;
+            switch(value) {
+                case GameState.Run:
+                    Time.timeScale = 1;
+                    break;
+                case GameState.UI:
+                    Time.timeScale = 0;
+                    break;
+                case GameState.Stop:
+                    Time.timeScale = 0;
+                    break;
             }
             _state = value;
         }

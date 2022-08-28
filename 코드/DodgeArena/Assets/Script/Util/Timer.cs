@@ -47,7 +47,10 @@ public class Timer
     }
 
     public void Stop() {
-        GameManager.instance.StopCoroutine(instance);
+        if(instance != null) {
+            GameManager.instance.StopCoroutine(instance);
+            instance = null;
+        }
     }
 
     private IEnumerable Run(Action<float> callback, Util.Runnable finish) {

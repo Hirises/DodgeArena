@@ -3,40 +3,46 @@ using UnityEngine;
 
 public class JoyStickHUD : MonoBehaviour {
     [SerializeField]
-    public GameObject knob;
+    public RectTransform knob;
+    [SerializeField]
+    public RectTransform self;
     [SerializeField]
     public float limit;
-    private bool enabled;
+    private bool actived;
+    public RectTransform canvas;
 
     public void Enable(Vector2 screenPos) {
-        Vector2 pos = GameManager.instance.camera.ScreenToWorldPoint(screenPos);
-        transform.position = pos;
-        knob.transform.position = this.transform.position;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, screenPos, GameManager.instance.camera, out Vector2 localPos);
+        localPos += canvas.sizeDelta / 2;
+        self.anchoredPosition = localPos;
+        knob.anchoredPosition = Vector2.zero;
         gameObject.SetActive(true);
-        enabled = true;
+        actived = true;
     }
 
     public void Run(Vector2 screenPos) {
-        if(!enabled) {
+        if(!actived) {
             return;
         }
-        Vector2 touchPos = GameManager.instance.camera.ScreenToWorldPoint(screenPos);
-        Vector2 pos = transform.position;
-        Vector2 dir = touchPos - pos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, screenPos, GameManager.instance.camera, out Vector2 localPos);
+        localPos += canvas.sizeDelta / 2;
+        Vector2 pos = self.anchoredPosition;
+        Vector2 dir = localPos - pos;
         if(dir.magnitude > limit) {
-            touchPos = pos + dir.normalized * limit;
+            knob.anchoredPosition = dir.normalized * limit;
+        } else {
+            knob.anchoredPosition = dir;
         }
-        knob.transform.position = touchPos;
     }
 
     public Vector2 GetMovement() {
-        Vector2 dir = knob.transform.position - transform.position;
-        return dir.normalized;
+        return knob.anchoredPosition.normalized;
     }
 
     public void Disable() {
-        enabled = false;
-        knob.transform.position = this.transform.position;
+        actived = false;
+        self.anchoredPosition = Vector2.zero;
+        knob.anchoredPosition = Vector2.zero;
         gameObject.SetActive(false);
     }
 }
