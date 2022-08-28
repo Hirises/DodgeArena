@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             _state = value;
         }
     }
-    public void GameEnd() {
+    public void EndGame() {
         state = GameState.Stop;
         foreach(WorldType type in worlds.Keys) {
             UnloadWorld(type);
@@ -107,6 +107,7 @@ public class GameManager : MonoBehaviour
             instance = this;
         } else {
             Destroy(transform);
+            return;
         }
 
         state = GameState.Stop;
@@ -140,6 +141,9 @@ public class GameManager : MonoBehaviour
             } else {
                 state = GameState.Run;
             }
+        }
+        if(Input.GetKeyDown(KeyCode.Escape)) {
+            EndGame();
         }
     }
 

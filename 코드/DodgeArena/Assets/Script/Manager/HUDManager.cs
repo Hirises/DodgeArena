@@ -41,6 +41,7 @@ public class HUDManager : MonoBehaviour {
             instance = this;
         } else {
             Destroy(gameObject);
+            return;
         }
 
         HarvestTimer.count = Timer.Count.Up;

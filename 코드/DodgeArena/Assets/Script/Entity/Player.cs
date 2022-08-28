@@ -51,7 +51,7 @@ public class Player : LivingEntity {
         hp -= damage;
 
         if(hp <= 0) {
-            GameManager.instance.GameEnd();
+            GameManager.instance.EndGame();
         }
     }
 }

@@ -30,6 +30,9 @@ public class DefaultEntityGenerator : EntityGenerator
     [ShowIf(nameof(useTag))]
     public bool containAll;
     [BoxGroup("Limit")]
+    [ShowIf(nameof(useTag))]
+    public bool removeTag = true;
+    [BoxGroup("Limit")]
     [ReorderableList]
     [ShowIf(nameof(useTag))]
     public List<string> tags;
@@ -87,7 +90,7 @@ public class DefaultEntityGenerator : EntityGenerator
         chunk.chunkData.risk += risk;
         chunk.chunkData.returns += returns;
         //태그 제거
-        if(useTag) {
+        if(useTag && removeTag) {
             if(containAll) {
                 foreach(string tag in tags) {
                     chunk.chunkData.tags.Remove(tag);

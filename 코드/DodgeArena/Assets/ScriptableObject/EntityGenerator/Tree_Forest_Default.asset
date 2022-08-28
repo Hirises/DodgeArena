@@ -22,6 +22,7 @@ MonoBehaviour:
   returns: 0
   useTag: 1
   containAll: 0
+  removeTag: 1
   tags:
   - tree
   group: {x: 5, y: 10}
