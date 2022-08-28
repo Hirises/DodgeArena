@@ -24,11 +24,9 @@ MonoBehaviour:
   containAll: 0
   tags:
   - boar
-  minGroup: 1
-  maxGrounp: 1
+  group: {x: 1, y: 1}
   half_GroupDistance: 1
-  minCount: 1
-  maxCount: 2
+  count: {x: 1, y: 2}
   half_Distance: 2
   half_Width: 5
   variants:

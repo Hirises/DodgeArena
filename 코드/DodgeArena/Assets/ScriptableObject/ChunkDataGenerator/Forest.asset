@@ -17,12 +17,9 @@ MonoBehaviour:
   worlds: 
   whiteListForBiome: 1
   biomes: 01000000
-  minDense: 0
-  maxDense: 0
-  minRisk: 100
-  maxRisk: 180
-  minReturn: 20
-  maxReturn: 50
+  dense: {x: 0, y: 0}
+  risk: {x: 100, y: 150}
+  _return: {x: 20, y: 50}
   tags:
     reorderableList:
       canAdd: 1
@@ -47,8 +44,11 @@ MonoBehaviour:
     reqReferences: {fileID: 0}
     isExpanded: 1
     _keyValues:
+    - tree
     - boar
     _keys:
+    - tree
     - boar
     _values:
+    - 1
     - 0.8

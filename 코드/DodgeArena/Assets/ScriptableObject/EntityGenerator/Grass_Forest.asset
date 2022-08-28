@@ -23,11 +23,9 @@ MonoBehaviour:
   useTag: 0
   containAll: 0
   tags: []
-  minGroup: 1
-  maxGrounp: 3
+  group: {x: 1, y: 3}
   half_GroupDistance: 5
-  minCount: 1
-  maxCount: 3
+  count: {x: 1, y: 3}
   half_Distance: 0.5
   half_Width: 1.5
   variants:

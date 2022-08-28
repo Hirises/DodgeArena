@@ -15,8 +15,34 @@ MonoBehaviour:
   weight: 100
   whiteListForWorld: 0
   worlds: 
-  biome: 1
-  minRisk: 40
-  maxRisk: 100
-  minReturn: 10
-  maxReturn: 30
+  whiteListForBiome: 1
+  biomes: 00000000
+  dense: {x: 0, y: 0}
+  risk: {x: 50, y: 100}
+  _return: {x: 10, y: 30}
+  tags:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: []
+    _keys: []
+    _values: []

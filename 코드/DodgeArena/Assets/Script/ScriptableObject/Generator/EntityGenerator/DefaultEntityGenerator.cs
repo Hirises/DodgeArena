@@ -35,15 +35,11 @@ public class DefaultEntityGenerator : EntityGenerator
     public List<string> tags;
 
     [BoxGroup("Group")]
-    public int minGroup = 1;
-    [BoxGroup("Group")]
-    public int maxGrounp = 1;
+    public Vector2Int group = new Vector2Int(1, 1);
     [BoxGroup("Group")]
     public float half_GroupDistance = 1;
     [BoxGroup("Individual")]
-    public int minCount = 1;
-    [BoxGroup("Individual")]
-    public int maxCount = 1;
+    public Vector2Int count = new Vector2Int(1, 1);
     [BoxGroup("Individual")]
     public float half_Distance = 1;
     [BoxGroup("Individual")]
@@ -107,12 +103,12 @@ public class DefaultEntityGenerator : EntityGenerator
         }
 
         //그룹별 생성
-        int group = Random.instance.RandRange(minGroup, maxGrounp);
+        int group = Random.instance.RandRange(this.group.x, this.group.y);
         List<Vector2> groupLocations = Util.SpreadLocation(group, chunk.location.center.vector2, half_GroupDistance, GameManager.instance.half_ChunkWeidth - half_Width);
         for(int i = 0; i < group; i++) {
             //그룹 기준 위치 설정 & 그룹에 생성될 개채수 설정
             WorldLocation groupLocation = new WorldLocation(world, groupLocations[i]);
-            int count = Random.instance.RandRange(minCount, maxCount);
+            int count = Random.instance.RandRange(this.count.x, this.count.y);
 
             //실제 개체 생성
             List<Vector2> locations = Util.SpreadLocation(count, groupLocation.vector2, half_Distance, half_Width);

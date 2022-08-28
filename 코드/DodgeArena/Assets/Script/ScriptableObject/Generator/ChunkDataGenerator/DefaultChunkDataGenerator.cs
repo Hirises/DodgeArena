@@ -19,17 +19,11 @@ public class DefaultChunkDataGenerator : ChunkDataGenerator {
     public List<BiomeTypeEnum> biomes;
 
     [BoxGroup("EntityGenerate")]
-    public int minDense;
+    public Vector2Int dense = new Vector2Int(50, 100);
     [BoxGroup("EntityGenerate")]
-    public int maxDense;
+    public Vector2Int risk = new Vector2Int(50, 100);
     [BoxGroup("EntityGenerate")]
-    public int minRisk;
-    [BoxGroup("EntityGenerate")]
-    public int maxRisk;
-    [BoxGroup("EntityGenerate")]
-    public int minReturn;
-    [BoxGroup("EntityGenerate")]
-    public int maxReturn;
+    public Vector2Int _return = new Vector2Int(50, 100);
     [BoxGroup("EntityGenerate")]
     public SerializableDictionaryBase<string, float> tags;
 
@@ -51,6 +45,6 @@ public class DefaultChunkDataGenerator : ChunkDataGenerator {
                 tagList.Add(tag);
             }
         }
-        return new ChunkData(Random.instance.RandRange(minDense, maxDense), Random.instance.RandRange(minRisk, maxRisk), Random.instance.RandRange(minReturn, maxReturn), tagList);
+        return new ChunkData(Random.instance.RandRange(dense.x, dense.y), Random.instance.RandRange(risk.x, risk.y), Random.instance.RandRange(_return.x, _return.y), tagList);
     }
 }
