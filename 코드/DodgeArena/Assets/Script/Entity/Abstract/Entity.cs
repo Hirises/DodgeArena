@@ -37,7 +37,11 @@ public abstract class Entity : MonoBehaviour {
     protected new SubCollider collider;
 
     public WorldLocation location { get; protected set; }
-    public Chunk chunk { get; private set; }
+    public Chunk chunk {
+        get {
+            return location.chunk;
+        }
+    }
     public bool initiated { get; private set; }
     public bool loaded { get; private set; }
     public bool filped { get; private set; }
@@ -50,7 +54,6 @@ public abstract class Entity : MonoBehaviour {
         }
 
         this.location = location;
-        this.chunk = location.chunk;
         this.loaded = false;
         this.trigger.onTriggerEnter += OnStartTrigger;
         this.trigger.onTriggerStay += OnStayTrigger;
@@ -148,7 +151,6 @@ public abstract class Entity : MonoBehaviour {
         //    * spriteRenderer.sprite.pixelsPerUnit);
         //spriteRenderer.sortingOrder = order;
         this.transform.position = currentLocation.vector - new Vector3(0, 0, spriteRenderer.sprite.pivot.y / spriteRenderer.sprite.pixelsPerUnit);
-        location = currentLocation;
 
         //청크 업데이트
         Chunk newChunk = currentLocation.chunk;
@@ -158,7 +160,6 @@ public abstract class Entity : MonoBehaviour {
                 chunk.entities.Remove(this);
             }
             transform.parent = newChunk.gameObject.transform;
-            chunk = newChunk;
 
             //청크 상태 반영
             if(newChunk.loaded) {
@@ -167,6 +168,7 @@ public abstract class Entity : MonoBehaviour {
                 OnUnload();
             }
         }
+        location = currentLocation;
     }
 
     /// <summary>

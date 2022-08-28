@@ -26,10 +26,13 @@ public class GameManager : MonoBehaviour
     public World worldPrefab;
     [SerializeField]
     [BoxGroup("World")]
-    public int seed;
+    public int seed = 0;
     [ReadOnly]
     [BoxGroup("World")]
-    public int subSeed;
+    public float biomeSeed1;
+    [ReadOnly]
+    [BoxGroup("World")]
+    public float biomeSeed2;
 
     [SerializeField]
     [BoxGroup("Biome")]
@@ -82,7 +85,9 @@ public class GameManager : MonoBehaviour
             player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
         }
 
-        debugText.text = player.hp.ToString() + "\n" + player.backpack.ToString();
+        string biome = player.location.chunk.biome.ToString() + "(D: " + player.location.chunk.biomeInfo.dificulty + " T:" + player.location.chunk.biomeInfo.temperature + ")";
+
+        debugText.text = player.hp.ToString() + "\n" + biome + "\n" + player.backpack.ToString();
     }
 
     #region UnityLifecycle
@@ -98,7 +103,11 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
-        subSeed = new Random(seed).NextInt();
+        if(seed == 0) {
+            seed = Random.instance.NextInt();
+        }
+        biomeSeed1 = new Random(seed).RandFloat(-100000.0f, 100000.0f);
+        biomeSeed2 = new Random(seed).RandFloat(-100000.0f, 100000.0f);
         LoadWorld(WorldType.Main);
         WorldLocation startLocation = new WorldLocation(GetWorld(WorldType.Main), new Vector2(0, 0));
         player.Initiated(startLocation);
@@ -175,10 +184,17 @@ public class GameManager : MonoBehaviour
     /// <param name="info">확인할 청크 정보</param>
     /// <returns>가능한 목록</returns>
     public List<BiomeGenerator> GetPossibleBiomeGenerators(ChunkLocation location, BiomeInfo info) {
+        int priority = int.MinValue;
         List<BiomeGenerator> output = new List<BiomeGenerator>();
         foreach(BiomeGenerator generator in GameData.instance.biomeGenerators) {
             if(generator.CheckConditions(location, info)) {
-                output.Add(generator);
+                if(generator.GetPriority() > priority) {
+                    output.Clear();
+                    output.Add(generator);
+                    priority = generator.GetPriority();
+                } else if(generator.GetPriority() == priority) {
+                    output.Add(generator);
+                }
             }
         }
         return output;

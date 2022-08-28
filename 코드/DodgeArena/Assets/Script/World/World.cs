@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Drawing;
 
 public class World : MonoBehaviour {
     public WorldType type;
@@ -91,8 +92,11 @@ public class World : MonoBehaviour {
     public Biome GenerateBiome(ChunkLocation location, out BiomeInfo output) {
         World world = location.world;
 
-        float dificulty = Mathf.PerlinNoise(( location.x + GameManager.instance.seed ) / GameManager.instance.biomeSizeRank, ( location.y + GameManager.instance.seed ) / GameManager.instance.biomeSizeRank);
-        float temperature = Mathf.PerlinNoise(( location.x + GameManager.instance.subSeed ) / GameManager.instance.biomeSizeRank, ( location.x + GameManager.instance.subSeed ) / GameManager.instance.biomeSizeRank);
+        float size = GameManager.instance.biomeSizeRank;
+        float dificulty = Mathf.PerlinNoise(location.x / size + GameManager.instance.biomeSeed1 + 0.1f, location.y / size + GameManager.instance.biomeSeed1 + 0.1f);
+        float temperature = Mathf.PerlinNoise(location.x / size + GameManager.instance.biomeSeed2 + 0.1f, location.y / size + GameManager.instance.biomeSeed2 + 0.1f);
+        dificulty = Mathf.Max(0, Mathf.Min(1, dificulty));
+        temperature = Mathf.Max(0, Mathf.Min(1, temperature));
 
         BiomeInfo biomeInfo = new BiomeInfo(dificulty, temperature);
         List<BiomeGenerator> potential = GameManager.instance.GetPossibleBiomeGenerators(location, biomeInfo);

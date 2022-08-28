@@ -18,4 +18,4 @@ MonoBehaviour:
   worlds: 
   difficulty: {x: 0, y: 1}
   temperature: {x: 0, y: 1}
-  biome: 1
+  biome: 0

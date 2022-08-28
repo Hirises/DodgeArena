@@ -15,14 +15,15 @@ MonoBehaviour:
   weight: 50
   whiteListForWorld: 0
   worlds: 
-  whiteListForBiome: 0
+  whiteListForBiome: 1
   biomes: 01000000
   dense: 0
   risk: 10
   returns: 0
-  useTag: 0
+  useTag: 1
   containAll: 0
-  tags: []
+  tags:
+  - boar
   minGroup: 1
   maxGrounp: 1
   half_GroupDistance: 1
