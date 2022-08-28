@@ -13,7 +13,7 @@ public class DefaultBiomeGenerator : BiomeGenerator {
     [BoxGroup("Environment")]
     public bool whiteListForWorld = false;
     [BoxGroup("Environment")]
-    public List<WorldType.Type> worlds;
+    public List<WorldTypeEnum> worlds;
     [BoxGroup("Environment")]
     public Vector2 difficulty;
     [BoxGroup("Environment")]

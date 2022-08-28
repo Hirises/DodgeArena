@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
 
     public void Test() {
         if(Input.GetKeyDown(KeyCode.Space)) {
-            player.Teleport(new WorldLocation(LoadWorld(WorldType.Sub), new Vector2(0, 0)));
+            player.Teleport(new WorldLocation(LoadWorld(WorldTypeEnum.Sub), new Vector2(0, 0)));
         }
 
         string biome = player.location.chunk.biome.ToString() + "(D: " + player.location.chunk.biomeInfo.dificulty + " T:" + player.location.chunk.biomeInfo.temperature + ")";
@@ -108,8 +108,8 @@ public class GameManager : MonoBehaviour
         }
         biomeSeed1 = new Random(seed).RandFloat(-100000.0f, 100000.0f);
         biomeSeed2 = new Random(seed).RandFloat(-100000.0f, 100000.0f);
-        LoadWorld(WorldType.Main);
-        WorldLocation startLocation = new WorldLocation(GetWorld(WorldType.Main), new Vector2(0, 0));
+        LoadWorld(WorldTypeEnum.Main);
+        WorldLocation startLocation = new WorldLocation(GetWorld(WorldTypeEnum.Main), new Vector2(0, 0));
         player.Initiated(startLocation);
         player.OnSpawn();
         state = GameState.Run;

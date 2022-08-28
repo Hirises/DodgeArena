@@ -3,34 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class WorldType
+[CreateAssetMenu(fileName = "WorldType", menuName = "Data/WorldType")]
+public class WorldType : ScriptableObject
 {
-    private static Dictionary<Type, WorldType> worldTypeMap = new Dictionary<Type, WorldType>();
-    public WorldType this[Type t] {
+    public static Dictionary<WorldTypeEnum, WorldType> worldTypeMap = new Dictionary<WorldTypeEnum, WorldType>();
+    public WorldType this[WorldTypeEnum t] {
         get => worldTypeMap[t];
     }
 
-    public enum Type {
-        Main,
-        Sub
-    }
+    public WorldTypeEnum enumType;
 
-    public static readonly WorldType Main = new WorldType(Type.Main);
-    public static readonly WorldType Sub = new WorldType(Type.Sub);
-
-    private readonly Type type;
-
-    public WorldType(Type type) {
-        this.type = type;
+    public WorldType(WorldTypeEnum type) {
+        this.enumType = type;
 
         worldTypeMap.Add(type, this);
     }
 
-    public static implicit operator WorldType.Type(WorldType self) {
-        return self.type;
+    public static implicit operator WorldTypeEnum(WorldType self) {
+        return self.enumType;
     }
 
-    public static implicit operator WorldType(WorldType.Type self) {
+    public static implicit operator WorldType(WorldTypeEnum self) {
         return worldTypeMap[self];
     }
 
@@ -39,15 +32,15 @@ public class WorldType
             return false;
         } else {
             WorldType t = (WorldType) obj;
-            return t.type == type;
+            return t.enumType == enumType;
         }
     }
 
     public override int GetHashCode() {
-        return HashCode.Combine(type);
+        return HashCode.Combine(enumType);
     }
 
     public override string ToString() {
-        return type.ToString();
+        return enumType.ToString();
     }
 }

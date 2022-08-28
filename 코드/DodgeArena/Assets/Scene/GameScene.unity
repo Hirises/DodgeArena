@@ -5236,6 +5236,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5319c48c15dde44eb969a6e502c20d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allWorlds:
+  - {fileID: 11400000, guid: 0a4b158e858ae194c890bdc1e9c80b51, type: 2}
+  - {fileID: 11400000, guid: 390a5b48d02fca845af92b26a78564b1, type: 2}
   allEntities:
   - {fileID: 11400000, guid: a5e2026a0e665864e8d0c25cdca90643, type: 2}
   - {fileID: 11400000, guid: cb0a636aceb9522478a58c492586aaed, type: 2}

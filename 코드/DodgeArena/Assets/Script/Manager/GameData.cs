@@ -7,6 +7,10 @@ public class GameData : MonoBehaviour {
     public static GameData instance { private set; get; }
 
     [SerializeField]
+    [BoxGroup("World")]
+    public List<WorldType> allWorlds;
+
+    [SerializeField]
     [BoxGroup("Entity")]
     public List<EntityType> allEntities;
 
@@ -35,6 +39,12 @@ public class GameData : MonoBehaviour {
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+
+        foreach(WorldType world in allWorlds) {
+            WorldType.worldTypeMap.Add(world.enumType, world);
+        }
+        allWorlds.Clear();
+        allWorlds = null;
 
         foreach(ItemType item in allItems) {
             ItemType.itemTypeMap.Add(item.enumType, item);

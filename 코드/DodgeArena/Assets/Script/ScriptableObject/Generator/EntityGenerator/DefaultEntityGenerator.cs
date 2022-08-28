@@ -12,7 +12,7 @@ public class DefaultEntityGenerator : EntityGenerator
     [BoxGroup("Environment")]
     public bool whiteListForWorld = false;
     [BoxGroup("Environment")]
-    public List<WorldType.Type> worlds;
+    public List<WorldTypeEnum> worlds;
     [BoxGroup("Environment")]
     public bool whiteListForBiome = false;
     [BoxGroup("Environment")]
