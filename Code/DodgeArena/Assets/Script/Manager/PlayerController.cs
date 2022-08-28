@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
             rigidbody.velocity = Vector2.zero;
             HUDManager.instance.ShowQuickBar();
         } else {
-            direction.Normalize();
             Vector2 moveVector = direction * playerSpeed;
             rigidbody.velocity = moveVector;
             HUDManager.instance.HideQuickBar();

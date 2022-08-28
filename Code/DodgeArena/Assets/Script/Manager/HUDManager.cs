@@ -51,7 +51,11 @@ public class HUDManager : MonoBehaviour {
         switch (GameManager.instance.state) {
             case GameManager.GameState.Run:
                 if(Input.GetMouseButtonDown(0)) {
-                    if(EventSystem.current.IsPointerOverGameObject() == false) {
+                    bool gameTouch = EventSystem.current.IsPointerOverGameObject(0);
+                    #if UNITY_EDITOR
+                        gameTouch = EventSystem.current.IsPointerOverGameObject();
+                    #endif
+                    if(!gameTouch) {
                         joyStick.Enable(Input.mousePosition);
                     }
                 } else if(Input.GetMouseButton(0)) {

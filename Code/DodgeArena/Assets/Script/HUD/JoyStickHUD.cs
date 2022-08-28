@@ -36,10 +36,13 @@ public class JoyStickHUD : MonoBehaviour {
     }
 
     public Vector2 GetMovement() {
-        return knob.anchoredPosition.normalized;
+        return knob.anchoredPosition / limit;
     }
 
     public void Disable() {
+        if(!actived) {
+            return;
+        }
         actived = false;
         self.anchoredPosition = Vector2.zero;
         knob.anchoredPosition = Vector2.zero;
