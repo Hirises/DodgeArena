@@ -24,7 +24,7 @@ public class HUDManager : MonoBehaviour {
 
     [SerializeField]
     [BoxGroup("Backpack")]
-    public BackpackHUD backpack;
+    public InventoryHUD backpack;
 
     private void Awake() {
         if(instance == null) {
@@ -77,7 +77,7 @@ public class HUDManager : MonoBehaviour {
 
     public void ShowBackpack() {
         GameManager.instance.state = GameManager.GameState.Stop;
-        backpack.Init();
+        backpack.Init(GameManager.instance.player.backpack);
         backpack.gameObject.SetActive(true);
     }
 

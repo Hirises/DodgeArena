@@ -2,28 +2,49 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Timer;
 using static UnityEditor.Progress;
 
 /// <summary>
 /// 아이템을 보관합니다
 /// </summary>
 public class Container {
-    public List<ItemStack> content;
+    private List<ItemStack> _content;
+    public IEnumerator<ItemStack> content {
+        get => _content.GetEnumerator();
+    }
+    public int size {
+        get => _content.Count;
+    }
+    public delegate void ContainerChange(Container call);
+    public event ContainerChange changeEvent;
 
     public Container(int amount) {
-        content = new List<ItemStack>();
+        _content = new List<ItemStack>();
         for(int i = 0; i < amount; i++) {
-            content.Add(ItemStack.Empty);
+            _content.Add(ItemStack.Empty);
         }
     }
 
     public ItemStack this[int index] {
         get {
-            return content[index];
+            return _content[index];
         }
         set {
-            content[index] = value;
+            _content[index] = value;
         }
+    }
+
+    public void Resize(int size) {
+        _content = new List<ItemStack>();
+        for(int i = 0; i < size; i++) {
+            _content.Add(ItemStack.Empty);
+        }
+        UpdateChange();
+    }
+
+    public void UpdateChange() {
+        changeEvent(this);
     }
 
     /// <summary>
@@ -42,7 +63,7 @@ public class Container {
     /// <param name="item">추가할 아이템</param>
     public ItemStack AddItem(ItemStack item) {
         ItemStack copy = item.Clone();
-        foreach(ItemStack check in content) {
+        foreach(ItemStack check in _content) {
             if(!check.IsEmpty()) {
                 check.AddItem(copy);
                 if(copy.amount <= 0) {
@@ -53,7 +74,7 @@ public class Container {
         if(copy.amount <= 0) {
             return ItemStack.Empty;
         }
-        foreach(ItemStack check in content) {
+        foreach(ItemStack check in _content) {
             if(check.IsEmpty()) {
                 check.AddItem(copy);
                 if(copy.amount <= 0) {
@@ -81,7 +102,7 @@ public class Container {
     /// </summary>
     /// <param name="item">제거할 아이템</param>
     public void RemoveItem(ItemStack item) {
-        foreach(ItemStack check in content) {
+        foreach(ItemStack check in _content) {
             check.RemoveItem(item);
             if(item.amount <= 0) {
                 return;
@@ -91,7 +112,7 @@ public class Container {
 
     public void RemoveItem(ItemType type, int count) {
         int left = count;
-        foreach(ItemStack check in content) {
+        foreach(ItemStack check in _content) {
             if(check.type.Equals(type)) {
                 int amount = Math.Min(left, check.amount);
                 check.OperateAmount(-amount);
@@ -105,7 +126,7 @@ public class Container {
 
     public override string ToString() {
         string output = "";
-        foreach(ItemStack item in content) {
+        foreach(ItemStack item in _content) {
             output += item.ToString() + ", ";
         }
         return output.Substring(0, output.Length - 2);
