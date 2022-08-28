@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     [BoxGroup("Reference")]
     public Player player;
+    [SerializeField]
+    [BoxGroup("Reference")]
+    public Camera camera;
 
     [SerializeField]
     [BoxGroup("World")]

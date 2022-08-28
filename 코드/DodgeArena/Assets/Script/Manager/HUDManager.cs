@@ -2,6 +2,8 @@ using System.Collections;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.UI;
+using System;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// HUD(Head Up Display) Manager
@@ -26,6 +28,10 @@ public class HUDManager : MonoBehaviour {
     [BoxGroup("Backpack")]
     public InventoryHUD backpack;
 
+    [SerializeField]
+    [BoxGroup("JoyStick")]
+    public JoyStickHUD joyStick;
+
     private void Awake() {
         if(instance == null) {
             instance = this;
@@ -34,6 +40,22 @@ public class HUDManager : MonoBehaviour {
         }
 
         HarvestTimer.count = Timer.Count.Up;
+    }
+
+    private void Update() {
+        if(GameManager.instance.state == GameManager.GameState.Run) {
+            if(Input.GetMouseButtonDown(0)) {
+                if(EventSystem.current.IsPointerOverGameObject() == false) {
+                    joyStick.Enable(Input.mousePosition);
+                }
+            } else if(Input.GetMouseButton(0)) {
+                joyStick.Run(Input.mousePosition);
+            } else if(Input.GetMouseButtonUp(0)) {
+                joyStick.Disable();
+            }
+        } else {
+            joyStick.Disable();
+        }
     }
 
     public bool StartHarvest(float time, Util.Runnable harvestCallback) {
