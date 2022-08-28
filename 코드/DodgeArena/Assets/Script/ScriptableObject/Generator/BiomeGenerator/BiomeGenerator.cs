@@ -9,5 +9,7 @@ public abstract class BiomeGenerator : ScriptableObject, IHasWeight
 
     public abstract int GetWeight();
 
+    public abstract int GetPriority();
+
     public abstract Biome Generate();
 }

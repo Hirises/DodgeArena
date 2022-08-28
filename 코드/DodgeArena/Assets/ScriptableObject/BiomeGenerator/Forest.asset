@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d67450b2af579448eeae1069f15422, type: 3}
   m_Name: Forest
   m_EditorClassIdentifier: 
-  weight: 50
+  weight: 100
+  priority: 1
   whiteListForWorld: 0
   worlds: 
+  difficulty: {x: 0.5, y: 1}
+  temperature: {x: 0, y: 1}
   biome: 0

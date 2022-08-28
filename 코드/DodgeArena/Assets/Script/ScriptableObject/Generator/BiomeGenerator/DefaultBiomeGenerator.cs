@@ -7,6 +7,8 @@ using NaughtyAttributes;
 public class DefaultBiomeGenerator : BiomeGenerator {
     [BoxGroup("Common")]
     public int weight = 100;
+    [BoxGroup("Common")]
+    public int priority = 1;
 
     [BoxGroup("Environment")]
     public bool whiteListForWorld = false;
@@ -25,6 +27,10 @@ public class DefaultBiomeGenerator : BiomeGenerator {
         flag &= difficulty.x <= info.dificulty && info.dificulty <= difficulty.y;
         flag &= temperature.x <= info.temperature && info.temperature <= temperature.y;
         return flag;
+    }
+
+    public override int GetPriority() {
+        return priority;
     }
 
     public override int GetWeight() {
