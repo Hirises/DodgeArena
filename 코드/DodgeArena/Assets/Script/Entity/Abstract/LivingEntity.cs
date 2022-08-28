@@ -4,9 +4,12 @@ using UnityEngine;
 using NaughtyAttributes;
 
 /// <summary>
-/// ¾À¿¡ »ı¼ºµÇ´Â µ¿ÀûÀÎ °´Ã¼
+/// ì”¬ì— ìƒì„±ë˜ëŠ” ë™ì ì¸ ê°ì²´
 /// </summary>
 public class LivingEntity : Entity
 {
-
+    private void LateUpdate() {
+        FixPosition();
+        FixFlip();
+    }
 }

@@ -129,10 +129,6 @@ public abstract class Entity : MonoBehaviour {
     #endregion
 
     #region Update
-    private void LateUpdate() {
-        FixPosition();
-        FixFlip();
-    }
 
     /// <summary>
     /// 현재 위치를 보정합니다.

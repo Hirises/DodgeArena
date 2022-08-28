@@ -8,7 +8,7 @@ using static UnityEditor.Progress;
 /// 아이템을 보관합니다
 /// </summary>
 public class Container {
-    private List<ItemStack> content;
+    public List<ItemStack> content;
 
     public Container(int amount) {
         content = new List<ItemStack>();

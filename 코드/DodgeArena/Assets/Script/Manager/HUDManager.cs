@@ -18,6 +18,14 @@ public class HUDManager : MonoBehaviour {
     private Util.Runnable HarvestCallback;
     private Timer HarvestTimer = new Timer();
 
+    [SerializeField]
+    [BoxGroup("Quick Bar")]
+    public GameObject quickBar;
+
+    [SerializeField]
+    [BoxGroup("Backpack")]
+    public BackpackHUD backpack;
+
     private void Awake() {
         if(instance == null) {
             instance = this;
@@ -57,5 +65,24 @@ public class HUDManager : MonoBehaviour {
         HarvestTimer.Stop();
         this.HarvestHUD.SetActive(false);
         GameManager.instance.player.isHarvesting = false;
+    }
+
+    public void ShowQuickBar() {
+        quickBar.SetActive(true);
+    }
+
+    public void HideQuickBar() {
+        quickBar.SetActive(false);
+    }
+
+    public void ShowBackpack() {
+        GameManager.instance.state = GameManager.GameState.Stop;
+        backpack.Init();
+        backpack.gameObject.SetActive(true);
+    }
+
+    public void HideBackpack() {
+        backpack.gameObject.SetActive(false);
+        GameManager.instance.state = GameManager.GameState.Run;
     }
 }

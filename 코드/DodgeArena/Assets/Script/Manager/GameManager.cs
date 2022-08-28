@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
     private GameState _state;
     public GameState state {
         get => _state;
-        private set {
+        set {
             if(value == GameState.Run) {
                 Time.timeScale = 1;
             }else if(value == GameState.Stop) {
