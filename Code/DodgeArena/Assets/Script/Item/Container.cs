@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using static Timer;
-using static UnityEditor.Progress;
 
 /// <summary>
 /// 아이템을 보관합니다
