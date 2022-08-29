@@ -3,22 +3,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
+using NaughtyAttributes;
 
-public class SlotHUD : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerMoveHandler {
+public class BackpackSlotHUD : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerMoveHandler {
     [SerializeField]
-    public ItemHUD innerItem;
-    [SerializeField]
-    public bool canAdd;
-    [SerializeField]
-    public bool canRemove;
+    public ItemHUD innerItemHUD;
+    [ReadOnly]
+    public int index;
     private Timer timer = new Timer();
-    public delegate void SlotEvent(SlotHUD slot);
+    public delegate void SlotEvent(BackpackSlotHUD slot);
     public event SlotEvent onPointerDown;
     public event SlotEvent onPointerUp;
     public event SlotEvent onClick;
 
     public void OnPointerClick(PointerEventData eventData) {
-        Debug.Log("click");
+        //Debug.Log("click");
         onClick(this);
     }
 
@@ -31,7 +30,7 @@ public class SlotHUD : MonoBehaviour, IPointerClickHandler, IPointerDownHandler,
 
     public void OnPointerHold() {
         timer.Stop();
-        Debug.Log("hold");
+        //Debug.Log("hold");
     }
 
     public void OnPointerMove(PointerEventData eventData) {
@@ -40,6 +39,6 @@ public class SlotHUD : MonoBehaviour, IPointerClickHandler, IPointerDownHandler,
     }
 
     public void UpdateHUD() {
-        innerItem.UpdateHUD();
+        innerItemHUD.UpdateHUD();
     }
 }

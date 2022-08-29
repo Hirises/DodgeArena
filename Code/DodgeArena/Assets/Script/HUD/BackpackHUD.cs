@@ -9,14 +9,16 @@ public class BackpackHUD : MonoBehaviour {
     [HideInInspector]
     public Container container;
     [HideInInspector]
-    public List<SlotHUD> slots;
+    public List<BackpackSlotHUD> slots;
+    [HideInInspector]
+    public int currentSlotIndex;
 
     [SerializeField]
     [BoxGroup("Inventory")]
     public RectTransform slotRoot;
     [SerializeField]
     [BoxGroup("Inventory")]
-    public SlotHUD slotPrefab;
+    public BackpackSlotHUD slotPrefab;
     [SerializeField]
     [BoxGroup("Inventory")]
     public Vector2 origin;
@@ -32,7 +34,7 @@ public class BackpackHUD : MonoBehaviour {
     public GameObject infoRoot;
     [SerializeField]
     [BoxGroup("Information")]
-    public SlotHUD infoItemSlot;
+    public BackpackSlotHUD infoItemSlot;
     [SerializeField]
     [BoxGroup("Information")]
     public TextMeshProUGUI infoItemName;
@@ -53,6 +55,7 @@ public class BackpackHUD : MonoBehaviour {
         this.container = GameManager.instance.player.backpack;
         container.changeEvent -= UpdateChange;
         container.changeEvent += UpdateChange;
+        currentSlotIndex = -1;
         UpdateChange(container);
     }
 
@@ -60,16 +63,17 @@ public class BackpackHUD : MonoBehaviour {
         HideInfo();
     }
 
-    public void UpdateChange(Container call) {
-        if(slots.Count != call.size) {
+    public void UpdateChange(Container self) {
+        if(slots.Count != container.size) {
             for(int i = 0; i < slotRoot.transform.childCount; i++) {
                 Destroy(slotRoot.transform.GetChild(i).gameObject);
             }
             slots.Clear();
             for(int i = 0; i < container.size; i++) {
-                SlotHUD slot = Instantiate(slotPrefab, slotRoot.transform);
+                BackpackSlotHUD slot = Instantiate(slotPrefab, slotRoot.transform);
                 slot.GetComponent<RectTransform>().localPosition = new Vector3(origin.x + ( margin.x * ( i % horizontalCount ) ), origin.y + ( margin.y * ( i / horizontalCount ) ), 0);
-                slot.innerItem.itemstack = container[i];
+                slot.innerItemHUD.itemstack = container[i];
+                slot.index = i;
                 slots.Add(slot);
                 slot.UpdateHUD();
                 slot.onClick += UpdateInfo;
@@ -77,30 +81,32 @@ public class BackpackHUD : MonoBehaviour {
             slotRoot.sizeDelta = new Vector2(0, -1 * (origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) )));
         } else {
             for(int i = 0; i < container.size; i++) {
-                SlotHUD slot = slots[i];
-                slot.innerItem.itemstack = container[i];
+                BackpackSlotHUD slot = slots[i];
+                slot.innerItemHUD.itemstack = container[i];
                 slot.UpdateHUD();
             }
         }
-        infoItemSlot.innerItem.itemstack = ItemStack.Empty;
+        infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
         infoItemSlot.UpdateHUD();
     }
 
-    public void UpdateInfo(SlotHUD slot) {
-        if(slot.innerItem.itemstack.IsEmpty()) {
+    public void UpdateInfo(BackpackSlotHUD slot) {
+        if(slot.innerItemHUD.itemstack.IsEmpty()) {
             HideInfo();
         } else {
-            ShowInfo(slot.innerItem.itemstack.Clone());
+            currentSlotIndex = slot.index;
+            ShowInfo(slot.innerItemHUD.itemstack.Clone());
         }
     }
 
     public void HideInfo() {
         infoRoot.SetActive(false);
-        infoItemSlot.innerItem.itemstack = ItemStack.Empty;
+        currentSlotIndex = -1;
+        infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
     }
 
     public void ShowInfo(ItemStack item) {
-        infoItemSlot.innerItem.itemstack = item;
+        infoItemSlot.innerItemHUD.itemstack = item;
         infoItemSlot.UpdateHUD();
         infoItemName.text = item.type.name;
         infoItemText.text = item.type.information;
@@ -137,6 +143,13 @@ public class BackpackHUD : MonoBehaviour {
     }
 
     public void DiscardButtonClicked() {
-
+        if(currentSlotIndex < 0) {
+            return;
+        }
+        WorldLocation location = GameManager.instance.player.location;
+        location.world.Spawn(( (EntityType) EntityTypeEnum.Item ).prefab, location.Randomize(1.5f), item => ( (Item) item ).itemstack = infoItemSlot.innerItemHUD.itemstack);
+        container[currentSlotIndex] = ItemStack.Empty;
+        HideInfo();
+        UpdateChange(container);
     }
 }

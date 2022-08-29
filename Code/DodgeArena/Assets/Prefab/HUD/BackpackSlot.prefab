@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6329561946340717305}
   - component: {fileID: 5279028793275999658}
   m_Layer: 5
-  m_Name: Slot
+  m_Name: BackpackSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,9 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ad03c1ad6671a4d9549b13b91d8001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  innerItem: {fileID: 6767086204365849186}
-  canAdd: 0
-  canRemove: 0
+  innerItemHUD: {fileID: 6767086204365849186}
+  index: 0
 --- !u!1001 &1925218006315706150
 PrefabInstance:
   m_ObjectHideFlags: 0

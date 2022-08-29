@@ -12,7 +12,7 @@ public class Container {
     public int size {
         get => _content.Count;
     }
-    public delegate void ContainerChange(Container call);
+    public delegate void ContainerChange(Container self);
     public event ContainerChange changeEvent;
 
     public Container(int amount) {
