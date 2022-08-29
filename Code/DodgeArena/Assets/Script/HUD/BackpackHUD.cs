@@ -10,7 +10,7 @@ public class BackpackHUD : MonoBehaviour {
     public Container container;
     [HideInInspector]
     public List<BackpackSlotHUD> slots;
-    [HideInInspector]
+    [ReadOnly]
     public int currentSlotIndex;
 
     [SerializeField]
@@ -77,6 +77,9 @@ public class BackpackHUD : MonoBehaviour {
                 slots.Add(slot);
                 slot.UpdateHUD();
                 slot.onClick += UpdateInfo;
+                if(currentSlotIndex == i) {
+                    UpdateInfo(slots[currentSlotIndex]);
+                }
             }
             slotRoot.sizeDelta = new Vector2(0, -1 * (origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) )));
         } else {
@@ -84,6 +87,9 @@ public class BackpackHUD : MonoBehaviour {
                 BackpackSlotHUD slot = slots[i];
                 slot.innerItemHUD.itemstack = container[i];
                 slot.UpdateHUD();
+                if(currentSlotIndex == i) {
+                    UpdateInfo(slots[currentSlotIndex]);
+                }
             }
         }
         infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
@@ -110,8 +116,9 @@ public class BackpackHUD : MonoBehaviour {
         infoItemSlot.UpdateHUD();
         infoItemName.text = item.type.name;
         infoItemText.text = item.type.information;
-        if(item.type.HasAttribute(ItemAttribute.Equipable)) {
-            if(item.HasTag(ItemTag.Equiped)) {
+        if(item.type.HasAttribute(ItemAttribute.Equipable) && GameManager.instance.player.HasEmptyEquipmentSlot()) {
+            Debug.Log(item);
+            if(!GameManager.instance.player.IsEquiped(item)) {
                 unequipButton.SetActive(true);
                 equipButton.SetActive(false);
             } else {
@@ -131,14 +138,40 @@ public class BackpackHUD : MonoBehaviour {
     }
 
     public void EquipButtonClicked() {
+        if(currentSlotIndex < 0) {
+            return;
+        }
+        EquipItem(currentSlotIndex);
+    }
 
+    public void EquipItem(int slot) {
+        Player player = GameManager.instance.player;
+        player.Equip(player.backpack[slot]);
+        if(currentSlotIndex == slot) {
+            Debug.Log(player.backpack[slot]);
+            UpdateInfo(slots[currentSlotIndex]);
+        }
     }
 
     public void UnequipButtonClicked() {
+        if(currentSlotIndex < 0) {
+            return;
+        }
+        UnequipItem(currentSlotIndex);
+    }
 
+    public void UnequipItem(int slot) {
+        Player player = GameManager.instance.player;
+        player.Unequip(player.backpack[slot]);
+        if(currentSlotIndex == slot) {
+            UpdateInfo(slots[currentSlotIndex]);
+        }
     }
 
     public void UseButtonClicked() {
+        if(currentSlotIndex < 0) {
+            return;
+        }
 
     }
 
@@ -146,9 +179,14 @@ public class BackpackHUD : MonoBehaviour {
         if(currentSlotIndex < 0) {
             return;
         }
-        WorldLocation location = GameManager.instance.player.location;
-        location.world.Spawn(( (EntityType) EntityTypeEnum.Item ).prefab, location.Randomize(1.5f), item => ( (Item) item ).itemstack = infoItemSlot.innerItemHUD.itemstack);
-        container[currentSlotIndex] = ItemStack.Empty;
+        DiscardItem(currentSlotIndex);
+    }
+
+    public void DiscardItem(int slot) {
+        Player player = GameManager.instance.player;
+        WorldLocation location = player.location;
+        location.world.Spawn(( (EntityType) EntityTypeEnum.Item ).prefab, location.Randomize(1.5f), item => ( (Item) item ).itemstack = player.backpack[slot]);
+        container[slot] = ItemStack.Empty;
         HideInfo();
         UpdateChange(container);
     }

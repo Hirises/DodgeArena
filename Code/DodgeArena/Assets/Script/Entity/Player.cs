@@ -22,11 +22,17 @@ public class Player : LivingEntity {
     [BoxGroup("Player")]
     private int backpackSize;
     public int hp { get; private set; }
+    [HideInInspector]
     public Container backpack;
+    [HideInInspector]
     public bool isHarvesting;
+    [HideInInspector]
+    public ItemStack[] equipedItems = new ItemStack[4];
 
     public override void OnSpawn() {
-        base.OnSpawn();
+        for(int i = 0; i < equipedItems.Length; i++) {
+            equipedItems[i] = ItemStack.Empty;
+        }
         this.hp = initialHp;
         this.backpack = new Container(backpackSize);
         this.isHarvesting = false;
@@ -56,5 +62,40 @@ public class Player : LivingEntity {
         if(hp <= 0) {
             GameManager.instance.EndGame();
         }
+    }
+
+    public bool HasEmptyEquipmentSlot() {
+        for(int i = 0; i < equipedItems.Length; i++) {
+            if(equipedItems[i].IsEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void Equip(ItemStack item) {
+        for(int i = 0; i < equipedItems.Length; i++) {
+            if(equipedItems[i].IsEmpty()) {
+                equipedItems[i] = item;
+                return;
+            }
+        }
+    }
+
+    public void Unequip(ItemStack item) {
+        for(int i = 0; i < equipedItems.Length; i++) {
+            if(equipedItems[i] == item) {
+                equipedItems[i] = ItemStack.Empty;
+            }
+        }
+    }
+
+    public bool IsEquiped(ItemStack item) {
+        for(int i = 0; i < equipedItems.Length; i++) {
+            if(equipedItems[i] == item) {
+                return true;
+            }
+        }
+        return false;
     }
 }

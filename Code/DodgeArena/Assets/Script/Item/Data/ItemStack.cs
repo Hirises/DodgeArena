@@ -152,7 +152,7 @@ public class ItemStack : ScriptableObject
     }
 
     public ItemStack Clone() {
-        return of(type, amount);
+        return of(type, amount, tags);
     }
 
     /// <summary>
@@ -188,6 +188,13 @@ public class ItemStack : ScriptableObject
     }
 
     public override string ToString() {
-        return type.ToString() + " X" + amount;
+        string tags = "";
+        foreach(ItemTag tag in this.tags) {
+            tags += tag.ToString() + ", ";
+        }
+        if(tags.Length > 0) {
+            tags = "{Tags: " + tags.Substring(0, tags.Length - 2) + "}";
+        }
+        return type.ToString() + " X" + amount + tags;
     }
 }
