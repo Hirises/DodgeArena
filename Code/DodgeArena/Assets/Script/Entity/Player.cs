@@ -18,6 +18,9 @@ public class Player : LivingEntity {
     [SerializeField]
     [BoxGroup("Player")]
     private int initialHp;
+    [SerializeField]
+    [BoxGroup("Player")]
+    private int backpackSize;
     public int hp { get; private set; }
     public Container backpack;
     public bool isHarvesting;
@@ -25,7 +28,7 @@ public class Player : LivingEntity {
     public override void OnSpawn() {
         base.OnSpawn();
         this.hp = initialHp;
-        this.backpack = new Container(9);
+        this.backpack = new Container(backpackSize);
         this.isHarvesting = false;
     }
 

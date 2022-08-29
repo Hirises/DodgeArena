@@ -14,35 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enumType: 1
   maxStackSize: 4
-  sprites:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 1
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 1
-    _keyValues:
-    - dict
-    _keys:
-    - dict
-    _values:
-    - {fileID: 21300000, guid: 9da9eb58b472c39409b7a9a28a7c3233, type: 3}
+  sprite: {fileID: 21300000, guid: 9da9eb58b472c39409b7a9a28a7c3233, type: 3}
+  name: "\uD1B5\uB098\uBB34"
+  information: "\uD2BC\uD2BC\uD55C \uD1B5\uB098\uBB34\uC774\uB2E4.\n\uAC00\uACF5\uD558\uBA74
+    \uB2E4\uC591\uD55C \uC6A9\uB3C4\uB85C \uC0AC\uC6A9\uD560 \uC218 \uC788\uB2E4"
+  attrubutes: 
   data:
     reorderableList:
       canAdd: 1

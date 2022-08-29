@@ -23,6 +23,8 @@ public class EntityType : ScriptableObject
         get => _type;
     }
     [SerializeField]
+    public Entity prefab;
+    [SerializeField]
     private SerializableDictionaryBase<string, Sprite> sprites = new SerializableDictionaryBase<string, Sprite>();
     [SerializeField]
     private SerializableDictionaryBase<string, string> data = new SerializableDictionaryBase<string, string>();

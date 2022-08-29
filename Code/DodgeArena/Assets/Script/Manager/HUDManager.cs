@@ -26,7 +26,7 @@ public class HUDManager : MonoBehaviour {
 
     [SerializeField]
     [BoxGroup("Backpack")]
-    public InventoryHUD backpack;
+    public BackpackHUD backpack;
 
     [SerializeField]
     [BoxGroup("JoyStick")]
@@ -114,13 +114,14 @@ public class HUDManager : MonoBehaviour {
 
     public void ShowBackpack() {
         GameManager.instance.state = GameManager.GameState.UI;
-        backpack.Init(GameManager.instance.player.backpack);
+        backpack.Enable();
         HideQuickBar();
         backpack.gameObject.SetActive(true);
     }
 
     public void HideBackpack() {
         backpack.gameObject.SetActive(false);
+        backpack.Disable();
         ShowQuickBar();
         GameManager.instance.state = GameManager.GameState.Run;
     }

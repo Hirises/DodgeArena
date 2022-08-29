@@ -30,5 +30,4 @@ MonoBehaviour:
   count: {x: 1, y: 2}
   half_Distance: 1
   half_Width: 5
-  variants:
-  - {fileID: 5694222733819670207, guid: 44cd1962e7934204598c750590ec40a9, type: 3}
+  entity: 3

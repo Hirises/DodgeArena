@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using NaughtyAttributes;
 using RotaryHeart.Lib.SerializableDictionary;
 
 [CreateAssetMenu(fileName = "ItemType", menuName = "Data/ItemType")]
@@ -20,16 +21,27 @@ public class ItemType : ScriptableObject
     public ItemTypeEnum enumType;
     public int maxStackSize;
     [SerializeField]
-    private SerializableDictionaryBase<string, Sprite> sprites = new SerializableDictionaryBase<string, Sprite>();
+    public Sprite sprite;
+    [SerializeField]
+    public new string name;
+    [SerializeField]
+    [ResizableTextArea]
+    public string information;
+    [SerializeField]
+    public List<ItemAttribute> attrubutes;
     [SerializeField]
     private SerializableDictionaryBase<string, string> data = new SerializableDictionaryBase<string, string>();
 
-    public Sprite GetSprite(string tag) {
-        return sprites[tag];
+    public bool HasData(string key) {
+        return data.ContainsKey(key);
     }
 
-    public string GetData(string tag) {
-        return data[tag];
+    public string GetData(string key) {
+        return data[key];
+    }
+
+    public bool HasAttribute(ItemAttribute tag) {
+        return attrubutes.Contains(tag);
     }
 
     private static ItemType Empty() {

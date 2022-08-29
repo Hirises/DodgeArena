@@ -90,14 +90,14 @@ public class GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(SceneEnum.MainScene.name);
     }
 
-    public void Test() {
+    public void Debug() {
         if(Input.GetKeyDown(KeyCode.Space)) {
             player.Teleport(new WorldLocation(LoadWorld(WorldTypeEnum.Sub), new Vector2(0, 0)));
         }
 
         string biome = player.location.chunk.biome.ToString() + "(D: " + player.location.chunk.biomeInfo.dificulty + " T:" + player.location.chunk.biomeInfo.temperature + ")";
 
-        debugText.text = player.hp.ToString() + "\n" + biome + "\n" + player.backpack.ToString();
+        debugText.text = player.hp.ToString() + "\n" + biome;
     }
 
     #region UnityLifecycle
@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
             UpdateChunkState();
         }
         CheckPlayerInput();
-        Test();
+        Debug();
     }
 
     public void CheckPlayerInput() {

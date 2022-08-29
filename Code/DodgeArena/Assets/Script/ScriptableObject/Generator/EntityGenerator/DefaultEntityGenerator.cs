@@ -48,7 +48,7 @@ public class DefaultEntityGenerator : EntityGenerator
     [BoxGroup("Individual")]
     public float half_Width = 1;
     [BoxGroup("Variant")]
-    public List<Entity> variants;
+    public EntityTypeEnum entity;
 
     public override bool CheckConditions(Chunk chunk)
     {
@@ -117,7 +117,7 @@ public class DefaultEntityGenerator : EntityGenerator
             List<Vector2> locations = Util.SpreadLocation(count, groupLocation.vector2, half_Distance, half_Width);
             for(int j = 0; j < count; j++) {
                 WorldLocation location = new WorldLocation(world, locations[j]);
-                chunk.world.Spawn(variants[Random.instance.RandInt(0, variants.Count)], location);
+                chunk.world.Spawn(((EntityType)entity).prefab, location);
             }
         }
 

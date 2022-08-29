@@ -27,6 +27,9 @@ public class ItemStack : ScriptableObject
             _amount = value;
         }
     }
+    [SerializeField]
+    public List<ItemTag> tags;
+
     public static ItemStack Empty { get {
             return of(ItemTypeEnum.Empty, 0);
         } 
@@ -37,10 +40,27 @@ public class ItemStack : ScriptableObject
     }
 
     public static ItemStack of(ItemType type, int amount) {
+        return of(type, amount, new List<ItemTag>());
+    }
+
+    public static ItemStack of(ItemType type, int amount, List<ItemTag> tags) {
         ItemStack instance = CreateInstance<ItemStack>();
         instance._type = type;
         instance.amount = amount;
+        instance.tags = tags;
         return instance;
+    }
+
+    public bool HasTag(ItemTag tag) {
+        return tags.Contains(tag);
+    }
+
+    public void AddTag(ItemTag tag) {
+        tags.Add(tag);
+    }
+
+    public void RemoveTag(ItemTag tag) {
+        tags.Remove(tag);
     }
 
     public ItemStack SetAmount(int amount) {
@@ -70,7 +90,7 @@ public class ItemStack : ScriptableObject
             return this;
         }
         if(IsEmpty()) {
-            SetType(item.type);
+            CopyFrom(item);
             SetAmount(0);
         }
         int value = Math.Min(type.maxStackSize - this.amount, item.amount);
@@ -107,6 +127,26 @@ public class ItemStack : ScriptableObject
         return this;
     }
 
+    /// <summary>
+    /// 이 아이템을 빈 상태로 초기화합니다
+    /// </summary>
+    public void Clear() {
+        SetType(ItemTypeEnum.Empty);
+        SetAmount(0);
+        tags = new List<ItemTag>();
+    }
+
+    /// <summary>
+    /// 해당 아이템의 정보를 복사해 이 아이템에 저장합니다
+    /// </summary>
+    /// <param name="other">대상 아이템</param>
+    public void CopyFrom(ItemStack other) {
+        SetType(other.type);
+        SetAmount(other.amount);
+        tags.Clear();
+        tags.AddRange(other.tags);
+    }
+
     public bool IsEmpty() {
         return type.enumType == ItemTypeEnum.Empty || amount == 0;
     }
@@ -131,7 +171,7 @@ public class ItemStack : ScriptableObject
     /// <param name="item">대상 아이템</param>
     /// <returns>결과</returns>
     public bool StackableRestrict(ItemStack item) {
-        return item.type == type;
+        return item.type == type && Util.DeepEquals(item.tags, tags);
     }
 
     public override bool Equals(object obj) {

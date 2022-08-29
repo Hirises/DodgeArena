@@ -16,7 +16,7 @@ public class ItemHUD : MonoBehaviour {
         if(itemstack == null) {
             itemstack = ItemStack.Empty;
         }
-        image.sprite = itemstack.type.GetSprite("dict");
+        image.sprite = itemstack.type.sprite;
         if(showAmount) {
             if(itemstack.IsEmpty() || itemstack.amount <= 1) {
                 amount.text = "";

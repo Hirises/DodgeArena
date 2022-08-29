@@ -22,11 +22,11 @@ MonoBehaviour:
   returns: 5
   useTag: 0
   containAll: 0
+  removeTag: 1
   tags: []
   group: {x: 1, y: 3}
   half_GroupDistance: 5
   count: {x: 1, y: 3}
   half_Distance: 0.5
   half_Width: 1.5
-  variants:
-  - {fileID: 6185907691642991307, guid: 6db13d99d709f184c997b9480d3a11af, type: 3}
+  entity: 1

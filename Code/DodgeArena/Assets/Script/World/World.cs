@@ -180,9 +180,25 @@ public class World : MonoBehaviour {
     /// <param name="location">생성할 위치</param>
     /// <returns>생성된 개체</returns>
     public T Spawn<T>(T target, WorldLocation location) where T : Entity {
+        return Spawn(target, location, null);
+    }
+
+    /// <summary>
+    /// 입력된 개체를 월드에 생성합니다
+    /// </summary>
+    /// <typeparam name="T">생성할 개체의 타입</typeparam>
+    /// <param name="target">생성할 개체</param>
+    /// <param name="location">생성할 위치</param>
+    /// <param name="initalizer">개체 생성 직후, 호출될 함수입니다.
+    /// <see cref="Entity.Initiated(WorldLocation)"/> 이후, <see cref="Entity.OnSpawn()"/> 이전에 호출됩니다</param>
+    /// <returns>생성된 개체</returns>
+    public T Spawn<T>(T target, WorldLocation location, Action<T> initalizer) where T : Entity {
         Chunk chunk = location.chunk;
         T instance = Instantiate(target, location.vector, Quaternion.identity, chunk.gameObject.transform);
         instance.Initiated(location);
+        if(initalizer != null) {
+            initalizer(instance);
+        }
         instance.OnSpawn();
         if(chunk.loaded) {
             instance.OnLoad();

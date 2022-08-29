@@ -30,29 +30,29 @@ public interface IResourceSource {
     protected void OnEnterHarvestingArea(Entity other, Collider2D collider) {
         if(other is Player player) {
             if(CanHarvest(player)) {
-                OnStartHarvesting();
-                harvesting = HUDManager.instance.StartHarvest(time, EndHarveting);
+                OnStartHarvesting(player);
+                harvesting = HUDManager.instance.StartHarvest(time, () => EndHarveting(player));
             }
         }
     }
 
     protected void OnExitHarvestingArea(Entity other, Collider2D collider) {
-        if(harvesting && other is Player) {
+        if(harvesting && other is Player player) {
             HUDManager.instance.StopHarvest();
             harvesting = false;
-            OnStopHarvesting();
+            OnStopHarvesting(player);
         }
     }
 
-    protected void EndHarveting() {
-        GiveRandomItem();
-        OnSuccessHarvesting();
+    protected void EndHarveting(Player player) {
+        GiveResource(player);
+        OnSuccessHarvesting(player);
     }
 
     /// <summary>
     /// 플레이어에게 랜덤 아이템을 지급
     /// </summary>
-    public void GiveRandomItem();
+    public void GiveResource(Player player);
 
     /// <summary>
     /// 이 객체가 채집 가능한 상태인지를 반환
@@ -64,15 +64,15 @@ public interface IResourceSource {
     /// <summary>
     /// 실제 채집을 시작하기 직전 실행
     /// </summary>
-    public void OnStartHarvesting();
+    public void OnStartHarvesting(Player player);
 
     /// <summary>
     /// 채집과 관련된 모든 처리가 성공적으로 완료 된 후 실행
     /// </summary>
-    public void OnSuccessHarvesting();
+    public void OnSuccessHarvesting(Player player);
     
     /// <summary>
     /// 채집과 관련도니 모든 처리가 종료된 후 실행 (실패, 취소시)
     /// </summary>
-    public void OnStopHarvesting();
+    public void OnStopHarvesting(Player player);
 }

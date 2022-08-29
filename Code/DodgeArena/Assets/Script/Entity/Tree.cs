@@ -22,19 +22,19 @@ public class Tree : LandScape, IResourceSource
         return true;
     }
 
-    public void OnStartHarvesting() {
+    public void OnStartHarvesting(Player player) {
         return;
     }
 
-    public void OnSuccessHarvesting() {
+    public void OnSuccessHarvesting(Player player) {
         Remove();
     }
 
-    public void OnStopHarvesting() {
+    public void OnStopHarvesting(Player player) {
         return;
     }
 
-    public void GiveRandomItem() {
+    public void GiveResource(Player player) {
         GameManager.instance.player.backpack.AddItems(items);
     }
 }

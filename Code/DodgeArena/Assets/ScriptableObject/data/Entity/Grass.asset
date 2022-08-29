@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Grass
   m_EditorClassIdentifier: 
   _type: 1
+  prefab: {fileID: 6185907691642991307, guid: 6db13d99d709f184c997b9480d3a11af, type: 3}
   sprites:
     reorderableList:
       canAdd: 1

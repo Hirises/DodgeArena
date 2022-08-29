@@ -26,7 +26,7 @@ public class SlotHUD : MonoBehaviour, IPointerClickHandler, IPointerDownHandler,
         timer.target = 0.5f;
         timer.Reset();
         timer.Start(null, OnPointerHold);
-        onPointerDown(this);
+        //onPointerDown(this);
     }
 
     public void OnPointerHold() {
@@ -36,7 +36,7 @@ public class SlotHUD : MonoBehaviour, IPointerClickHandler, IPointerDownHandler,
 
     public void OnPointerMove(PointerEventData eventData) {
         timer.Stop();
-        onPointerUp(this);
+        //onPointerUp(this);
     }
 
     public void UpdateHUD() {

@@ -22,6 +22,7 @@ MonoBehaviour:
   returns: 0
   useTag: 1
   containAll: 0
+  removeTag: 1
   tags:
   - boar
   group: {x: 1, y: 1}
@@ -29,5 +30,4 @@ MonoBehaviour:
   count: {x: 1, y: 2}
   half_Distance: 2
   half_Width: 5
-  variants:
-  - {fileID: 1697931047449044391, guid: e1e4cce6851f1604aaf487e64166e83f, type: 3}
+  entity: 2
