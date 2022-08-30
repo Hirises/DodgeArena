@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 using NaughtyAttributes;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using static UnityEditor.Progress;
 
 public class BackpackHUD : MonoBehaviour {
     [HideInInspector]
     public Container container;
     [HideInInspector]
     public List<BackpackSlotHUD> slots;
-    [ReadOnly]
-    public int currentSlotIndex;
 
     [SerializeField]
     [BoxGroup("Inventory")]
@@ -50,12 +47,14 @@ public class BackpackHUD : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Information")]
     public GameObject useButton;
+    [SerializeField]
+    [BoxGroup("Information")]
+    public GameObject discardButton;
 
     public void Enable() {
         this.container = GameManager.instance.player.backpack;
         container.changeEvent -= UpdateChange;
         container.changeEvent += UpdateChange;
-        currentSlotIndex = -1;
         UpdateChange(container);
     }
 
@@ -73,13 +72,10 @@ public class BackpackHUD : MonoBehaviour {
                 BackpackSlotHUD slot = Instantiate(slotPrefab, slotRoot.transform);
                 slot.GetComponent<RectTransform>().localPosition = new Vector3(origin.x + ( margin.x * ( i % horizontalCount ) ), origin.y + ( margin.y * ( i / horizontalCount ) ), 0);
                 slot.innerItemHUD.itemstack = container[i];
-                slot.index = i;
                 slots.Add(slot);
                 slot.UpdateHUD();
-                slot.onClick += UpdateInfo;
-                if(currentSlotIndex == i) {
-                    UpdateInfo(slots[currentSlotIndex]);
-                }
+                slot.onClick += OnClickSlot;
+                //TODO
             }
             slotRoot.sizeDelta = new Vector2(0, -1 * (origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) )));
         } else {
@@ -87,27 +83,27 @@ public class BackpackHUD : MonoBehaviour {
                 BackpackSlotHUD slot = slots[i];
                 slot.innerItemHUD.itemstack = container[i];
                 slot.UpdateHUD();
-                if(currentSlotIndex == i) {
-                    UpdateInfo(slots[currentSlotIndex]);
-                }
+                //TODO
             }
         }
         infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
         infoItemSlot.UpdateHUD();
     }
 
-    public void UpdateInfo(BackpackSlotHUD slot) {
-        if(slot.innerItemHUD.itemstack.IsEmpty()) {
+    public void OnClickSlot(BackpackSlotHUD clickedSlot) {
+        UpdateInfo(clickedSlot.innerItemHUD.itemstack);
+    }
+
+    public void UpdateInfo(ItemStack targetItem) {
+        if(targetItem.IsEmpty()) {
             HideInfo();
         } else {
-            currentSlotIndex = slot.index;
-            ShowInfo(slot.innerItemHUD.itemstack.Clone());
+            ShowInfo(targetItem);
         }
     }
 
     public void HideInfo() {
         infoRoot.SetActive(false);
-        currentSlotIndex = -1;
         infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
     }
 
@@ -116,9 +112,8 @@ public class BackpackHUD : MonoBehaviour {
         infoItemSlot.UpdateHUD();
         infoItemName.text = item.type.name;
         infoItemText.text = item.type.information;
-        if(item.type.HasAttribute(ItemAttribute.Equipable) && GameManager.instance.player.HasEmptyEquipmentSlot()) {
-            Debug.Log(item);
-            if(!GameManager.instance.player.IsEquiped(item)) {
+        if(item.type.HasAttribute(ItemAttribute.Equipable) && GameManager.instance.player.HasEmptyEquipmentSlot() && (item.type.itemFuntion?.CanEquip(item) ?? true)) {
+            if(GameManager.instance.player.IsEquiped(item)) {
                 unequipButton.SetActive(true);
                 equipButton.SetActive(false);
             } else {
@@ -129,65 +124,58 @@ public class BackpackHUD : MonoBehaviour {
             equipButton.SetActive(false);
             unequipButton.SetActive(false);
         }
-        if(item.type.HasAttribute(ItemAttribute.Useable)) {
+        if(item.type.HasAttribute(ItemAttribute.Useable) && ( item.type.itemFuntion?.CanUse(item) ?? true )) {
             useButton.SetActive(true);
         } else {
             useButton.SetActive(false);
+        }
+        if(( item.type.itemFuntion?.CanDiscard(item) ?? true )) {
+            discardButton.SetActive(true);
+        } else {
+            discardButton.SetActive(false);
         }
         infoRoot.SetActive(true);
     }
 
     public void EquipButtonClicked() {
-        if(currentSlotIndex < 0) {
-            return;
-        }
-        EquipItem(currentSlotIndex);
-    }
-
-    public void EquipItem(int slot) {
         Player player = GameManager.instance.player;
-        player.Equip(player.backpack[slot]);
-        if(currentSlotIndex == slot) {
-            Debug.Log(player.backpack[slot]);
-            UpdateInfo(slots[currentSlotIndex]);
+        ItemStack item = infoItemSlot.innerItemHUD.itemstack;
+        if(item.type.itemFuntion == null) {
+            player.Equip(item);
+        } else {
+            item.type.itemFuntion.OnEquip(item);
         }
+        UpdateInfo(item);
     }
 
     public void UnequipButtonClicked() {
-        if(currentSlotIndex < 0) {
-            return;
-        }
-        UnequipItem(currentSlotIndex);
-    }
-
-    public void UnequipItem(int slot) {
         Player player = GameManager.instance.player;
-        player.Unequip(player.backpack[slot]);
-        if(currentSlotIndex == slot) {
-            UpdateInfo(slots[currentSlotIndex]);
+        ItemStack item = infoItemSlot.innerItemHUD.itemstack;
+        if(item.type.itemFuntion == null) {
+            player.Unequip(item);
+        } else {
+            item.type.itemFuntion.OnUnequip(item);
         }
+        UpdateInfo(item);
     }
 
     public void UseButtonClicked() {
-        if(currentSlotIndex < 0) {
-            return;
-        }
-
+        ItemStack item = infoItemSlot.innerItemHUD.itemstack;
+        item.type.itemFuntion?.OnUse(item);
+        UpdateInfo(item);
     }
 
     public void DiscardButtonClicked() {
-        if(currentSlotIndex < 0) {
-            return;
-        }
-        DiscardItem(currentSlotIndex);
-    }
-
-    public void DiscardItem(int slot) {
         Player player = GameManager.instance.player;
-        WorldLocation location = player.location;
-        location.world.Spawn(( (EntityType) EntityTypeEnum.Item ).prefab, location.Randomize(1.5f), item => ( (Item) item ).itemstack = player.backpack[slot]);
-        container[slot] = ItemStack.Empty;
-        HideInfo();
+        ItemStack targetItem = infoItemSlot.innerItemHUD.itemstack;
+        if(targetItem.type.itemFuntion == null) {
+            player.DropItem(targetItem);
+            targetItem.Clear();
+            HideInfo();
+        } else {
+            targetItem.type.itemFuntion.OnDiscard(targetItem);
+            UpdateInfo(targetItem);
+        }
         UpdateChange(container);
     }
 }

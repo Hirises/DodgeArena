@@ -29,6 +29,15 @@ public class ItemStack : ScriptableObject
     }
     [SerializeField]
     public List<ItemTag> tags;
+    private static int id = 0;
+    private int uuid = -1;
+
+    public int getId() {
+        if(this.uuid == -1) {
+            this.uuid = id++;
+        }
+        return uuid;
+    }
 
     public static ItemStack Empty { get {
             return of(ItemTypeEnum.Empty, 0);

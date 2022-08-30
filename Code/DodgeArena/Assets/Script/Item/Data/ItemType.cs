@@ -28,6 +28,8 @@ public class ItemType : ScriptableObject
     [ResizableTextArea]
     public string information;
     [SerializeField]
+    public IItemFuntion itemFuntion;
+    [SerializeField]
     public List<ItemAttribute> attrubutes;
     [SerializeField]
     private SerializableDictionaryBase<string, string> data = new SerializableDictionaryBase<string, string>();

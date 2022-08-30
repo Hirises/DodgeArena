@@ -1,20 +1,30 @@
 using System.Collections;
 using UnityEngine;
 
-public interface IItemFuntion {
-    public void CanUse(BackpackSlotHUD slot);
+/// <summary>
+/// 아이템 사용 및 효과 클래스
+/// </summary>
+public abstract class IItemFuntion : ScriptableObject {
+    public abstract bool CanUse(ItemStack item);
 
-    public bool OnUse(BackpackSlotHUD slot);
+    public abstract void OnUse(ItemStack item);
 
-    public void CanEquip(BackpackSlotHUD slot);
+    public abstract bool CanEquip(ItemStack item);
 
-    public bool OnEquip(BackpackSlotHUD slot);
+    public virtual void OnEquip(ItemStack item) {
+        GameManager.instance.player.Equip(item);
+    }
 
-    public void CanUnequip(BackpackSlotHUD slot);
+    public abstract bool CanUnequip(ItemStack item);
 
-    public bool OnUnequip(BackpackSlotHUD slot);
+    public virtual void OnUnequip(ItemStack item) {
+        GameManager.instance.player.Unequip(item);
+    }
 
-    public void CanDiscard(BackpackSlotHUD slot);
+    public abstract bool CanDiscard(ItemStack item);
 
-    public bool OnDiscard(BackpackSlotHUD slot);
+    public virtual void OnDiscard(ItemStack item) {
+        GameManager.instance.player.DropItem(item);
+        item.Clear();
+    }
 }

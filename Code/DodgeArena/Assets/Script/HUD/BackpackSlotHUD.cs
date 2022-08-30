@@ -8,8 +8,6 @@ using NaughtyAttributes;
 public class BackpackSlotHUD : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerMoveHandler {
     [SerializeField]
     public ItemHUD innerItemHUD;
-    [ReadOnly]
-    public int index;
     private Timer timer = new Timer();
     public delegate void SlotEvent(BackpackSlotHUD slot);
     public event SlotEvent onPointerDown;

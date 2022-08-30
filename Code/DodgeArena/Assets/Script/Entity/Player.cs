@@ -98,4 +98,11 @@ public class Player : LivingEntity {
         }
         return false;
     }
+
+    public void DropItem(ItemStack targetItem) {
+        if(IsEquiped(targetItem)) {
+            Unequip(targetItem);
+        }
+        location.world.Spawn(( (EntityType) EntityTypeEnum.Item ).prefab, location.Randomize(1.5f), item => ( (Item) item ).itemstack = targetItem);
+    }
 }
