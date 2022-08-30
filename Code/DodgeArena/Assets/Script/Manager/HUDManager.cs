@@ -123,8 +123,13 @@ public class HUDManager : MonoBehaviour {
     }
 
     public void UpdateQuickBar() {
+        Player player = GameManager.instance.player;
         for(int i = 0; i < 4; i++) {
-            quickBarSlots[i].innerItemHUD.itemstack = GameManager.instance.player.GetEquipedItem(i);
+            ItemStack item = player.GetEquipedItem(i);
+            if(item.IsEmpty() && player.IsEquiped(item)) {
+                player.Unequip(item);
+            }
+            quickBarSlots[i].innerItemHUD.itemstack = item;
             quickBarSlots[i].UpdateHUD();
         }
     }

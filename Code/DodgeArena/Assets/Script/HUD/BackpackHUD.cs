@@ -2,7 +2,6 @@ using NaughtyAttributes;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class BackpackHUD : MonoBehaviour {
     [HideInInspector]
@@ -136,7 +135,7 @@ public class BackpackHUD : MonoBehaviour {
         infoItemName.text = item.type.name;
         infoItemText.text = item.type.information;
         if(item.type.HasAttribute(ItemAttribute.Equipable) && GameManager.instance.player.HasEmptyEquipmentSlot() && (item.type.itemFuntion?.CanEquip(item) ?? true)) {
-            if(GameManager.instance.player.GetEquipedSlot(item) >= 0) {
+            if(GameManager.instance.player.IsEquiped(item)) {
                 unequipButton.SetActive(true);
                 equipButton.SetActive(false);
             } else {

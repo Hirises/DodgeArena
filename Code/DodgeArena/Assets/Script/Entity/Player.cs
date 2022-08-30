@@ -106,6 +106,10 @@ public class Player : LivingEntity {
         }
     }
 
+    public bool IsEquiped(ItemStack item) {
+        return GetEquipedSlot(item) >= 0;
+    }
+
     public int GetEquipedSlot(ItemStack item) {
         for(int i = 0; i < equipedItems.Length; i++) {
             if(equipedItems[i] == item) {
@@ -120,7 +124,7 @@ public class Player : LivingEntity {
     }
 
     public void DropItem(ItemStack targetItem) {
-        if(GetEquipedSlot(targetItem) >= 0) {
+        if(IsEquiped(targetItem)) {
             Unequip(targetItem);
         }
         location.world.Spawn(( (EntityType) EntityTypeEnum.Item ).prefab, location.Randomize(1.5f), item => ( (Item) item ).itemstack = targetItem);

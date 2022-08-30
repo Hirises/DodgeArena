@@ -23,9 +23,6 @@ public class ItemStack : ScriptableObject
         get {
             return _amount;
         }
-        set {
-            _amount = value;
-        }
     }
     [SerializeField]
     public List<ItemTag> tags;
@@ -55,7 +52,7 @@ public class ItemStack : ScriptableObject
     public static ItemStack of(ItemType type, int amount, List<ItemTag> tags) {
         ItemStack instance = CreateInstance<ItemStack>();
         instance._type = type;
-        instance.amount = amount;
+        instance._amount = amount;
         instance.tags = tags;
         return instance;
     }
@@ -77,15 +74,16 @@ public class ItemStack : ScriptableObject
     }
 
     public ItemStack SetAmount(int amount, bool force) {
-        if(amount < 0) {
-            amount = 0;
+        if(amount <= 0) {
+            Clear();
+            return this;
         }
         if(!force) {
             if(amount > type.maxStackSize) {
                 amount = type.maxStackSize;
             }
         }
-        this.amount = amount;
+        this._amount = amount;
         return this;
     }
 
@@ -140,7 +138,7 @@ public class ItemStack : ScriptableObject
     /// </summary>
     public ItemStack Clear() {
         SetType(ItemTypeEnum.Empty);
-        SetAmount(0);
+        _amount = 0;
         tags = new List<ItemTag>();
         return this;
     }
