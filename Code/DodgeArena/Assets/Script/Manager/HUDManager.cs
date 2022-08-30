@@ -23,6 +23,9 @@ public class HUDManager : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Quick Bar")]
     public GameObject quickBar;
+    [SerializeField]
+    [BoxGroup("Quick Bar")]
+    public QuickSlotHUD[] quickBarSlots;
 
     [SerializeField]
     [BoxGroup("Backpack")]
@@ -110,6 +113,13 @@ public class HUDManager : MonoBehaviour {
 
     public void HideQuickBar() {
         quickBar.SetActive(false);
+    }
+
+    public void UpdateQuickBar() {
+        for(int i = 0; i < 4; i++) {
+            quickBarSlots[i].innerItemHUD.itemstack = GameManager.instance.player.GetEquipedItem(i);
+            quickBarSlots[i].UpdateHUD();
+        }
     }
 
     public void ShowBackpack() {

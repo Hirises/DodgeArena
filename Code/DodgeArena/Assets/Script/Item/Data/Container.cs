@@ -57,28 +57,29 @@ public class Container {
     /// 입력된 아이템을 추가합니다.
     /// </summary>
     /// <param name="item">추가할 아이템</param>
+    /// <return>추가하고 남은 아이템 (복사본)</return>
     public ItemStack AddItem(ItemStack item) {
-        ItemStack copy = item.Clone();
+        int amount = item.amount;
         foreach(ItemStack check in _content) {
             if(!check.IsEmpty()) {
-                check.AddItem(copy);
-                if(copy.amount <= 0) {
+                amount -= check.AddItem(item);
+                if(amount <= 0) {
                     return ItemStack.Empty;
                 }
             }
         }
-        if(copy.amount <= 0) {
+        if(amount <= 0) {
             return ItemStack.Empty;
         }
         foreach(ItemStack check in _content) {
             if(check.IsEmpty()) {
-                check.AddItem(copy);
-                if(copy.amount <= 0) {
+                amount -= check.AddItem(item);
+                if(amount <= 0) {
                     return ItemStack.Empty;
                 }
             }
         }
-        return copy;
+        return item.Clone().SetAmount(amount);
     }
 
     /// <summary>
@@ -94,16 +95,34 @@ public class Container {
 
     /// <summary>
     /// 입력된 아이템을 제거합니다.
-    /// 파라미터를 수정합니다. (제거하고 남은 아이템임)
     /// </summary>
     /// <param name="item">제거할 아이템</param>
-    public void RemoveItem(ItemStack item) {
+    /// <returns>제거하고 남은 아이템 (복사본)</returns>
+    public ItemStack RemoveItem(ItemStack item) {
+        int amount = item.amount;
         foreach(ItemStack check in _content) {
-            check.RemoveItem(item);
+            amount -= check.RemoveItem(item);
             if(item.amount <= 0) {
-                return;
+                return ItemStack.Empty;
             }
         }
+        return item.Clone().SetAmount(amount);
+    }
+
+    /// <summary>
+    /// 입력된 아이템을 제거합니다.
+    /// 동일한 인스턴스 하나만 제거합니다
+    /// </summary>
+    /// <param name="item">제거할 아이템</param>
+    /// <returns>제거 여부</returns>
+    public bool RemoveItemRestrict(ItemStack item) {
+        for(int i = 0; i < _content.Count; i++) {
+            ItemStack check = _content[i];
+            if(check == item) {
+                _content[i] = ItemStack.Empty;
+            }
+        }
+        return false;
     }
 
     public void RemoveItem(ItemType type, int count) {

@@ -91,12 +91,12 @@ public class ItemStack : ScriptableObject
 
     /// <summary>
     /// 입력된 아이템을 추가합니다.
-    /// 파라미터를 수정합니다. (추가하고 남은 아이템임)
     /// </summary>
     /// <param name="item">추가할 아이템</param>
-    public ItemStack AddItem(ItemStack item) {
+    /// <returns>추가한 개수</returns>
+    public int AddItem(ItemStack item) {
         if(!Stackable(item)) {
-            return this;
+            return 0;
         }
         if(IsEmpty()) {
             CopyFrom(item);
@@ -104,8 +104,7 @@ public class ItemStack : ScriptableObject
         }
         int value = Math.Min(type.maxStackSize - this.amount, item.amount);
         OperateAmount(value);
-        item.OperateAmount(-value);
-        return this;
+        return value;
     }
 
     /// <summary>
@@ -113,14 +112,14 @@ public class ItemStack : ScriptableObject
     /// 파라미터를 수정합니다. (제거하고 남은 아이템임)
     /// </summary>
     /// <param name="item">제거할 아이템</param>
-    public ItemStack RemoveItem(ItemStack item) {
+    /// <returns>제거한 개수</returns>
+    public int RemoveItem(ItemStack item) {
         if(!StackableRestrict(item)) {
-            return this;
+            return 0;
         }
         int value = Math.Min(this.amount, item.amount);
         OperateAmount(-value);
-        item.OperateAmount(-value);
-        return this;
+        return value;
     }
 
     public ItemStack OperateAmount(int value) {

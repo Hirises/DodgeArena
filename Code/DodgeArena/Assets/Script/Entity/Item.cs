@@ -24,6 +24,7 @@ public class Item : Entity, IResourceSource {
     }
 
     public void GiveResource(Player player) {
+        Debug.Log("give " + itemstack);
         player.backpack.AddItem(itemstack);
     }
 

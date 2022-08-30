@@ -9,6 +9,8 @@ public class BackpackHUD : MonoBehaviour {
     public Container container;
     [HideInInspector]
     public List<BackpackSlotHUD> slots;
+    [HideInInspector]
+    public BackpackSlotHUD selectedSlot;
 
     [SerializeField]
     [BoxGroup("Inventory")]
@@ -31,7 +33,7 @@ public class BackpackHUD : MonoBehaviour {
     public GameObject infoRoot;
     [SerializeField]
     [BoxGroup("Information")]
-    public BackpackSlotHUD infoItemSlot;
+    public SlotHUD infoItemSlot;
     [SerializeField]
     [BoxGroup("Information")]
     public TextMeshProUGUI infoItemName;
@@ -53,9 +55,12 @@ public class BackpackHUD : MonoBehaviour {
 
     public void Enable() {
         this.container = GameManager.instance.player.backpack;
+        selectedSlot = null;
         container.changeEvent -= UpdateChange;
         container.changeEvent += UpdateChange;
         UpdateChange(container);
+        infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
+        infoItemSlot.UpdateHUD();
     }
 
     public void Disable() {
@@ -75,7 +80,12 @@ public class BackpackHUD : MonoBehaviour {
                 slots.Add(slot);
                 slot.UpdateHUD();
                 slot.onClick += OnClickSlot;
-                //TODO
+                if(slot.innerItemHUD.itemstack == infoItemSlot.innerItemHUD.itemstack) {
+                    UpdateInfo(slot.innerItemHUD.itemstack);
+                    slot.Select();
+                } else {
+                    slot.Unselect();
+                }
             }
             slotRoot.sizeDelta = new Vector2(0, -1 * (origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) )));
         } else {
@@ -83,15 +93,23 @@ public class BackpackHUD : MonoBehaviour {
                 BackpackSlotHUD slot = slots[i];
                 slot.innerItemHUD.itemstack = container[i];
                 slot.UpdateHUD();
-                //TODO
+                if(slot.innerItemHUD.itemstack == infoItemSlot.innerItemHUD.itemstack) {
+                    UpdateInfo(slot.innerItemHUD.itemstack);
+                    slot.Select();
+                } else {
+                    slot.Unselect();
+                }
             }
         }
-        infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
-        infoItemSlot.UpdateHUD();
     }
 
     public void OnClickSlot(BackpackSlotHUD clickedSlot) {
         UpdateInfo(clickedSlot.innerItemHUD.itemstack);
+        if(selectedSlot != null) {
+            selectedSlot.Unselect();
+        }
+        clickedSlot.Select();
+        selectedSlot = clickedSlot;
     }
 
     public void UpdateInfo(ItemStack targetItem) {
@@ -113,7 +131,7 @@ public class BackpackHUD : MonoBehaviour {
         infoItemName.text = item.type.name;
         infoItemText.text = item.type.information;
         if(item.type.HasAttribute(ItemAttribute.Equipable) && GameManager.instance.player.HasEmptyEquipmentSlot() && (item.type.itemFuntion?.CanEquip(item) ?? true)) {
-            if(GameManager.instance.player.IsEquiped(item)) {
+            if(GameManager.instance.player.GetEquipedSlot(item) >= 0) {
                 unequipButton.SetActive(true);
                 equipButton.SetActive(false);
             } else {
@@ -146,6 +164,10 @@ public class BackpackHUD : MonoBehaviour {
             item.type.itemFuntion.OnEquip(item);
         }
         UpdateInfo(item);
+        for(int i = 0; i < container.size; i++) {
+            BackpackSlotHUD slot = slots[i];
+            slot.UpdateHUD();
+        }
     }
 
     public void UnequipButtonClicked() {
@@ -157,6 +179,10 @@ public class BackpackHUD : MonoBehaviour {
             item.type.itemFuntion.OnUnequip(item);
         }
         UpdateInfo(item);
+        for(int i = 0; i < container.size; i++) {
+            BackpackSlotHUD slot = slots[i];
+            slot.UpdateHUD();
+        }
     }
 
     public void UseButtonClicked() {
@@ -170,7 +196,7 @@ public class BackpackHUD : MonoBehaviour {
         ItemStack targetItem = infoItemSlot.innerItemHUD.itemstack;
         if(targetItem.type.itemFuntion == null) {
             player.DropItem(targetItem);
-            targetItem.Clear();
+            player.backpack.RemoveItemRestrict(targetItem);
             HideInfo();
         } else {
             targetItem.type.itemFuntion.OnDiscard(targetItem);

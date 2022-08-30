@@ -26,8 +26,7 @@ public class Player : LivingEntity {
     public Container backpack;
     [HideInInspector]
     public bool isHarvesting;
-    [HideInInspector]
-    public ItemStack[] equipedItems = new ItemStack[4];
+    private ItemStack[] equipedItems = new ItemStack[4];
 
     public override void OnSpawn() {
         for(int i = 0; i < equipedItems.Length; i++) {
@@ -77,6 +76,7 @@ public class Player : LivingEntity {
         for(int i = 0; i < equipedItems.Length; i++) {
             if(equipedItems[i].IsEmpty()) {
                 equipedItems[i] = item;
+                HUDManager.instance.UpdateQuickBar();
                 return;
             }
         }
@@ -86,21 +86,26 @@ public class Player : LivingEntity {
         for(int i = 0; i < equipedItems.Length; i++) {
             if(equipedItems[i] == item) {
                 equipedItems[i] = ItemStack.Empty;
+                HUDManager.instance.UpdateQuickBar();
             }
         }
     }
 
-    public bool IsEquiped(ItemStack item) {
+    public int GetEquipedSlot(ItemStack item) {
         for(int i = 0; i < equipedItems.Length; i++) {
             if(equipedItems[i] == item) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
+    }
+
+    public ItemStack GetEquipedItem(int slot) {
+        return equipedItems[slot];
     }
 
     public void DropItem(ItemStack targetItem) {
-        if(IsEquiped(targetItem)) {
+        if(GetEquipedSlot(targetItem) >= 0) {
             Unequip(targetItem);
         }
         location.world.Spawn(( (EntityType) EntityTypeEnum.Item ).prefab, location.Randomize(1.5f), item => ( (Item) item ).itemstack = targetItem);
