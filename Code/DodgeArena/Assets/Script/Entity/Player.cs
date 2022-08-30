@@ -34,6 +34,7 @@ public class Player : LivingEntity {
         }
         this.hp = initialHp;
         this.backpack = new Container(backpackSize);
+        this.backpack.changeEvent += HUDManager.instance.UpdateQuickBar;
         this.isHarvesting = false;
     }
 

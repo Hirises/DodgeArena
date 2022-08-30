@@ -59,27 +59,25 @@ public class Container {
     /// <param name="item">추가할 아이템</param>
     /// <return>추가하고 남은 아이템 (복사본)</return>
     public ItemStack AddItem(ItemStack item) {
-        int amount = item.amount;
+        ItemStack copy = item.Clone();
         foreach(ItemStack check in _content) {
             if(!check.IsEmpty()) {
-                amount -= check.AddItem(item);
-                if(amount <= 0) {
+                copy.OperateAmount(-1 * check.AddItem(copy));
+                if(copy.amount <= 0) {
+                    UpdateChange();
                     return ItemStack.Empty;
                 }
             }
-        }
-        if(amount <= 0) {
-            return ItemStack.Empty;
         }
         foreach(ItemStack check in _content) {
             if(check.IsEmpty()) {
-                amount -= check.AddItem(item);
-                if(amount <= 0) {
-                    return ItemStack.Empty;
-                }
+                check.CopyFrom(copy);
+                UpdateChange();
+                return ItemStack.Empty;
             }
         }
-        return item.Clone().SetAmount(amount);
+        UpdateChange();
+        return copy;
     }
 
     /// <summary>
@@ -99,14 +97,16 @@ public class Container {
     /// <param name="item">제거할 아이템</param>
     /// <returns>제거하고 남은 아이템 (복사본)</returns>
     public ItemStack RemoveItem(ItemStack item) {
-        int amount = item.amount;
+        ItemStack copy = item.Clone();
         foreach(ItemStack check in _content) {
-            amount -= check.RemoveItem(item);
-            if(item.amount <= 0) {
+            copy.OperateAmount(-1 * check.RemoveItem(item));
+            if(copy.amount <= 0) {
+                UpdateChange();
                 return ItemStack.Empty;
             }
         }
-        return item.Clone().SetAmount(amount);
+        UpdateChange();
+        return copy;
     }
 
     /// <summary>
@@ -120,12 +120,20 @@ public class Container {
             ItemStack check = _content[i];
             if(check == item) {
                 _content[i] = ItemStack.Empty;
+                UpdateChange();
+                return true;
             }
         }
         return false;
     }
 
-    public void RemoveItem(ItemType type, int count) {
+    /// <summary>
+    /// 입력된 타입의 아이템을 삭제합니다
+    /// </summary>
+    /// <param name="type">삭제할 타입</param>
+    /// <param name="count">삭제할 개수</param>
+    /// <return>제거한 개수</return>
+    public int RemoveItem(ItemType type, int count) {
         int left = count;
         foreach(ItemStack check in _content) {
             if(check.type.Equals(type)) {
@@ -133,10 +141,13 @@ public class Container {
                 check.OperateAmount(-amount);
                 left -= amount;
                 if(left <= 0) {
-                    return;
+                    UpdateChange();
+                    return count;
                 }
             }
         }
+        UpdateChange();
+        return count - left;
     }
 
     public override string ToString() {

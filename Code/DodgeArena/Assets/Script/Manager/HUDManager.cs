@@ -115,6 +115,13 @@ public class HUDManager : MonoBehaviour {
         quickBar.SetActive(false);
     }
 
+    /// <summary>
+    /// 이벤트 참조를 위해...
+    /// </summary>
+    public void UpdateQuickBar(Container self) {
+        UpdateQuickBar();
+    }
+
     public void UpdateQuickBar() {
         for(int i = 0; i < 4; i++) {
             quickBarSlots[i].innerItemHUD.itemstack = GameManager.instance.player.GetEquipedItem(i);

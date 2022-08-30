@@ -138,21 +138,23 @@ public class ItemStack : ScriptableObject
     /// <summary>
     /// 이 아이템을 빈 상태로 초기화합니다
     /// </summary>
-    public void Clear() {
+    public ItemStack Clear() {
         SetType(ItemTypeEnum.Empty);
         SetAmount(0);
         tags = new List<ItemTag>();
+        return this;
     }
 
     /// <summary>
     /// 해당 아이템의 정보를 복사해 이 아이템에 저장합니다
     /// </summary>
     /// <param name="other">대상 아이템</param>
-    public void CopyFrom(ItemStack other) {
+    public ItemStack CopyFrom(ItemStack other) {
         SetType(other.type);
         SetAmount(other.amount);
         tags.Clear();
         tags.AddRange(other.tags);
+        return this;
     }
 
     public bool IsEmpty() {

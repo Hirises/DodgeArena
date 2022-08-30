@@ -65,6 +65,7 @@ public class BackpackHUD : MonoBehaviour {
 
     public void Disable() {
         HideInfo();
+        container.changeEvent -= UpdateChange;
     }
 
     public void UpdateChange(Container self) {
