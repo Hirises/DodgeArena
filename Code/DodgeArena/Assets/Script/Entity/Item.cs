@@ -11,7 +11,7 @@ public class Item : Entity, IResourceSource {
     [SerializeField]
     public ItemStack itemstack;
 
-    float IResourceSource.time { get => _time; set => _time = value; }
+    float IResourceSource.time { get => _time; }
     bool IResourceSource.harvesting { get => _harvesting; set => _harvesting = value; }
 
     public override void OnSpawn() {
@@ -24,7 +24,6 @@ public class Item : Entity, IResourceSource {
     }
 
     public void GiveResource(Player player) {
-        Debug.Log("give " + itemstack);
         player.backpack.AddItem(itemstack);
     }
 

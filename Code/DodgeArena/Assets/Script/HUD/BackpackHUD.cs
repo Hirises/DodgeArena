@@ -58,7 +58,7 @@ public class BackpackHUD : MonoBehaviour {
         selectedSlot = null;
         container.changeEvent -= UpdateChange;
         container.changeEvent += UpdateChange;
-        UpdateChange(container);
+        UpdateChange();
         infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
         infoItemSlot.UpdateHUD();
     }
@@ -69,6 +69,10 @@ public class BackpackHUD : MonoBehaviour {
     }
 
     public void UpdateChange(Container self) {
+        UpdateChange();
+    }
+
+    public void UpdateChange() {
         if(slots.Count != container.size) {
             for(int i = 0; i < slotRoot.transform.childCount; i++) {
                 Destroy(slotRoot.transform.GetChild(i).gameObject);
@@ -88,7 +92,7 @@ public class BackpackHUD : MonoBehaviour {
                     slot.Unselect();
                 }
             }
-            slotRoot.sizeDelta = new Vector2(0, -1 * (origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) )));
+            slotRoot.sizeDelta = new Vector2(0, -1 * ( origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) ) ));
         } else {
             for(int i = 0; i < container.size; i++) {
                 BackpackSlotHUD slot = slots[i];
@@ -189,7 +193,8 @@ public class BackpackHUD : MonoBehaviour {
     public void UseButtonClicked() {
         ItemStack item = infoItemSlot.innerItemHUD.itemstack;
         item.type.itemFuntion?.OnUse(item);
-        UpdateInfo(item);
+        UpdateChange();
+        HUDManager.instance.UpdateQuickBar();
     }
 
     public void DiscardButtonClicked() {
@@ -203,6 +208,6 @@ public class BackpackHUD : MonoBehaviour {
             targetItem.type.itemFuntion.OnDiscard(targetItem);
             UpdateInfo(targetItem);
         }
-        UpdateChange(container);
+        UpdateChange();
     }
 }

@@ -56,12 +56,26 @@ public class Player : LivingEntity {
         }
     }
 
+    public void OperateHP(int value) {
+        if(value == 0) {
+            return;
+        }else if(value < 0) {
+            Damage(-value);
+        } else {
+            Heal(value);
+        }
+    }
+
     public void Damage(int damage) {
         hp -= damage;
 
         if(hp <= 0) {
             GameManager.instance.EndGame();
         }
+    }
+
+    public void Heal(int heal) {
+        hp += heal;
     }
 
     public bool HasEmptyEquipmentSlot() {

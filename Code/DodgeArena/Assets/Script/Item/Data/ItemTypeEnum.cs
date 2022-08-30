@@ -3,5 +3,6 @@ using UnityEngine;
 
 public enum ItemTypeEnum {
     Empty,
-    Log
+    Log,
+    Herb
 }

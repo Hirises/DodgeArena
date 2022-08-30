@@ -71,6 +71,10 @@ public class Random
         return NextBool() ? -1 : 1;
     }
 
+    public int RandRange(Vector2Int range) {
+        return RandRange(range.x, range.y);
+    }
+
     /// <summary>
     /// [min, max] 사이의 int 값을 반환합니다 <br/>
     /// 자동으로 min값과 max값의 대소를 설정합니다

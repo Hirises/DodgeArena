@@ -6,5 +6,6 @@ public enum EntityTypeEnum {
     Grass,
     WildBoar,
     Tree,
-    Item
+    Item,
+    Herb
 }

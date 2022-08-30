@@ -12,7 +12,7 @@ public class Tree : LandScape, IResourceSource
     [BoxGroup("ResourceSource")]
     protected List<ItemStack> items;
     protected bool harvesting;
-    float IResourceSource.time { get => time; set => time = value; }
+    float IResourceSource.time { get => time; }
     bool IResourceSource.harvesting { get => harvesting; set => harvesting = value; }
 
     public override void OnSpawn() {

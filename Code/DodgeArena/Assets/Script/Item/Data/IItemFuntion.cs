@@ -9,6 +9,10 @@ public abstract class IItemFuntion : ScriptableObject {
 
     public abstract void OnUse(ItemStack item);
 
+    public abstract bool CanUseOnQuickBar(ItemStack item);
+
+    public abstract void OnUseOnQuickBar(ItemStack item);
+
     public abstract bool CanEquip(ItemStack item);
 
     public virtual void OnEquip(ItemStack item) {

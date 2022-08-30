@@ -9,7 +9,6 @@ using UnityEngine;
 public interface IResourceSource {
     public float time {
         get;
-        protected set;
     }
     protected bool harvesting {
         get;
