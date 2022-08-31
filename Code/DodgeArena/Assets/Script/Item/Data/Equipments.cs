@@ -10,11 +10,12 @@ public class Equipments {
     public event EquipmentsChange changeEvent;
 
     public enum Slot {
-        Undefind,
         Helmet, 
         Chestplate,
         Boots,
         Hand,
+        Jewel1,
+        Jewel2,
         Quickbar1,
         Quickbar2,
         Quickbar3,
@@ -25,6 +26,8 @@ public class Equipments {
     private ItemStack chestplate;
     private ItemStack boots;
     private ItemStack hand;
+    private ItemStack jewel1;
+    private ItemStack jewel2;
     private ItemStack[] quickbar;
 
     public Equipments() {
@@ -32,6 +35,8 @@ public class Equipments {
         this.chestplate = ItemStack.Empty;
         this.boots = ItemStack.Empty;
         this.hand = ItemStack.Empty;
+        this.jewel1 = ItemStack.Empty;
+        this.jewel2 = ItemStack.Empty;
         this.quickbar = new ItemStack[4];
         this.quickbar[0] = ItemStack.Empty;
         this.quickbar[1] = ItemStack.Empty;
@@ -49,6 +54,10 @@ public class Equipments {
                 return boots;
             case Slot.Hand:
                 return hand;
+            case Slot.Jewel1:
+                return jewel1;
+            case Slot.Jewel2:
+                return jewel2;
             case Slot.Quickbar1:
                 return quickbar[0];
             case Slot.Quickbar2:
@@ -74,6 +83,12 @@ public class Equipments {
                 break;
             case Slot.Hand:
                 hand = item;
+                break;
+            case Slot.Jewel1:
+                jewel1 = item;
+                break;
+            case Slot.Jewel2:
+                jewel2 = item;
                 break;
             case Slot.Quickbar1:
                 quickbar[0] = item;
@@ -104,7 +119,7 @@ public class Equipments {
                 return true;
             }
         }
-        outSlot = Slot.Undefind;
+        outSlot = Slot.Quickbar1;
         return false;
     }
 

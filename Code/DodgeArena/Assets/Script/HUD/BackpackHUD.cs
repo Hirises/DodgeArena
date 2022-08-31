@@ -2,11 +2,14 @@ using NaughtyAttributes;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Progress;
+using RotaryHeart.Lib.SerializableDictionary;
+using System;
 
 public class BackpackHUD : MonoBehaviour {
     [HideInInspector]
     public Container container;
+    [HideInInspector]
+    public Equipments equipments;
     [HideInInspector]
     public List<BackpackSlotHUD> slots;
     [HideInInspector]
@@ -27,6 +30,13 @@ public class BackpackHUD : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Inventory")]
     public int horizontalCount;
+
+    [SerializeField]
+    [BoxGroup("Equipments")]
+    public GameObject EquipmentsRoot;
+    [SerializeField]
+    [BoxGroup("Equipments")]
+    public SerializableDictionaryBase<Equipments.Slot, BackpackSlotHUD> EquipmentSlots;
 
     [SerializeField]
     [BoxGroup("Information")]
@@ -54,12 +64,16 @@ public class BackpackHUD : MonoBehaviour {
         if(this.container == null) {
             this.container = GameManager.instance.player.backpack;
         }
+        if(this.equipments == null) {
+            this.equipments = GameManager.instance.player.equipments;
+        }
         if(selectedSlot != null) {
             UnselectSlot();
         }
-        container.changeEvent -= UpdateChange;
-        container.changeEvent += UpdateChange;
-        UpdateChange();
+        container.changeEvent -= MainInventoryChange;
+        container.changeEvent += MainInventoryChange;
+        MainInventoryChange();
+        EquipmentsRoot.SetActive(true);
         gameObject.SetActive(true);
     }
 
@@ -71,21 +85,22 @@ public class BackpackHUD : MonoBehaviour {
         if(selectedSlot != null) {
             UnselectSlot();
         }
-        container.changeEvent -= UpdateChange;
+        EquipmentsRoot.SetActive(false);
+        container.changeEvent -= MainInventoryChange;
     }
 
     /// <summary>
     /// 인벤토리의 변경사항 반영
     /// </summary>
     /// <param name="self">이벤트에 등록하기 위해 파리미터 조건을 맞출려고 들어감</param>
-    public void UpdateChange(Container self) {
-        UpdateChange();
+    public void MainInventoryChange(Container self) {
+        MainInventoryChange();
     }
 
     /// <summary>
     /// 인벤토리의 변경사항 반영
     /// </summary>
-    public void UpdateChange() {
+    public void MainInventoryChange() {
         if(slots.Count != container.size) { //리사이즈
             //기존 슬롯 제거
             for(int i = 0; i < slotRoot.transform.childCount; i++) {
@@ -113,6 +128,25 @@ public class BackpackHUD : MonoBehaviour {
         }
         //팝업창 업데이트
         UpdateInfo();
+    }
+
+    /// <summary>
+    /// 장비 인벤토리의 변경사항 반영
+    /// <param name="self">이벤트에 등록하기 위해 파리미터 조건을 맞출려고 들어감</param>
+    /// </summary>
+    public void EquipmentInventroyChange(Equipments self) {
+        EquipmentInventroyChange();
+    }
+
+    /// <summary>
+    /// 장비 인벤토리의 변경사항 반영
+    /// </summary>
+    public void EquipmentInventroyChange() {
+        foreach(Equipments.Slot type in Enum.GetValues(typeof(Equipments.Slot))) {
+            BackpackSlotHUD slot = EquipmentSlots[type];
+            slot.innerItemHUD.itemstack = equipments.GetEquipment(type);
+            slot.UpdateHUD();
+        }
     }
 
     /// <summary>
@@ -172,6 +206,7 @@ public class BackpackHUD : MonoBehaviour {
 
         UpdateInfo();
 
+        EquipmentsRoot.SetActive(false);
         infoRoot.SetActive(true);
     }
 
@@ -210,6 +245,7 @@ public class BackpackHUD : MonoBehaviour {
             return;
         }
         infoRoot.SetActive(false);
+        EquipmentsRoot.SetActive(true);
         infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
         infoItemSlot.UpdateHUD();
         UnselectSlot();
@@ -222,7 +258,7 @@ public class BackpackHUD : MonoBehaviour {
     public void UseButtonClicked() {
         ItemStack item = infoItemSlot.innerItemHUD.itemstack;
         item.type.itemFuntion?.OnUse(item);
-        UpdateChange();
+        MainInventoryChange();
         HUDManager.instance.UpdateQuickBar();
     }
 
@@ -242,6 +278,6 @@ public class BackpackHUD : MonoBehaviour {
             targetItem.type.itemFuntion.OnDiscard(targetItem);
             UpdateInfo();
         }
-        UpdateChange();
+        MainInventoryChange();
     }
 }

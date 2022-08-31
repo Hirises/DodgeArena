@@ -18,7 +18,6 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
     public void OnPointerClick(PointerEventData eventData) {
         //클릭
         if(onClick != null) {
-            Debug.Log("Click");
             onClick(this);
         }
     }
