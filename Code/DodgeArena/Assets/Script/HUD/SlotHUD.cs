@@ -5,12 +5,9 @@ public class SlotHUD : MonoBehaviour {
     [SerializeField]
     public ItemHUD innerItemHUD;
 
-    private void Awake() {
-        if(innerItemHUD.itemstack == null) {
-            innerItemHUD.itemstack = ItemStack.Empty;
-        }
-    }
-
+    /// <summary>
+    /// 슬롯 내부 HUD를 업데이트 합니다
+    /// </summary>
     public virtual void UpdateHUD() {
         innerItemHUD.UpdateHUD();
     }

@@ -9,7 +9,16 @@ public class ItemHUD : MonoBehaviour {
     public Image image;
     [SerializeField]
     public TextMeshProUGUI amount;
-    public ItemStack itemstack;
+    private ItemStack _itemstack;
+    public ItemStack itemstack {
+        get {
+            if(_itemstack == null) {
+                _itemstack = ItemStack.Empty;
+            }
+            return _itemstack;
+        }
+        set => _itemstack = value;
+    }
     public bool showAmount = true;
 
     public void UpdateHUD() {

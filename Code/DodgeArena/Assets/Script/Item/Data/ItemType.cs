@@ -28,7 +28,7 @@ public class ItemType : ScriptableObject
     [ResizableTextArea]
     public string information;
     [SerializeField]
-    public IItemFuntion itemFuntion;
+    public ItemFuntion itemFuntion;
     [SerializeField]
     public List<ItemAttribute> attrubutes;
     [SerializeField]

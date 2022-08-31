@@ -125,24 +125,18 @@ public class HUDManager : MonoBehaviour {
     public void UpdateQuickBar() {
         Player player = GameManager.instance.player;
         for(int i = 0; i < 4; i++) {
-            ItemStack item = player.GetEquipedItem(i);
-            if(item.IsEmpty() && player.IsEquiped(item)) {
-                player.Unequip(item);
-            }
-            quickBarSlots[i].innerItemHUD.itemstack = item;
+            quickBarSlots[i].innerItemHUD.itemstack = player.equipments.GetQuickbarItem(i);
             quickBarSlots[i].UpdateHUD();
         }
     }
 
     public void ShowBackpack() {
         GameManager.instance.state = GameManager.GameState.UI;
-        backpack.Enable();
         HideQuickBar();
-        backpack.gameObject.SetActive(true);
+        backpack.Enable();
     }
 
     public void HideBackpack() {
-        backpack.gameObject.SetActive(false);
         backpack.Disable();
         ShowQuickBar();
         GameManager.instance.state = GameManager.GameState.Run;

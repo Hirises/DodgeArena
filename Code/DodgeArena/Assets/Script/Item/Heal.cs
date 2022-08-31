@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Script.Item {
     [CreateAssetMenu(fileName = "Heal", menuName = "Data/ItemFunction/Heal")]
-    public class Heal : IItemFuntion {
+    public class Heal : ItemFuntion {
         [SerializeField]
         public int heal;
 

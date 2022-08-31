@@ -9,10 +9,6 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
     [SerializeField]
     public Image image;
     [SerializeField]
-    public Sprite defaultSlot;
-    [SerializeField]
-    public Sprite[] equipedSlot;
-    [SerializeField]
     public Color selectedColor;
     private Timer timer = new Timer();
     public delegate void SlotEvent(BackpackSlotHUD slot);
@@ -22,6 +18,7 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
     public void OnPointerClick(PointerEventData eventData) {
         //클릭
         if(onClick != null) {
+            Debug.Log("Click");
             onClick(this);
         }
     }
@@ -46,23 +43,13 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
         timer.Stop();
     }
 
-    public override void UpdateHUD() {
-        base.UpdateHUD();
-        switch(GameManager.instance.player.GetEquipedSlot(innerItemHUD.itemstack)) {
-            case var slot when slot >= 0 :
-                image.sprite = equipedSlot[slot];
-                break;
-            default:
-                image.sprite = defaultSlot;
-                break;
-        }
-    }
-
-    public void Select() {
+    public void OnSelect() {
+        Debug.Log("OnSelect");
         image.color = selectedColor;
     }
 
-    public void Unselect() {
+    public void OnUnselect() {
+        Debug.Log("onUnselect");
         image.color = Color.white;
     }
 }

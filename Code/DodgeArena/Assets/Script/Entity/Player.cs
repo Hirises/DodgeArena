@@ -25,15 +25,14 @@ public class Player : LivingEntity {
     [HideInInspector]
     public Container backpack;
     [HideInInspector]
+    public Equipments equipments;
+    [HideInInspector]
     public bool isHarvesting;
-    private ItemStack[] equipedItems = new ItemStack[4];
 
     public override void OnSpawn() {
-        for(int i = 0; i < equipedItems.Length; i++) {
-            equipedItems[i] = ItemStack.Empty;
-        }
         this.hp = initialHp;
         this.backpack = new Container(backpackSize);
+        this.equipments = new Equipments();
         this.backpack.changeEvent += HUDManager.instance.UpdateQuickBar;
         this.isHarvesting = false;
     }
@@ -78,54 +77,9 @@ public class Player : LivingEntity {
         hp += heal;
     }
 
-    public bool HasEmptyEquipmentSlot() {
-        for(int i = 0; i < equipedItems.Length; i++) {
-            if(equipedItems[i].IsEmpty()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void Equip(ItemStack item) {
-        for(int i = 0; i < equipedItems.Length; i++) {
-            if(equipedItems[i].IsEmpty()) {
-                equipedItems[i] = item;
-                HUDManager.instance.UpdateQuickBar();
-                return;
-            }
-        }
-    }
-
-    public void Unequip(ItemStack item) {
-        for(int i = 0; i < equipedItems.Length; i++) {
-            if(equipedItems[i] == item) {
-                equipedItems[i] = ItemStack.Empty;
-                HUDManager.instance.UpdateQuickBar();
-            }
-        }
-    }
-
-    public bool IsEquiped(ItemStack item) {
-        return GetEquipedSlot(item) >= 0;
-    }
-
-    public int GetEquipedSlot(ItemStack item) {
-        for(int i = 0; i < equipedItems.Length; i++) {
-            if(equipedItems[i] == item) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public ItemStack GetEquipedItem(int slot) {
-        return equipedItems[slot];
-    }
-
     public void DropItem(ItemStack targetItem) {
-        if(IsEquiped(targetItem)) {
-            Unequip(targetItem);
+        if(equipments.IsEquiped(targetItem, out Equipments.Slot slot)) {
+            equipments.Unequip(slot, targetItem);
         }
         location.world.Spawn(( (EntityType) EntityTypeEnum.Item ).prefab, location.Randomize(1.5f), item => ( (Item) item ).itemstack = targetItem);
     }

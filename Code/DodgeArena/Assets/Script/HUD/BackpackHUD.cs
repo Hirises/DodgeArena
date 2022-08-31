@@ -2,6 +2,7 @@ using NaughtyAttributes;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class BackpackHUD : MonoBehaviour {
     [HideInInspector]
@@ -41,42 +42,59 @@ public class BackpackHUD : MonoBehaviour {
     public TextMeshProUGUI infoItemText;
     [SerializeField]
     [BoxGroup("Information")]
-    public GameObject equipButton;
-    [SerializeField]
-    [BoxGroup("Information")]
-    public GameObject unequipButton;
-    [SerializeField]
-    [BoxGroup("Information")]
     public GameObject useButton;
     [SerializeField]
     [BoxGroup("Information")]
     public GameObject discardButton;
 
+    /// <summary>
+    /// 초기화
+    /// </summary>
     public void Enable() {
-        this.container = GameManager.instance.player.backpack;
-        selectedSlot = null;
+        if(this.container == null) {
+            this.container = GameManager.instance.player.backpack;
+        }
+        if(selectedSlot != null) {
+            UnselectSlot();
+        }
         container.changeEvent -= UpdateChange;
         container.changeEvent += UpdateChange;
         UpdateChange();
-        infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
-        infoItemSlot.UpdateHUD();
+        gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// 숨기기
+    /// </summary>
     public void Disable() {
-        HideInfo();
+        gameObject.SetActive(false);
+        if(selectedSlot != null) {
+            UnselectSlot();
+        }
         container.changeEvent -= UpdateChange;
     }
 
+    /// <summary>
+    /// 인벤토리의 변경사항 반영
+    /// </summary>
+    /// <param name="self">이벤트에 등록하기 위해 파리미터 조건을 맞출려고 들어감</param>
     public void UpdateChange(Container self) {
         UpdateChange();
     }
 
+    /// <summary>
+    /// 인벤토리의 변경사항 반영
+    /// </summary>
     public void UpdateChange() {
-        if(slots.Count != container.size) {
+        if(slots.Count != container.size) { //리사이즈
+            //기존 슬롯 제거
             for(int i = 0; i < slotRoot.transform.childCount; i++) {
                 Destroy(slotRoot.transform.GetChild(i).gameObject);
             }
             slots.Clear();
+
+            //슬롯 초기화
+            slotRoot.sizeDelta = new Vector2(0, -1 * ( origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) ) ));
             for(int i = 0; i < container.size; i++) {
                 BackpackSlotHUD slot = Instantiate(slotPrefab, slotRoot.transform);
                 slot.GetComponent<RectTransform>().localPosition = new Vector3(origin.x + ( margin.x * ( i % horizontalCount ) ), origin.y + ( margin.y * ( i / horizontalCount ) ), 0);
@@ -84,68 +102,87 @@ public class BackpackHUD : MonoBehaviour {
                 slots.Add(slot);
                 slot.UpdateHUD();
                 slot.onClick += OnClickSlot;
-                if(slot.innerItemHUD.itemstack == infoItemSlot.innerItemHUD.itemstack) {
-                    UpdateInfo(slot.innerItemHUD.itemstack);
-                    slot.Select();
-                } else {
-                    slot.Unselect();
-                }
             }
-            slotRoot.sizeDelta = new Vector2(0, -1 * ( origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) ) ));
         } else {
+            //슬롯 업데이트
             for(int i = 0; i < container.size; i++) {
                 BackpackSlotHUD slot = slots[i];
                 slot.innerItemHUD.itemstack = container[i];
                 slot.UpdateHUD();
-                if(slot.innerItemHUD.itemstack == infoItemSlot.innerItemHUD.itemstack) {
-                    UpdateInfo(slot.innerItemHUD.itemstack);
-                    slot.Select();
-                } else {
-                    slot.Unselect();
-                }
             }
         }
+        //팝업창 업데이트
+        UpdateInfo();
     }
 
+    /// <summary>
+    /// 슬롯 클릭시
+    /// </summary>
+    /// <param name="clickedSlot">클릭된 슬롯</param>
     public void OnClickSlot(BackpackSlotHUD clickedSlot) {
-        UpdateInfo(clickedSlot.innerItemHUD.itemstack);
-        if(selectedSlot != null) {
-            selectedSlot.Unselect();
-        }
-        clickedSlot.Select();
-        selectedSlot = clickedSlot;
-    }
-
-    public void UpdateInfo(ItemStack targetItem) {
-        if(targetItem.IsEmpty()) {
-            HideInfo();
+        if(selectedSlot == clickedSlot) {
+            //이미 선택되었었다면 취소
+            UnselectSlot();
         } else {
-            ShowInfo(targetItem);
+            //선택되지 않았었다면 선택
+
+            //이전에 선택된 슬롯 제거
+            if(selectedSlot != null) {
+                UnselectSlot();
+            }
+            SelectSlot(clickedSlot);
         }
     }
 
-    public void HideInfo() {
-        infoRoot.SetActive(false);
-        infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
+    /// <summary>
+    /// 슬롯 선택
+    /// </summary>
+    /// <param name="slot">대상 슬롯</param>
+    public void SelectSlot(BackpackSlotHUD slot) {
+        ShowInfo(slot.innerItemHUD.itemstack);
+        slot.OnSelect();
+        selectedSlot = slot;
     }
 
+    /// <summary>
+    /// 현재 슬롯 선택 취소
+    /// </summary>
+    public void UnselectSlot() {
+        HideInfo();
+        selectedSlot.OnUnselect();
+        selectedSlot = null;
+    }
+
+    /// <summary>
+    /// 아이템 정보창 띄우기
+    /// </summary>
+    /// <param name="item">대상 아이템</param>
     public void ShowInfo(ItemStack item) {
         infoItemSlot.innerItemHUD.itemstack = item;
+
+        UpdateInfo();
+
+        infoRoot.SetActive(true);
+    }
+
+    /// <summary>
+    /// 아이템 정보창 업데이트
+    /// </summary>
+    public void UpdateInfo() {
+        if(!infoRoot.activeSelf) {
+            return;
+        }
+        ItemStack item = infoItemSlot.innerItemHUD.itemstack;
+        if(item.IsEmpty()) {
+            HideInfo();
+            return;
+        }
+
         infoItemSlot.UpdateHUD();
         infoItemName.text = item.type.name;
         infoItemText.text = item.type.information;
-        if(item.type.HasAttribute(ItemAttribute.Equipable) && GameManager.instance.player.HasEmptyEquipmentSlot() && (item.type.itemFuntion?.CanEquip(item) ?? true)) {
-            if(GameManager.instance.player.IsEquiped(item)) {
-                unequipButton.SetActive(true);
-                equipButton.SetActive(false);
-            } else {
-                equipButton.SetActive(true);
-                unequipButton.SetActive(false);
-            }
-        } else {
-            equipButton.SetActive(false);
-            unequipButton.SetActive(false);
-        }
+
+        //TODO ItemFunction 수정
         if(item.type.HasAttribute(ItemAttribute.Useable) && ( item.type.itemFuntion?.CanUse(item) ?? true )) {
             useButton.SetActive(true);
         } else {
@@ -156,39 +193,23 @@ public class BackpackHUD : MonoBehaviour {
         } else {
             discardButton.SetActive(false);
         }
-        infoRoot.SetActive(true);
     }
 
-    public void EquipButtonClicked() {
-        Player player = GameManager.instance.player;
-        ItemStack item = infoItemSlot.innerItemHUD.itemstack;
-        if(item.type.itemFuntion == null) {
-            player.Equip(item);
-        } else {
-            item.type.itemFuntion.OnEquip(item);
+    /// <summary>
+    /// 아이템 정보창 숨기기
+    /// </summary>
+    public void HideInfo() {
+        if(!infoRoot.activeSelf) {
+            return;
         }
-        UpdateInfo(item);
-        for(int i = 0; i < container.size; i++) {
-            BackpackSlotHUD slot = slots[i];
-            slot.UpdateHUD();
-        }
+        infoRoot.SetActive(false);
+        infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
+        infoItemSlot.UpdateHUD();
     }
 
-    public void UnequipButtonClicked() {
-        Player player = GameManager.instance.player;
-        ItemStack item = infoItemSlot.innerItemHUD.itemstack;
-        if(item.type.itemFuntion == null) {
-            player.Unequip(item);
-        } else {
-            item.type.itemFuntion.OnUnequip(item);
-        }
-        UpdateInfo(item);
-        for(int i = 0; i < container.size; i++) {
-            BackpackSlotHUD slot = slots[i];
-            slot.UpdateHUD();
-        }
-    }
-
+    /// <summary>
+    /// 아이템 사용 버튼 클릭시
+    /// </summary>
     public void UseButtonClicked() {
         ItemStack item = infoItemSlot.innerItemHUD.itemstack;
         item.type.itemFuntion?.OnUse(item);
@@ -196,7 +217,12 @@ public class BackpackHUD : MonoBehaviour {
         HUDManager.instance.UpdateQuickBar();
     }
 
+    /// <summary>
+    /// 아이템 버리기 버튼 클릭시
+    /// </summary>
     public void DiscardButtonClicked() {
+        //TODO 버리기 로직 수정
+
         Player player = GameManager.instance.player;
         ItemStack targetItem = infoItemSlot.innerItemHUD.itemstack;
         if(targetItem.type.itemFuntion == null) {
@@ -205,7 +231,7 @@ public class BackpackHUD : MonoBehaviour {
             HideInfo();
         } else {
             targetItem.type.itemFuntion.OnDiscard(targetItem);
-            UpdateInfo(targetItem);
+            UpdateInfo();
         }
         UpdateChange();
     }
