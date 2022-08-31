@@ -43,13 +43,19 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
         timer.Stop();
     }
 
+    /// <summary>
+    /// 이 슬롯 선택시
+    /// </summary>
     public void OnSelect() {
-        Debug.Log("OnSelect");
+        //하이라이팅
         image.color = selectedColor;
     }
 
+    /// <summary>
+    /// 이 슬롯 선택 해제시
+    /// </summary>
     public void OnUnselect() {
-        Debug.Log("onUnselect");
+        //하이라이팅 해제
         image.color = Color.white;
     }
 }

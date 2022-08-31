@@ -139,25 +139,35 @@ public class BackpackHUD : MonoBehaviour {
     /// </summary>
     /// <param name="slot">대상 슬롯</param>
     public void SelectSlot(BackpackSlotHUD slot) {
-        ShowInfo(slot.innerItemHUD.itemstack);
+        if(slot.innerItemHUD.itemstack.IsEmpty()) {
+            return;
+        }
+        ShowInfo(slot);
         slot.OnSelect();
-        selectedSlot = slot;
     }
 
     /// <summary>
     /// 현재 슬롯 선택 취소
     /// </summary>
     public void UnselectSlot() {
-        HideInfo();
         selectedSlot.OnUnselect();
-        selectedSlot = null;
+        HideInfo();
     }
 
     /// <summary>
     /// 아이템 정보창 띄우기
     /// </summary>
     /// <param name="item">대상 아이템</param>
-    public void ShowInfo(ItemStack item) {
+    public void ShowInfo(BackpackSlotHUD slot) {
+        if(slot == selectedSlot) {
+            return;
+        }
+        ItemStack item = slot.innerItemHUD.itemstack;
+        if(item.IsEmpty()) {
+            return;
+        }
+        selectedSlot = slot;
+        SelectSlot(slot);
         infoItemSlot.innerItemHUD.itemstack = item;
 
         UpdateInfo();
@@ -169,9 +179,6 @@ public class BackpackHUD : MonoBehaviour {
     /// 아이템 정보창 업데이트
     /// </summary>
     public void UpdateInfo() {
-        if(!infoRoot.activeSelf) {
-            return;
-        }
         ItemStack item = infoItemSlot.innerItemHUD.itemstack;
         if(item.IsEmpty()) {
             HideInfo();
@@ -205,6 +212,8 @@ public class BackpackHUD : MonoBehaviour {
         infoRoot.SetActive(false);
         infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
         infoItemSlot.UpdateHUD();
+        UnselectSlot();
+        selectedSlot = null;
     }
 
     /// <summary>
