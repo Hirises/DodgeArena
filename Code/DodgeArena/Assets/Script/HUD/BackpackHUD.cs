@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using RotaryHeart.Lib.SerializableDictionary;
 using System;
+using UnityEngine.UI;
 
 public class BackpackHUD : MonoBehaviour {
     [HideInInspector]
@@ -15,6 +16,9 @@ public class BackpackHUD : MonoBehaviour {
     [HideInInspector]
     public BackpackSlotHUD selectedSlot;
 
+    [SerializeField]
+    [BoxGroup("Inventory")]
+    public ScrollRect scroll;
     [SerializeField]
     [BoxGroup("Inventory")]
     public RectTransform slotRoot;
@@ -116,7 +120,10 @@ public class BackpackHUD : MonoBehaviour {
                 slot.innerItemHUD.itemstack = container[i];
                 slots.Add(slot);
                 slot.UpdateHUD();
+                slot.onClick -= OnClickSlot;
                 slot.onClick += OnClickSlot;
+                slot.onHold -= OnHoldSlot;
+                slot.onHold += OnHoldSlot;
             }
         } else {
             //슬롯 업데이트
@@ -166,6 +173,22 @@ public class BackpackHUD : MonoBehaviour {
             }
             SelectSlot(clickedSlot);
         }
+    }
+
+    /// <summary>
+    /// 슬롯 홀드시
+    /// </summary>
+    /// <param name="holdedSlot">홀드한 슬롯</param>
+    public void OnHoldSlot(BackpackSlotHUD holdedSlot) {
+        scroll.enabled = false;
+    }
+
+    /// <summary>
+    /// UI 전체에 대한 마우스 놓기 감지
+    /// </summary>
+    public void OnMouseUp() {
+        Debug.Log("Super Up");
+        scroll.enabled = true;
     }
 
     /// <summary>

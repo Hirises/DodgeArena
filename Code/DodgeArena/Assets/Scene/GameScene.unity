@@ -246,6 +246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 34472445}
   - component: {fileID: 34472446}
+  - component: {fileID: 34472447}
   m_Layer: 5
   m_Name: Backpack
   m_TagString: Untagged
@@ -288,6 +289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slots: []
   selectedSlot: {fileID: 0}
+  scroll: {fileID: 713500279}
   slotRoot: {fileID: 466606659}
   slotPrefab: {fileID: 5279028793275999658, guid: 09d14e2ce015c5b4982d9b54db04cbd4, type: 3}
   origin: {x: -250, y: -25}
@@ -336,6 +338,32 @@ MonoBehaviour:
   infoItemText: {fileID: 2063492093}
   useButton: {fileID: 252859538}
   discardButton: {fileID: 432408730}
+--- !u!61 &34472447
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34472444}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 800, y: 1500}
+  m_EdgeRadius: 0
 --- !u!1 &179016736
 GameObject:
   m_ObjectHideFlags: 0
@@ -2320,6 +2348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slots: []
   selectedSlot: {fileID: 0}
+  scroll: {fileID: 0}
   slotRoot: {fileID: 0}
   slotPrefab: {fileID: 5279028793275999658, guid: 09d14e2ce015c5b4982d9b54db04cbd4, type: 3}
   origin: {x: 0, y: 0}
@@ -2328,21 +2357,21 @@ MonoBehaviour:
   EquipmentsRoot: {fileID: 0}
   EquipmentSlots:
     reorderableList:
-      canAdd: 0
-      canRemove: 0
-      draggable: 0
-      expandable: 0
-      multipleSelection: 0
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
       isExpanded: 0
       label:
-        m_Text: 
+        m_Text: Keys
         m_Image: {fileID: 0}
         m_Tooltip: 
-      headerHeight: 0
-      footerHeight: 0
-      slideEasing: 0
-      verticalSpacing: 0
-      showDefaultBackground: 0
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
       elementDisplayType: 0
       elementNameProperty: 
       elementNameOverride: 

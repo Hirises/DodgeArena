@@ -12,10 +12,12 @@ public class Timer
     }
     public float target;
     public enum Count {
-        Up,
-        Down
+        DependedUp,
+        DependedDown,
+        IndependedUp,
+        IndependedDown
     }
-    public Count count = Count.Up;
+    public Count type = Count.DependedUp;
     public float rate {
         get {
             return time / target;
@@ -67,18 +69,33 @@ public class Timer
     }
 
     public void Tick() {
-        if(count == Count.Up) {
-            this._time += Time.deltaTime;
-        } else {
-            this._time -= Time.deltaTime;
+        switch(type) {
+            case Count.DependedUp:
+                this._time += Time.deltaTime;
+                break;
+            case Count.DependedDown:
+                this._time -= Time.deltaTime;
+                break;
+            case Count.IndependedUp:
+                this._time += Time.unscaledDeltaTime;
+                break;
+            case Count.IndependedDown:
+                this._time -= Time.unscaledDeltaTime;
+                break;
         }
     }
 
     public bool Check() {
-        if(count == Count.Up) {
-            return this._time >= target;
-        } else {
-            return this._time <= target;
+        switch(type) {
+            case Count.DependedUp:
+                return this._time >= target;
+            case Count.DependedDown:
+                return this._time <= target;
+            case Count.IndependedUp:
+                return this._time >= target;
+            case Count.IndependedDown:
+                return this._time <= target;
         }
+        return true;
     }
 }

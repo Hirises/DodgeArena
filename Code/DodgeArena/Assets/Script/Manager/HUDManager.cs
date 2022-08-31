@@ -47,7 +47,7 @@ public class HUDManager : MonoBehaviour {
             return;
         }
 
-        HarvestTimer.count = Timer.Count.Up;
+        HarvestTimer.type = Timer.Count.DependedUp;
     }
 
     private void Update() {

@@ -48,7 +48,7 @@ public class WildBoar : LivingEntity {
         }
 
         collide = 0;
-        timer.count = Timer.Count.Up;
+        timer.type = Timer.Count.DependedUp;
         StartCoroutine("Stand");
 
         return true;

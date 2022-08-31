@@ -17,6 +17,7 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
 
     public void OnPointerClick(PointerEventData eventData) {
         //클릭
+        Debug.Log("Base Click");
         if(onClick != null) {
             onClick(this);
         }
@@ -24,13 +25,16 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
 
     public void OnPointerDown(PointerEventData eventData) {
         //마우스 누르기
+        Debug.Log("Down");
         timer.target = 0.5f;
+        timer.type = Timer.Count.IndependedUp;
         timer.Reset();
         timer.Start(null, OnPointerHold);
     }
 
     public void OnPointerHold() {
         //홀드
+        Debug.Log("Hold");
         timer.Stop();
         if(onHold != null) {
             onHold(this);
