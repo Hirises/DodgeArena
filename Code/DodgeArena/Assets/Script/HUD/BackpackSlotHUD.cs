@@ -5,7 +5,7 @@ using System;
 using UnityEngine.EventSystems;
 using NaughtyAttributes;
 
-public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandler, IPointerMoveHandler {
+public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandler, IPointerMoveHandler, IPointerEnterHandler, IPointerExitHandler {
     [SerializeField]
     public Image image;
     [SerializeField]
@@ -14,10 +14,11 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
     public delegate void SlotEvent(BackpackSlotHUD slot);
     public event SlotEvent onHold;
     public event SlotEvent onClick;
+    public event SlotEvent onEnter;
+    public event SlotEvent onExit;
 
     public void OnPointerClick(PointerEventData eventData) {
         //클릭
-        Debug.Log("Base Click");
         if(onClick != null) {
             onClick(this);
         }
@@ -25,7 +26,6 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
 
     public void OnPointerDown(PointerEventData eventData) {
         //마우스 누르기
-        Debug.Log("Down");
         timer.target = 0.5f;
         timer.type = Timer.Count.IndependedUp;
         timer.Reset();
@@ -34,7 +34,6 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
 
     public void OnPointerHold() {
         //홀드
-        Debug.Log("Hold");
         timer.Stop();
         if(onHold != null) {
             onHold(this);
@@ -44,6 +43,20 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
     public void OnPointerMove(PointerEventData eventData) {
         //마우스 벗어남 & 마우스 땜
         timer.Stop();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData) {
+        //마우스 들어옴 (드레그 인)
+        if(onEnter != null) {
+            onEnter(this);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+        //마우스 나감 (드레그 아웃)
+        if(onExit != null) {
+            onExit(this);
+        }
     }
 
     /// <summary>

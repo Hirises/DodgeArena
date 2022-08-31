@@ -5,6 +5,7 @@ using UnityEngine;
 using RotaryHeart.Lib.SerializableDictionary;
 using System;
 using UnityEngine.UI;
+using static Equipments;
 
 public class BackpackHUD : MonoBehaviour {
     [HideInInspector]
@@ -15,6 +16,10 @@ public class BackpackHUD : MonoBehaviour {
     public List<BackpackSlotHUD> slots;
     [HideInInspector]
     public BackpackSlotHUD selectedSlot;
+    [HideInInspector]
+    public BackpackSlotHUD dragSlot;
+    [HideInInspector]
+    public BackpackSlotHUD dragTargetSlot;
 
     [SerializeField]
     [BoxGroup("Inventory")]
@@ -77,6 +82,7 @@ public class BackpackHUD : MonoBehaviour {
         container.changeEvent -= MainInventoryChange;
         container.changeEvent += MainInventoryChange;
         MainInventoryChange();
+        EndDrag();
         EquipmentsRoot.SetActive(true);
         gameObject.SetActive(true);
     }
@@ -85,6 +91,7 @@ public class BackpackHUD : MonoBehaviour {
     /// 숨기기
     /// </summary>
     public void Disable() {
+        CancelDrag();
         gameObject.SetActive(false);
         if(selectedSlot != null) {
             UnselectSlot();
@@ -124,6 +131,10 @@ public class BackpackHUD : MonoBehaviour {
                 slot.onClick += OnClickSlot;
                 slot.onHold -= OnHoldSlot;
                 slot.onHold += OnHoldSlot;
+                slot.onEnter -= OnSlotIn;
+                slot.onEnter += OnSlotIn;
+                slot.onExit -= OnSlotOut;
+                slot.onExit += OnSlotOut;
             }
         } else {
             //슬롯 업데이트
@@ -166,11 +177,6 @@ public class BackpackHUD : MonoBehaviour {
             UnselectSlot();
         } else {
             //선택되지 않았었다면 선택
-
-            //이전에 선택된 슬롯 제거
-            if(selectedSlot != null) {
-                UnselectSlot();
-            }
             SelectSlot(clickedSlot);
         }
     }
@@ -180,15 +186,105 @@ public class BackpackHUD : MonoBehaviour {
     /// </summary>
     /// <param name="holdedSlot">홀드한 슬롯</param>
     public void OnHoldSlot(BackpackSlotHUD holdedSlot) {
-        scroll.enabled = false;
+        StartDrag(holdedSlot);
     }
 
     /// <summary>
     /// UI 전체에 대한 마우스 놓기 감지
     /// </summary>
     public void OnMouseUp() {
-        Debug.Log("Super Up");
+        EndDrag();
+    }
+
+    /// <summary>
+    /// 해당 슬롯 드레그 시작
+    /// </summary>
+    /// <param name="slot">대상 슬롯</param>
+    public void StartDrag(BackpackSlotHUD slot) {
+        if(dragSlot != null) {
+            CancelDrag();
+        }
+        Debug.Log("drag start");
+        scroll.enabled = false;
+        dragTargetSlot = slot;
+        dragSlot = slot;
+    }
+
+    /// <summary>
+    /// 슬롯 드레그 인
+    /// </summary>
+    /// <param name="slot">대상 슬롯</param>
+    public void OnSlotIn(BackpackSlotHUD slot) {
+        if(dragSlot == null) {
+            return;
+        }
+        Debug.Log("drag in");
+        dragTargetSlot = slot;
+    }
+
+    /// <summary>
+    /// 슬롯 드레그 아웃
+    /// </summary>
+    /// <param name="holdedSlot">대상 슬롯</param>
+    public void OnSlotOut(BackpackSlotHUD slot) {
+        if(dragSlot == null) {
+            return;
+        }
+        Debug.Log("drag out");
+        if(dragTargetSlot == slot) {
+            dragTargetSlot = null;
+        }
+    }
+
+    /// <summary>
+    /// 드레그 종료
+    /// </summary>
+    public void EndDrag() {
+        if(dragSlot == null) {
+            return;
+        }
+        Debug.Log("drag end");
+        if(dragTargetSlot != null) {
+            RunDrag();
+        } else {
+            CancelDrag();
+        }
+    }
+
+    /// <summary>
+    /// 드레그 실행
+    /// </summary>
+    public void RunDrag() {
+        ItemStack from = dragSlot.innerItemHUD.itemstack;
+        ItemStack to = dragTargetSlot.innerItemHUD.itemstack;
+        Debug.Log("from " + from + " to" + to);
+        if(to.Stackable(from)) {
+            Debug.Log("1");
+            int count = to.AddItem(from);
+            from.OperateAmount(-count);
+            Debug.Log(count);
+        } else {
+            Debug.Log("2");
+            ItemStack tmp = to.Clone();
+            to.CopyFrom(from);
+            from.CopyFrom(tmp);
+        }
+        if(dragSlot == selectedSlot) {
+            SelectSlot(dragTargetSlot);
+        }
+        Debug.Log("from " + from + " to" + to);
+        MainInventoryChange();
+        CancelDrag();
+    }
+
+    /// <summary>
+    /// 드레그 취소
+    /// </summary>
+    public void CancelDrag() {
+        Debug.Log("drag cancel");
+        dragSlot = null;
         scroll.enabled = true;
+        dragTargetSlot = null;
     }
 
     /// <summary>
@@ -199,6 +295,12 @@ public class BackpackHUD : MonoBehaviour {
         if(slot.innerItemHUD.itemstack.IsEmpty()) {
             return;
         }
+
+        //이전에 선택된 슬롯 제거
+        if(selectedSlot != null) {
+            UnselectSlot();
+        }
+
         ShowInfo(slot);
         slot.OnSelect();
     }
