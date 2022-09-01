@@ -27,7 +27,7 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
 
     public void OnPointerDown(PointerEventData eventData) {
         //마우스 누르기
-        timer.target = 0.5f;
+        timer.target = 0.3f;
         timer.type = Timer.Count.IndependedUp;
         timer.Reset();
         timer.Start(null, OnPointerHold);
