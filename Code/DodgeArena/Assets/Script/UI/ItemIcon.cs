@@ -4,11 +4,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class ItemHUD : MonoBehaviour {
+public class ItemIcon : MonoBehaviour {
     [SerializeField]
-    public Image image;
+    private Image image;
     [SerializeField]
-    public TextMeshProUGUI amount;
+    private TextMeshProUGUI amountText;
     private ItemStack _itemstack;
     public ItemStack itemstack {
         get {
@@ -28,9 +28,9 @@ public class ItemHUD : MonoBehaviour {
         image.sprite = itemstack.type.sprite;
         if(showAmount) {
             if(itemstack.IsEmpty() || itemstack.amount <= 1) {
-                amount.text = "";
+                amountText.text = "";
             } else {
-                amount.text = itemstack.amount.ToString();
+                amountText.text = itemstack.amount.ToString();
             }
         }
     }

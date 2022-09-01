@@ -136,4 +136,20 @@ public class Equipments {
     public ItemStack GetQuickbarItem(int slot) {
         return quickbar[slot];
     }
+
+    public ItemStack AddItem(ItemStack item) {
+        ItemStack copy = item.Clone();
+        for(int i = 0; i < 4; i++) {
+            if(GetQuickbarItem(i).StackableRestrict(copy)) {
+                int count = GetQuickbarItem(i).AddItem(copy);
+                copy.OperateAmount(-count);
+                if(copy.IsEmpty()) {
+                    HUDManager.instance.UpdateQuickBar();
+                    return copy;
+                }
+            }
+        }
+        HUDManager.instance.UpdateQuickBar();
+        return copy;
+    }
 }

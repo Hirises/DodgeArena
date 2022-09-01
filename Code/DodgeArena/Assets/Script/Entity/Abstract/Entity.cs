@@ -11,7 +11,7 @@ public abstract class Entity : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Entity")]
     [Label("originData")]
-    public EntityType _type;
+    private EntityType _type;
     public EntityType type {
         get => _type.enumType;
     }

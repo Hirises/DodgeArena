@@ -13,31 +13,28 @@ public class HUDManager : MonoBehaviour {
 
     [SerializeField]
     [BoxGroup("Harvest")]
-    public GameObject HarvestHUD;
+    private GameObject HarvestHUD;
     [SerializeField]
     [BoxGroup("Harvest")]
-    public Image HarvestHUDFill;
+    private Image HarvestHUDFill;
     private Util.Runnable HarvestCallback;
     private Timer HarvestTimer = new Timer();
 
     [SerializeField]
     [BoxGroup("Quick Bar")]
-    public GameObject quickBar;
+    private GameObject quickBar;
     [SerializeField]
     [BoxGroup("Quick Bar")]
-    public QuickSlotHUD[] quickBarSlots;
+    private QuickbarSlot[] quickBarSlots;
 
     [SerializeField]
     [BoxGroup("Backpack")]
-    public BackpackHUD backpack;
+    private BackpackUI backpack;
 
     [SerializeField]
     [BoxGroup("JoyStick")]
-    public JoyStickHUD joyStick;
-
-    [HideInInspector]
-    public bool drag;
-    private ItemHUD cursor;
+    private JoyStickHUD joyStick;
+    private ItemIcon cursor;
 
     private void Awake() {
         if(instance == null) {
@@ -125,7 +122,7 @@ public class HUDManager : MonoBehaviour {
     public void UpdateQuickBar() {
         Player player = GameManager.instance.player;
         for(int i = 0; i < 4; i++) {
-            quickBarSlots[i].innerItemHUD.itemstack = player.equipments.GetQuickbarItem(i);
+            quickBarSlots[i].itemstack = player.equipments.GetQuickbarItem(i);
             quickBarSlots[i].UpdateHUD();
         }
     }

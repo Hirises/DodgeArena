@@ -7,75 +7,68 @@ using System;
 using UnityEngine.UI;
 using static Equipments;
 
-public class BackpackHUD : MonoBehaviour {
-    [HideInInspector]
-    public Container container;
-    [HideInInspector]
-    public Equipments equipments;
-    [HideInInspector]
-    public List<BackpackSlotHUD> slots;
-    [HideInInspector]
-    public BackpackSlotHUD selectedSlot;
-    [HideInInspector]
-    public BackpackSlotHUD dragSlot;
-    [HideInInspector]
-    public BackpackSlotHUD dragTargetSlot;
-    [HideInInspector]
-    public bool runDrag = false;
+public class BackpackUI : MonoBehaviour {
+    private Container container;
+    private Equipments equipments;
+    private List<BackpackSlot> slots;
+    private BackpackSlot selectedSlot;
+    private BackpackSlot dragSlot;
+    private BackpackSlot dragTargetSlot;
+    private bool runDrag = false;
 
     [SerializeField]
     [BoxGroup("Inventory")]
-    public RectTransform canvas;
+    private RectTransform canvas;
     [SerializeField]
     [BoxGroup("Inventory")]
-    public ScrollRect scroll;
+    private ScrollRect scroll;
     [SerializeField]
     [BoxGroup("Inventory")]
-    public ItemHUD dragItem;
+    private ItemIcon dragItem;
     [SerializeField]
     [BoxGroup("Inventory")]
-    public RectTransform dragItemRect;
+    private RectTransform dragItemRect;
     [SerializeField]
     [BoxGroup("Inventory")]
-    public RectTransform slotRoot;
+    private RectTransform slotRoot;
     [SerializeField]
     [BoxGroup("Inventory")]
-    public BackpackSlotHUD slotPrefab;
+    private BackpackSlot slotPrefab;
     [SerializeField]
     [BoxGroup("Inventory")]
-    public Vector2 origin;
+    private Vector2 origin;
     [SerializeField]
     [BoxGroup("Inventory")]
-    public Vector2 margin;
+    private Vector2 margin;
     [SerializeField]
     [BoxGroup("Inventory")]
-    public int horizontalCount;
+    private int horizontalCount;
 
     [SerializeField]
     [BoxGroup("Equipments")]
-    public GameObject EquipmentsRoot;
+    private GameObject EquipmentsRoot;
     [SerializeField]
     [BoxGroup("Equipments")]
-    public SerializableDictionaryBase<Equipments.Slot, BackpackSlotHUD> EquipmentSlots;
+    private SerializableDictionaryBase<Equipments.Slot, BackpackSlot> EquipmentSlots;
 
     [SerializeField]
     [BoxGroup("Information")]
-    public GameObject infoRoot;
+    private GameObject infoRoot;
     [SerializeField]
     [BoxGroup("Information")]
-    public SlotHUD infoItemSlot;
+    private NormalSlot infoItemSlot;
     [SerializeField]
     [BoxGroup("Information")]
-    public TextMeshProUGUI infoItemName;
+    private TextMeshProUGUI infoItemName;
     [SerializeField]
     [BoxGroup("Information")]
-    public TextMeshProUGUI infoItemText;
+    private TextMeshProUGUI infoItemText;
     [SerializeField]
     [BoxGroup("Information")]
-    public GameObject useButton;
+    private GameObject useButton;
     [SerializeField]
     [BoxGroup("Information")]
-    public GameObject discardButton;
+    private GameObject discardButton;
 
     /// <summary>
     /// 초기화
@@ -138,7 +131,7 @@ public class BackpackHUD : MonoBehaviour {
             //슬롯 초기화
             slotRoot.sizeDelta = new Vector2(0, -1 * ( origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) ) ));
             for(int i = 0; i < container.size; i++) {
-                BackpackSlotHUD slot = Instantiate(slotPrefab, slotRoot.transform);
+                BackpackSlot slot = Instantiate(slotPrefab, slotRoot.transform);
                 slot.GetComponent<RectTransform>().localPosition = new Vector3(origin.x + ( margin.x * ( i % horizontalCount ) ), origin.y + ( margin.y * ( i / horizontalCount ) ), 0);
                 slots.Add(slot);
                 slot.onClick -= OnClickSlot;
@@ -157,14 +150,14 @@ public class BackpackHUD : MonoBehaviour {
                         CancelDrag();
                     }
                 } else {
-                    slot.innerItemHUD.itemstack = container[i];
+                    slot.itemstack = container[i];
                     slot.UpdateHUD();
                 }
             }
         } else {
             //슬롯 업데이트
             for(int i = 0; i < container.size; i++) {
-                BackpackSlotHUD slot = slots[i];
+                BackpackSlot slot = slots[i];
                 if(slot == dragSlot) {
                     dragItem.itemstack = container[i];
                     dragItem.UpdateHUD();
@@ -172,7 +165,7 @@ public class BackpackHUD : MonoBehaviour {
                         CancelDrag();
                     }
                 } else {
-                    slot.innerItemHUD.itemstack = container[i];
+                    slot.itemstack = container[i];
                     slot.UpdateHUD();
                 }
             }
@@ -194,7 +187,7 @@ public class BackpackHUD : MonoBehaviour {
     /// </summary>
     public void EquipmentInventroyRegister() {
         foreach(Equipments.Slot type in Enum.GetValues(typeof(Equipments.Slot))) {
-            BackpackSlotHUD slot = EquipmentSlots[type];
+            BackpackSlot slot = EquipmentSlots[type];
             slot.onClick -= OnClickSlot;
             slot.onClick += OnClickSlot;
             slot.onHold -= OnHoldSlot;
@@ -211,8 +204,8 @@ public class BackpackHUD : MonoBehaviour {
     /// </summary>
     public void EquipmentInventroyChange() {
         foreach(Equipments.Slot type in Enum.GetValues(typeof(Equipments.Slot))) {
-            BackpackSlotHUD slot = EquipmentSlots[type];
-            slot.innerItemHUD.itemstack = equipments.GetEquipment(type);
+            BackpackSlot slot = EquipmentSlots[type];
+            slot.itemstack = equipments.GetEquipment(type);
             slot.UpdateHUD();
         }
     }
@@ -221,7 +214,7 @@ public class BackpackHUD : MonoBehaviour {
     /// 슬롯 클릭시
     /// </summary>
     /// <param name="clickedSlot">클릭된 슬롯</param>
-    public void OnClickSlot(BackpackSlotHUD clickedSlot) {
+    public void OnClickSlot(BackpackSlot clickedSlot) {
         if(selectedSlot == clickedSlot) {
             //이미 선택되었었다면 취소
             UnselectSlot();
@@ -235,7 +228,7 @@ public class BackpackHUD : MonoBehaviour {
     /// 슬롯 홀드시
     /// </summary>
     /// <param name="holdedSlot">홀드한 슬롯</param>
-    public void OnHoldSlot(BackpackSlotHUD holdedSlot) {
+    public void OnHoldSlot(BackpackSlot holdedSlot) {
         StartDrag(holdedSlot);
     }
 
@@ -250,21 +243,21 @@ public class BackpackHUD : MonoBehaviour {
     /// 해당 슬롯 드레그 시작
     /// </summary>
     /// <param name="slot">대상 슬롯</param>
-    public void StartDrag(BackpackSlotHUD slot) {
+    public void StartDrag(BackpackSlot slot) {
         if(runDrag) {
             CancelDrag();
         }
         scroll.enabled = false;
         dragTargetSlot = slot;
         dragSlot = slot;
-        dragItem.itemstack = slot.innerItemHUD.itemstack;
+        dragItem.itemstack = slot.itemstack;
         dragItem.UpdateHUD();
         FixDragItemHUD();
-        slot.innerItemHUD.itemstack = ItemStack.Empty;
+        slot.itemstack = ItemStack.Empty;
         slot.UpdateHUD();
         dragItem.gameObject.SetActive(true);
         runDrag = true;
-        Vibration.Vibrate(50);
+        Vibration.VibrateShort();
     }
 
     private void Update() {
@@ -282,7 +275,7 @@ public class BackpackHUD : MonoBehaviour {
     /// 슬롯 드레그 인
     /// </summary>
     /// <param name="slot">대상 슬롯</param>
-    public void OnSlotIn(BackpackSlotHUD slot) {
+    public void OnSlotIn(BackpackSlot slot) {
         if(!runDrag) {
             return;
         }
@@ -293,7 +286,7 @@ public class BackpackHUD : MonoBehaviour {
     /// 슬롯 드레그 아웃
     /// </summary>
     /// <param name="holdedSlot">대상 슬롯</param>
-    public void OnSlotOut(BackpackSlotHUD slot) {
+    public void OnSlotOut(BackpackSlot slot) {
         if(!runDrag) {
             return;
         }
@@ -324,7 +317,7 @@ public class BackpackHUD : MonoBehaviour {
             return;
         }
         ItemStack from = dragItem.itemstack;
-        ItemStack to = dragTargetSlot.innerItemHUD.itemstack;
+        ItemStack to = dragTargetSlot.itemstack;
         if(to.Stackable(from)) {
             int count = to.AddItem(from);
             from.OperateAmount(-count);
@@ -339,6 +332,7 @@ public class BackpackHUD : MonoBehaviour {
         CancelDrag();
         MainInventoryChange();
         EquipmentInventroyChange();
+        HUDManager.instance.UpdateQuickBar();
     }
 
     /// <summary>
@@ -348,7 +342,7 @@ public class BackpackHUD : MonoBehaviour {
         runDrag = false;
         dragItem.gameObject.SetActive(false);
         if(dragSlot != null) {
-            dragSlot.innerItemHUD.itemstack = dragItem.itemstack;
+            dragSlot.itemstack = dragItem.itemstack;
             dragSlot.UpdateHUD();
         }
         dragItem.itemstack = ItemStack.Empty;
@@ -369,8 +363,8 @@ public class BackpackHUD : MonoBehaviour {
     /// 슬롯 선택
     /// </summary>
     /// <param name="slot">대상 슬롯</param>
-    public void SelectSlot(BackpackSlotHUD slot) {
-        if(slot.innerItemHUD.itemstack.IsEmpty()) {
+    public void SelectSlot(BackpackSlot slot) {
+        if(slot.itemstack.IsEmpty()) {
             if(selectedSlot != null) {
                 UnselectSlot();
             }
@@ -398,17 +392,17 @@ public class BackpackHUD : MonoBehaviour {
     /// 아이템 정보창 띄우기
     /// </summary>
     /// <param name="item">대상 아이템</param>
-    public void ShowInfo(BackpackSlotHUD slot) {
+    public void ShowInfo(BackpackSlot slot) {
         if(slot == selectedSlot) {
             return;
         }
-        ItemStack item = slot.innerItemHUD.itemstack;
+        ItemStack item = slot.itemstack;
         if(item.IsEmpty()) {
             return;
         }
         selectedSlot = slot;
         SelectSlot(slot);
-        infoItemSlot.innerItemHUD.itemstack = item;
+        infoItemSlot.itemstack = item;
 
         UpdateInfo();
 
@@ -420,7 +414,7 @@ public class BackpackHUD : MonoBehaviour {
     /// 아이템 정보창 업데이트
     /// </summary>
     public void UpdateInfo() {
-        ItemStack item = infoItemSlot.innerItemHUD.itemstack;
+        ItemStack item = infoItemSlot.itemstack;
         if(item.IsEmpty()) {
             HideInfo();
             return;
@@ -452,7 +446,7 @@ public class BackpackHUD : MonoBehaviour {
         }
         infoRoot.SetActive(false);
         EquipmentsRoot.SetActive(true);
-        infoItemSlot.innerItemHUD.itemstack = ItemStack.Empty;
+        infoItemSlot.itemstack = ItemStack.Empty;
         infoItemSlot.UpdateHUD();
         UnselectSlot();
         selectedSlot = null;
@@ -462,7 +456,7 @@ public class BackpackHUD : MonoBehaviour {
     /// 아이템 사용 버튼 클릭시
     /// </summary>
     public void UseButtonClicked() {
-        ItemStack item = infoItemSlot.innerItemHUD.itemstack;
+        ItemStack item = infoItemSlot.itemstack;
         item.type.itemFuntion?.OnUse(item);
         MainInventoryChange();
         EquipmentInventroyChange();
@@ -475,7 +469,7 @@ public class BackpackHUD : MonoBehaviour {
         //TODO 버리기 로직 수정
 
         Player player = GameManager.instance.player;
-        ItemStack targetItem = infoItemSlot.innerItemHUD.itemstack;
+        ItemStack targetItem = infoItemSlot.itemstack;
         if(targetItem.type.itemFuntion == null) {
             player.DropItem(targetItem);
             player.backpack.RemoveItemRestrict(targetItem);

@@ -21,16 +21,19 @@ public class ItemType : ScriptableObject
     public ItemTypeEnum enumType;
     public int maxStackSize;
     [SerializeField]
-    public Sprite sprite;
+    public Sprite sprite { private set; get; }
     [SerializeField]
-    public new string name;
+    public new string name { private set; get; }
     [SerializeField]
     [ResizableTextArea]
-    public string information;
+    private string _information;
+    public string information {
+        get => _information;
+    }
     [SerializeField]
-    public ItemFuntion itemFuntion;
+    public ItemFuntion itemFuntion { private set; get; }
     [SerializeField]
-    public List<ItemAttribute> attrubutes;
+    private List<ItemAttribute> attrubutes;
     [SerializeField]
     private SerializableDictionaryBase<string, string> data = new SerializableDictionaryBase<string, string>();
 

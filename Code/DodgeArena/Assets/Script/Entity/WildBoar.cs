@@ -47,7 +47,6 @@ public class WildBoar : LivingEntity {
             return false;
         }
 
-        collide = 0;
         timer.type = Timer.Count.DependedUp;
         StartCoroutine("Stand");
 
@@ -62,7 +61,6 @@ public class WildBoar : LivingEntity {
         }
 
         StopAllCoroutines();
-        collide = 0;
 
         return true;
     }
@@ -88,7 +86,7 @@ public class WildBoar : LivingEntity {
     {
         state = State.Threaten;
         LookAt(GameManager.instance.player.gameObject.transform.position);
-        spriteRenderer.sprite = _type.GetSprite("attack");
+        spriteRenderer.sprite = type.GetSprite("attack");
         timer.Reset();
         timer.target = threateningDuration;
         while (true)
@@ -146,7 +144,7 @@ public class WildBoar : LivingEntity {
     {
         state = State.Rest;
         rigidbody.velocity = Vector2.zero;
-        spriteRenderer.sprite = _type.GetSprite("normal");
+        spriteRenderer.sprite = type.GetSprite("normal");
         timer.Reset();
         timer.target = restDuration;
         while (true)

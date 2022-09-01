@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class JoyStickHUD : MonoBehaviour {
     [SerializeField]
-    public RectTransform knob;
+    private RectTransform knob;
     [SerializeField]
-    public RectTransform self;
+    private RectTransform self;
     [SerializeField]
-    public float limit;
+    private float limit;
     private bool actived;
-    public RectTransform canvas;
+    private RectTransform canvas;
 
     public void Enable(Vector2 screenPos) {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, screenPos, GameManager.instance.camera, out Vector2 localPos);

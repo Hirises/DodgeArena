@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Herb : LandScape, IResourceSource {
     [SerializeField]
-    public float time;
+    private float time;
     [SerializeField]
-    public Vector2Int drop;
+    private Vector2Int drop;
     private bool _harvesting;
     float IResourceSource.time { get => time; }
     bool IResourceSource.harvesting { get => _harvesting; set => _harvesting = value; }
@@ -19,7 +19,7 @@ public class Herb : LandScape, IResourceSource {
     }
 
     void IResourceSource.GiveResource(Player player) {
-        player.backpack.AddItem(ItemStack.of(ItemTypeEnum.Herb, Random.instance.RandRange(drop)));
+        player.AddItem(ItemStack.of(ItemTypeEnum.Herb, Random.instance.RandRange(drop)));
     }
 
     void IResourceSource.OnStartHarvesting(Player player) {

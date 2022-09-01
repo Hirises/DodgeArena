@@ -6,10 +6,19 @@ using UnityEngine;
 /// </summary>
 public class Item : Entity, IResourceSource {
     [SerializeField]
-    public float _time;
+    private float _time;
     private bool _harvesting;
     [SerializeField]
-    public ItemStack itemstack;
+    private ItemStack _itemstack;
+    public ItemStack itemstack {
+        get => _itemstack;
+        set {
+            _itemstack = value;
+            if(spriteRenderer != null) {
+                spriteRenderer.sprite = _itemstack.type.sprite;
+            }
+        }
+    }
 
     float IResourceSource.time { get => _time; }
     bool IResourceSource.harvesting { get => _harvesting; set => _harvesting = value; }
@@ -24,7 +33,7 @@ public class Item : Entity, IResourceSource {
     }
 
     public void GiveResource(Player player) {
-        player.backpack.AddItem(itemstack);
+        player.AddItem(itemstack);
     }
 
     public void OnStartHarvesting(Player player) {

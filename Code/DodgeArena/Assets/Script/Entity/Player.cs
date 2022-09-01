@@ -22,10 +22,14 @@ public class Player : LivingEntity {
     [BoxGroup("Player")]
     private int backpackSize;
     public int hp { get; private set; }
-    [HideInInspector]
-    public Container backpack;
-    [HideInInspector]
-    public Equipments equipments;
+    public Container backpack {
+        get;
+        private set;
+    }
+    public Equipments equipments {
+        get;
+        private set;
+    }
     [HideInInspector]
     public bool isHarvesting;
 
@@ -82,5 +86,19 @@ public class Player : LivingEntity {
             equipments.Unequip(slot, targetItem);
         }
         location.world.Spawn(( (EntityType) EntityTypeEnum.Item ).prefab, location.Randomize(1.5f), item => ( (Item) item ).itemstack = targetItem);
+    }
+
+    /// <summary>
+    /// 플레이어에게 아이템을 지급합니다
+    /// 퀵슬롯을 먼저 검사합니다
+    /// </summary>
+    /// <param name="item">추가할 아이템</param>
+    /// <returns>추가하고 남은 아이템 (복사본)</returns>
+    public ItemStack AddItem(ItemStack item) {
+        ItemStack copy = equipments.AddItem(item);
+        if(copy.IsEmpty()) {
+            return copy;
+        }
+        return backpack.AddItem(copy);
     }
 }

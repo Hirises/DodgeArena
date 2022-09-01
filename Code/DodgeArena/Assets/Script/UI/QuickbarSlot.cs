@@ -2,10 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class QuickSlotHUD : SlotHUD {
+public class QuickbarSlot : NormalSlot {
     public void OnClick() {
         //클릭
-        ItemStack item = innerItemHUD.itemstack;
+        ItemStack item = itemIcon.itemstack;
         if(item.type.itemFuntion == null || !item.type.itemFuntion.CanUseOnQuickBar(item)) {
             return;
         }

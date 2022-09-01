@@ -7,11 +7,8 @@ public class Tree : LandScape, IResourceSource
 {
     [SerializeField]
     [BoxGroup("ResourceSource")]
-    protected float time;
-    [SerializeField]
-    [BoxGroup("ResourceSource")]
-    protected List<ItemStack> items;
-    protected bool harvesting;
+    private float time;
+    private bool harvesting;
     float IResourceSource.time { get => time; }
     bool IResourceSource.harvesting { get => harvesting; set => harvesting = value; }
 
@@ -35,6 +32,6 @@ public class Tree : LandScape, IResourceSource
     }
 
     public void GiveResource(Player player) {
-        GameManager.instance.player.backpack.AddItems(items);
+        GameManager.instance.player.AddItem(ItemStack.of(ItemTypeEnum.Log, 1));
     }
 }

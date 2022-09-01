@@ -5,13 +5,13 @@ using System;
 using UnityEngine.EventSystems;
 using NaughtyAttributes;
 
-public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler {
+public class BackpackSlot : NormalSlot, IPointerClickHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler {
     [SerializeField]
-    public Image image;
+    private Image image;
     [SerializeField]
-    public Color selectedColor;
+    private Color selectedColor;
     private Timer timer = new Timer();
-    public delegate void SlotEvent(BackpackSlotHUD slot);
+    public delegate void SlotEvent(BackpackSlot slot);
     public event SlotEvent onHold;
     public event SlotEvent onClick;
     public event SlotEvent onEnter;
