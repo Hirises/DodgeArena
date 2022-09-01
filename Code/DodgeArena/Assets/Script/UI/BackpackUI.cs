@@ -10,7 +10,7 @@ using static Equipments;
 public class BackpackUI : MonoBehaviour {
     private Container container;
     private Equipments equipments;
-    private List<BackpackSlot> slots;
+    private List<BackpackSlot> slots = new List<BackpackSlot>();
     private BackpackSlot selectedSlot;
     private BackpackSlot dragSlot;
     private BackpackSlot dragTargetSlot;
@@ -52,23 +52,28 @@ public class BackpackUI : MonoBehaviour {
     private SerializableDictionaryBase<Equipments.Slot, BackpackSlot> EquipmentSlots;
 
     [SerializeField]
-    [BoxGroup("Information")]
-    private GameObject infoRoot;
+    [BoxGroup("ToolTip")]
+    private GameObject toolTipRoot;
     [SerializeField]
-    [BoxGroup("Information")]
+    [BoxGroup("ToolTip")]
     private NormalSlot infoItemSlot;
     [SerializeField]
-    [BoxGroup("Information")]
+    [BoxGroup("ToolTip")]
     private TextMeshProUGUI infoItemName;
+
+    [SerializeField]
+    [BoxGroup("Information")]
+    private GameObject infoRoot;
     [SerializeField]
     [BoxGroup("Information")]
     private TextMeshProUGUI infoItemText;
     [SerializeField]
     [BoxGroup("Information")]
     private GameObject useButton;
+
     [SerializeField]
-    [BoxGroup("Information")]
-    private GameObject discardButton;
+    [BoxGroup("Split")]
+    private GameObject splitRoot;
 
     /// <summary>
     /// 초기화
@@ -171,7 +176,7 @@ public class BackpackUI : MonoBehaviour {
             }
         }
         //팝업창 업데이트
-        UpdateInfo();
+        UpdateToolTip();
     }
 
     /// <summary>
@@ -404,19 +409,22 @@ public class BackpackUI : MonoBehaviour {
         SelectSlot(slot);
         infoItemSlot.itemstack = item;
 
-        UpdateInfo();
+        UpdateToolTip();
 
         EquipmentsRoot.SetActive(false);
+        splitRoot.SetActive(false);
         infoRoot.SetActive(true);
+        toolTipRoot.SetActive(true);
     }
 
     /// <summary>
     /// 아이템 정보창 업데이트
     /// </summary>
-    public void UpdateInfo() {
+    public void UpdateToolTip() {
         ItemStack item = infoItemSlot.itemstack;
         if(item.IsEmpty()) {
             HideInfo();
+            HideSplit();
             return;
         }
 
@@ -430,26 +438,51 @@ public class BackpackUI : MonoBehaviour {
         } else {
             useButton.SetActive(false);
         }
-        if(( item.type.itemFuntion?.CanDiscard(item) ?? true )) {
-            discardButton.SetActive(true);
-        } else {
-            discardButton.SetActive(false);
-        }
     }
 
     /// <summary>
     /// 아이템 정보창 숨기기
     /// </summary>
     public void HideInfo() {
-        if(!infoRoot.activeSelf) {
+        if(!toolTipRoot.activeSelf) {
             return;
         }
-        infoRoot.SetActive(false);
+        toolTipRoot.SetActive(false);
         EquipmentsRoot.SetActive(true);
         infoItemSlot.itemstack = ItemStack.Empty;
         infoItemSlot.UpdateHUD();
         UnselectSlot();
         selectedSlot = null;
+    }
+
+    public void ShowSplit() {
+        if(selectedSlot == null) {
+            return;
+        }
+
+        EquipmentsRoot.SetActive(false);
+        splitRoot.SetActive(false);
+        infoRoot.SetActive(true);
+        toolTipRoot.SetActive(true);
+    }
+
+    public void HideSplit() {
+        if(selectedSlot == null) {
+            return;
+        }
+
+        ShowInfo(selectedSlot);
+    }
+
+    public void SplitCancelButtonClick() {
+        HideSplit();
+    }
+
+    /// <summary>
+    /// 아이템 분할 버튼 클릭시
+    /// </summary>
+    public void SplitButtonClicked() {
+        ShowSplit();
     }
 
     /// <summary>
@@ -476,7 +509,7 @@ public class BackpackUI : MonoBehaviour {
             HideInfo();
         } else {
             targetItem.type.itemFuntion.OnDiscard(targetItem);
-            UpdateInfo();
+            UpdateToolTip();
         }
         MainInventoryChange();
         EquipmentInventroyChange();

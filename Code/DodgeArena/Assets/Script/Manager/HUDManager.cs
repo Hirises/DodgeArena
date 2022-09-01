@@ -34,7 +34,6 @@ public class HUDManager : MonoBehaviour {
     [SerializeField]
     [BoxGroup("JoyStick")]
     private JoyStickHUD joyStick;
-    private ItemIcon cursor;
 
     private void Awake() {
         if(instance == null) {

@@ -90,14 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ad03c1ad6671a4d9549b13b91d8001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  innerItemHUD: {fileID: 7655880929587119862}
+  _itemIcon: {fileID: 7655880929587119862}
   image: {fileID: 6329561946340717305}
-  defaultSlot: {fileID: 21300000, guid: 7f7e146b86eaa354084d916c138b6f6f, type: 3}
-  equipedSlot:
-  - {fileID: 21300000, guid: 7169128a524f5614daa9d8c69a6c04af, type: 3}
-  - {fileID: 21300000, guid: 4443a15aa2a4d3b489de71017aed7ae7, type: 3}
-  - {fileID: 21300000, guid: 529c19428f32f1b44bbecaab989d81a5, type: 3}
-  - {fileID: 21300000, guid: 34783ef65c7dea44fa26189bfc8a9f76, type: 3}
   selectedColor: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
 --- !u!1001 &3269927496005723058
 PrefabInstance:

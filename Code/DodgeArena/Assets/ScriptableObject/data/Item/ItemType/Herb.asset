@@ -14,11 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enumType: 2
   maxStackSize: 10
-  sprite: {fileID: 21300000, guid: c92104df6f1722d40aacdc6dc165e80d, type: 3}
-  name: "\uD5C8\uBE0C"
-  information: "\uC232\uC5D0\uC11C \uD754\uD788 \uBCFC \uC218 \uC788\uB294 \uD5C8\uBE0C\uB2E4\n\uC0AC\uC6A9\uD558\uBA74
-    \uCCB4\uB825\uC744 \uC57D\uAC04 \uD68C\uBCF5\uC2DC\uCF1C\uC900\uB2E4"
-  itemFuntion: {fileID: 11400000, guid: 1123ba8cf4dd9f54d82567a059d11865, type: 2}
+  _sprite: {fileID: 21300000, guid: c92104df6f1722d40aacdc6dc165e80d, type: 3}
+  _name: "\uB098\uBB34"
+  _information: "\uC801\uB2F9\uD55C \uD1B5\uB098\uBB34\uC774\uB2E4\n\uAC00\uACF5\uC744
+    \uD1B5\uD574 \uC5EC\uB7EC \uC6A9\uB3C4\uB85C \uC0AC\uC6A9\uD560 \uC218 \uC788\uB2E4"
   attrubutes: 0100000000000000
   data:
     reorderableList:
