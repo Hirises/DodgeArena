@@ -40,7 +40,9 @@ public class Container {
     }
 
     public void UpdateChange() {
-        changeEvent(this);
+        if(changeEvent != null) {
+            changeEvent(this);
+        }
     }
 
     /// <summary>

@@ -86,14 +86,18 @@ public class BackpackHUD : MonoBehaviour {
         }
         if(this.equipments == null) {
             this.equipments = GameManager.instance.player.equipments;
+            EquipmentInventroyRegister();
         }
         if(selectedSlot != null) {
             UnselectSlot();
         }
         container.changeEvent -= MainInventoryChange;
         container.changeEvent += MainInventoryChange;
-        MainInventoryChange();
+        equipments.changeEvent -= EquipmentInventroyChange;
+        equipments.changeEvent += EquipmentInventroyChange;
         EndDrag();
+        MainInventoryChange();
+        EquipmentInventroyChange();
         EquipmentsRoot.SetActive(true);
         gameObject.SetActive(true);
     }
@@ -109,6 +113,7 @@ public class BackpackHUD : MonoBehaviour {
         }
         EquipmentsRoot.SetActive(false);
         container.changeEvent -= MainInventoryChange;
+        equipments.changeEvent -= EquipmentInventroyChange;
     }
 
     /// <summary>
@@ -182,6 +187,23 @@ public class BackpackHUD : MonoBehaviour {
     /// </summary>
     public void EquipmentInventroyChange(Equipments self) {
         EquipmentInventroyChange();
+    }
+
+    /// <summary>
+    /// 장비 인벤토리 이벤트 등록
+    /// </summary>
+    public void EquipmentInventroyRegister() {
+        foreach(Equipments.Slot type in Enum.GetValues(typeof(Equipments.Slot))) {
+            BackpackSlotHUD slot = EquipmentSlots[type];
+            slot.onClick -= OnClickSlot;
+            slot.onClick += OnClickSlot;
+            slot.onHold -= OnHoldSlot;
+            slot.onHold += OnHoldSlot;
+            slot.onEnter -= OnSlotIn;
+            slot.onEnter += OnSlotIn;
+            slot.onExit -= OnSlotOut;
+            slot.onExit += OnSlotOut;
+        }
     }
 
     /// <summary>
@@ -316,6 +338,7 @@ public class BackpackHUD : MonoBehaviour {
         }
         CancelDrag();
         MainInventoryChange();
+        EquipmentInventroyChange();
     }
 
     /// <summary>
@@ -442,7 +465,7 @@ public class BackpackHUD : MonoBehaviour {
         ItemStack item = infoItemSlot.innerItemHUD.itemstack;
         item.type.itemFuntion?.OnUse(item);
         MainInventoryChange();
-        HUDManager.instance.UpdateQuickBar();
+        EquipmentInventroyChange();
     }
 
     /// <summary>
@@ -462,5 +485,6 @@ public class BackpackHUD : MonoBehaviour {
             UpdateInfo();
         }
         MainInventoryChange();
+        EquipmentInventroyChange();
     }
 }

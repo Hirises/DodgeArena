@@ -118,7 +118,7 @@ public class HUDManager : MonoBehaviour {
     /// <summary>
     /// 이벤트 참조를 위해...
     /// </summary>
-    public void UpdateQuickBar(Container self) {
+    public void UpdateQuickBar(Equipments self) {
         UpdateQuickBar();
     }
 
