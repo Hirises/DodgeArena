@@ -98,7 +98,7 @@ public class ItemStack : ScriptableObject
         }
         if(IsEmpty()) {
             CopyFrom(item);
-            SetAmount(0);
+            _amount = 0;
         }
         int value = Math.Min(type.maxStackSize - this.amount, item.amount);
         OperateAmount(value);

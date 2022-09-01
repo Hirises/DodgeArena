@@ -187,6 +187,7 @@ public class BackpackHUD : MonoBehaviour {
     /// <param name="holdedSlot">홀드한 슬롯</param>
     public void OnHoldSlot(BackpackSlotHUD holdedSlot) {
         StartDrag(holdedSlot);
+        Vibration.Vibrate(50);
     }
 
     /// <summary>
@@ -204,7 +205,6 @@ public class BackpackHUD : MonoBehaviour {
         if(dragSlot != null) {
             CancelDrag();
         }
-        Debug.Log("drag start");
         scroll.enabled = false;
         dragTargetSlot = slot;
         dragSlot = slot;
@@ -218,7 +218,6 @@ public class BackpackHUD : MonoBehaviour {
         if(dragSlot == null) {
             return;
         }
-        Debug.Log("drag in");
         dragTargetSlot = slot;
     }
 
@@ -230,7 +229,6 @@ public class BackpackHUD : MonoBehaviour {
         if(dragSlot == null) {
             return;
         }
-        Debug.Log("drag out");
         if(dragTargetSlot == slot) {
             dragTargetSlot = null;
         }
@@ -243,7 +241,6 @@ public class BackpackHUD : MonoBehaviour {
         if(dragSlot == null) {
             return;
         }
-        Debug.Log("drag end");
         if(dragTargetSlot != null) {
             RunDrag();
         } else {
@@ -257,14 +254,10 @@ public class BackpackHUD : MonoBehaviour {
     public void RunDrag() {
         ItemStack from = dragSlot.innerItemHUD.itemstack;
         ItemStack to = dragTargetSlot.innerItemHUD.itemstack;
-        Debug.Log("from " + from + " to" + to);
         if(to.Stackable(from)) {
-            Debug.Log("1");
             int count = to.AddItem(from);
             from.OperateAmount(-count);
-            Debug.Log(count);
         } else {
-            Debug.Log("2");
             ItemStack tmp = to.Clone();
             to.CopyFrom(from);
             from.CopyFrom(tmp);
@@ -272,7 +265,6 @@ public class BackpackHUD : MonoBehaviour {
         if(dragSlot == selectedSlot) {
             SelectSlot(dragTargetSlot);
         }
-        Debug.Log("from " + from + " to" + to);
         MainInventoryChange();
         CancelDrag();
     }
@@ -281,7 +273,6 @@ public class BackpackHUD : MonoBehaviour {
     /// 드레그 취소
     /// </summary>
     public void CancelDrag() {
-        Debug.Log("drag cancel");
         dragSlot = null;
         scroll.enabled = true;
         dragTargetSlot = null;
@@ -293,6 +284,9 @@ public class BackpackHUD : MonoBehaviour {
     /// <param name="slot">대상 슬롯</param>
     public void SelectSlot(BackpackSlotHUD slot) {
         if(slot.innerItemHUD.itemstack.IsEmpty()) {
+            if(selectedSlot != null) {
+                UnselectSlot();
+            }
             return;
         }
 

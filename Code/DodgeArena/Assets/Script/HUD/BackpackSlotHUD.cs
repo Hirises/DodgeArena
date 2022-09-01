@@ -5,7 +5,7 @@ using System;
 using UnityEngine.EventSystems;
 using NaughtyAttributes;
 
-public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandler, IPointerMoveHandler, IPointerEnterHandler, IPointerExitHandler {
+public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler {
     [SerializeField]
     public Image image;
     [SerializeField]
@@ -19,6 +19,7 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
 
     public void OnPointerClick(PointerEventData eventData) {
         //클릭
+        timer.Stop();
         if(onClick != null) {
             onClick(this);
         }
@@ -40,11 +41,11 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
         }
     }
 
-    public void OnPointerMove(PointerEventData eventData) {
-        //마우스 벗어남 & 마우스 땜
+
+    public void OnPointerUp(PointerEventData eventData) {
+        //마우스 땜
         timer.Stop();
     }
-
     public void OnPointerEnter(PointerEventData eventData) {
         //마우스 들어옴 (드레그 인)
         if(onEnter != null) {
@@ -54,6 +55,7 @@ public class BackpackSlotHUD : SlotHUD, IPointerClickHandler, IPointerDownHandle
 
     public void OnPointerExit(PointerEventData eventData) {
         //마우스 나감 (드레그 아웃)
+        timer.Stop();
         if(onExit != null) {
             onExit(this);
         }

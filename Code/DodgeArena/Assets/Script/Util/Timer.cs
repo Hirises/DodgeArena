@@ -40,6 +40,7 @@ public class Timer
     }
 
     public void Reset(float time) {
+        Stop();
         this._time = time;
     }
 
