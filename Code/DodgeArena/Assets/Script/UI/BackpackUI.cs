@@ -358,13 +358,6 @@ public class BackpackUI : MonoBehaviour {
     }
 
     /// <summary>
-    /// 드레그 리셋
-    /// </summary>
-    public void ResetDrag() {
-
-    }
-
-    /// <summary>
     /// 슬롯 선택
     /// </summary>
     /// <param name="slot">대상 슬롯</param>
@@ -413,8 +406,8 @@ public class BackpackUI : MonoBehaviour {
 
         EquipmentsRoot.SetActive(false);
         splitRoot.SetActive(false);
-        infoRoot.SetActive(true);
         toolTipRoot.SetActive(true);
+        infoRoot.SetActive(true);
     }
 
     /// <summary>
@@ -448,6 +441,7 @@ public class BackpackUI : MonoBehaviour {
             return;
         }
         toolTipRoot.SetActive(false);
+        HideSplit();
         EquipmentsRoot.SetActive(true);
         infoItemSlot.itemstack = ItemStack.Empty;
         infoItemSlot.UpdateHUD();
@@ -459,23 +453,37 @@ public class BackpackUI : MonoBehaviour {
         if(selectedSlot == null) {
             return;
         }
+        if(splitRoot.activeSelf) {
+            return;
+        }
 
         EquipmentsRoot.SetActive(false);
-        splitRoot.SetActive(false);
-        infoRoot.SetActive(true);
+        infoRoot.SetActive(false);
         toolTipRoot.SetActive(true);
+        splitRoot.SetActive(true);
     }
 
     public void HideSplit() {
         if(selectedSlot == null) {
             return;
         }
+        if(!splitRoot.activeSelf) {
+            return;
+        }
+        splitRoot.SetActive(false);
 
-        ShowInfo(selectedSlot);
+        UpdateToolTip();
+
+        infoRoot.SetActive(true);
+        toolTipRoot.SetActive(true);
     }
 
     public void SplitCancelButtonClick() {
         HideSplit();
+    }
+
+    public void SplitDoneButtonClick() {
+
     }
 
     /// <summary>
