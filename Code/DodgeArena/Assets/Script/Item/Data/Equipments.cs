@@ -43,7 +43,25 @@ public class Equipments {
         this.quickbar[2] = ItemStack.Empty;
         this.quickbar[3] = ItemStack.Empty;
     }
-        
+
+    public static bool IsSimilarSlot(Slot origin, Slot contrast) {
+        if(IsQuickbarSlot(origin)) {
+            return IsQuickbarSlot(contrast);
+        }else if(IsJewelSlot(origin)) {
+            return IsJewelSlot(contrast);
+        } else {
+            return origin == contrast;
+        }
+    }
+
+    public static bool IsJewelSlot(Slot slot) {
+        return slot == Slot.Jewel1 || slot == Slot.Jewel2;
+    }
+
+    public static bool IsQuickbarSlot(Slot slot) {
+        return slot == Slot.Quickbar1 || slot == Slot.Quickbar2 || slot == Slot.Quickbar3 || slot == Slot.Quickbar4;
+    }
+
     public ItemStack GetEquipment(Slot slot) {
         switch(slot) {
             case Slot.Helmet:

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using RotaryHeart.Lib.SerializableDictionary;
 
 public class Util {
     public delegate void Runnable();
@@ -333,5 +334,41 @@ public class Util {
             }
         }
         return true;
+    }
+
+    /// <summary>
+    /// 입력된 Dictionary에서 value에 대한 key 값을 찾아줍니다
+    /// </summary>
+    /// <param name="dictonary">대상 Dictionary</param>
+    /// <param name="value">찾을 값</param>
+    /// <param name="first">첫번째로 일치된 key</param>
+    /// <returns>발견 여부</returns>
+    public static bool GetKey<K, V>(Dictionary<K, V> dictonary, V value, out K first) {
+        foreach(K key in dictonary.Keys) {
+            if(dictonary[key].Equals(value)) {
+                first = key;
+                return true;
+            }
+        }
+        first = default(K);
+        return false;
+    }
+
+    /// <summary>
+    /// 입력된 Dictionary에서 value에 대한 key 값을 찾아줍니다
+    /// </summary>
+    /// <param name="dictonary">대상 Dictionary</param>
+    /// <param name="value">찾을 값</param>
+    /// <param name="first">첫번째로 일치된 key</param>
+    /// <returns>발견 여부</returns>
+    public static bool GetKey<K, V>(SerializableDictionaryBase<K, V> dictonary, V value, out K first) {
+        foreach(K key in dictonary.Keys) {
+            if(dictonary[key].Equals(value)) {
+                first = key;
+                return true;
+            }
+        }
+        first = default(K);
+        return false;
     }
 }

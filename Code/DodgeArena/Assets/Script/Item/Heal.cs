@@ -7,33 +7,25 @@ namespace Assets.Script.Item {
         [SerializeField]
         public int heal;
 
-        public override bool CanDiscard(ItemStack item) {
+        public override bool CanEquip(Equipments.Slot slot, ItemStack itemstack) {
+            return Equipments.IsQuickbarSlot(slot);
+        }
+
+        public override bool CanUse(ItemStack itemStack) {
             return true;
         }
 
-        public override bool CanEquip(ItemStack item) {
-            return true;
+        public override void OnEquip(Equipments.Slot slot, ItemStack itemStack) {
+            return;
         }
 
-        public override bool CanUnequip(ItemStack item) {
-            return true;
+        public override void OnUnequip(Equipments.Slot slot, ItemStack itemStack) {
+            return;
         }
 
-        public override bool CanUse(ItemStack item) {
-            return true;
-        }
-
-        public override bool CanUseOnQuickBar(ItemStack item) {
-            return true;
-        }
-
-        public override void OnUse(ItemStack item) {
+        public override void OnUse(ItemStack itemStack) {
             GameManager.instance.player.Heal(heal);
-            item.OperateAmount(-1);
-        }
-
-        public override void OnUseOnQuickBar(ItemStack item) {
-            OnUse(item);
+            itemStack.OperateAmount(-1);
         }
     }
 }

@@ -129,11 +129,11 @@ public class HUDManager : MonoBehaviour {
     public void ShowBackpack() {
         GameManager.instance.state = GameManager.GameState.UI;
         HideQuickBar();
-        backpack.Enable();
+        backpack.Active();
     }
 
     public void HideBackpack() {
-        backpack.Disable();
+        backpack.Disactive();
         ShowQuickBar();
         GameManager.instance.state = GameManager.GameState.Run;
     }

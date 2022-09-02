@@ -24,8 +24,6 @@ public class ItemStack : ScriptableObject
             return _amount;
         }
     }
-    [SerializeField]
-    public List<ItemTag> tags;
 
     public static ItemStack Empty { get {
             return of(ItemTypeEnum.Empty, 0);
@@ -37,27 +35,10 @@ public class ItemStack : ScriptableObject
     }
 
     public static ItemStack of(ItemType type, int amount) {
-        return of(type, amount, new List<ItemTag>());
-    }
-
-    public static ItemStack of(ItemType type, int amount, List<ItemTag> tags) {
         ItemStack instance = CreateInstance<ItemStack>();
         instance._type = type;
         instance._amount = amount;
-        instance.tags = tags;
         return instance;
-    }
-
-    public bool HasTag(ItemTag tag) {
-        return tags.Contains(tag);
-    }
-
-    public void AddTag(ItemTag tag) {
-        tags.Add(tag);
-    }
-
-    public void RemoveTag(ItemTag tag) {
-        tags.Remove(tag);
     }
 
     public ItemStack SetAmount(int amount) {
@@ -130,7 +111,6 @@ public class ItemStack : ScriptableObject
     public ItemStack Clear() {
         SetType(ItemTypeEnum.Empty);
         _amount = 0;
-        tags = new List<ItemTag>();
         return this;
     }
 
@@ -141,8 +121,6 @@ public class ItemStack : ScriptableObject
     public ItemStack CopyFrom(ItemStack other) {
         SetType(other.type);
         SetAmount(other.amount);
-        tags.Clear();
-        tags.AddRange(other.tags);
         return this;
     }
 
@@ -151,7 +129,7 @@ public class ItemStack : ScriptableObject
     }
 
     public ItemStack Clone() {
-        return of(type, amount, tags);
+        return of(type, amount);
     }
 
     /// <summary>
@@ -170,7 +148,7 @@ public class ItemStack : ScriptableObject
     /// <param name="item">대상 아이템</param>
     /// <returns>결과</returns>
     public bool StackableRestrict(ItemStack item) {
-        return item.type == type && Util.DeepEquals(item.tags, tags);
+        return item.type == type;
     }
 
     public override bool Equals(object obj) {
@@ -187,13 +165,6 @@ public class ItemStack : ScriptableObject
     }
 
     public override string ToString() {
-        string tags = "";
-        foreach(ItemTag tag in this.tags) {
-            tags += tag.ToString() + ", ";
-        }
-        if(tags.Length > 0) {
-            tags = "{Tags: " + tags.Substring(0, tags.Length - 2) + "}";
-        }
-        return type.ToString() + " X" + amount + tags;
+        return type.ToString() + "X" + amount;
     }
 }

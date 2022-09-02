@@ -7,51 +7,96 @@ using System;
 using UnityEngine.UI;
 
 public class BackpackUI : MonoBehaviour {
-    private Container container;
-    private Equipments equipments;
-    private List<BackpackSlot> slots = new List<BackpackSlot>();
-    private BackpackSlot selectedSlot;
-    private BackpackSlot dragSlot;
-    private BackpackSlot dragTargetSlot;
-    private bool runDrag = false;
-    private bool forDiscard = false;
-    private int splitAmount;
 
+    //필드 영역 --------------------------------------------------------------
+
+    #region Private Fields
+    /// <summary>
+    /// 플레이어 인벤토리
+    /// </summary>
+    private Container container;
+    /// <summary>
+    /// 플레이어 장비
+    /// </summary>
+    private Equipments equipments;
+    /// <summary>
+    /// 전체 인벤토리 슬롯
+    /// </summary>
+    private List<BackpackSlot> slots = new List<BackpackSlot>();
+    /// <summary>
+    /// 현재 선택된 슬롯
+    /// </summary>
+    private BackpackSlot selectedSlot;
+    /// <summary>
+    /// 현재 드레그 중인가?
+    /// </summary>
+    private bool runDrag = false;
+    /// <summary>
+    /// 현재 드레그 중인 슬롯
+    /// </summary>
+    private BackpackSlot dragSlot;
+    /// <summary>
+    /// 현재 드레그 목적지로 지정된 슬롯
+    /// </summary>
+    private BackpackSlot dragTargetSlot;
+    /// <summary>
+    /// 나뉘어질 아이템 개수 (남는 쪽)
+    /// </summary>
+    private int splitAmount;
+    #endregion
+
+    #region Inventory
     [SerializeField]
     [BoxGroup("Inventory")]
     private RectTransform canvas;
     [SerializeField]
     [BoxGroup("Inventory")]
-    private ScrollRect scroll;
+    private ScrollRect inventroyScroll;
     [SerializeField]
     [BoxGroup("Inventory")]
-    private ItemIcon dragItem;
-    [SerializeField]
-    [BoxGroup("Inventory")]
-    private RectTransform dragItemRect;
-    [SerializeField]
-    [BoxGroup("Inventory")]
-    private RectTransform slotRoot;
+    private RectTransform inventoryContent;
     [SerializeField]
     [BoxGroup("Inventory")]
     private BackpackSlot slotPrefab;
+    /// <summary>
+    /// 슬롯 시작 위치
+    /// </summary>
     [SerializeField]
     [BoxGroup("Inventory")]
-    private Vector2 origin;
+    private Vector2 slotOrigin;
+    /// <summary>
+    /// 슬롯 하나당 얼마다 떨어져서 배치할지
+    /// </summary>
     [SerializeField]
     [BoxGroup("Inventory")]
-    private Vector2 margin;
+    private Vector2 slotMargin;
+    /// <summary>
+    /// 가로 슬롯 개수
+    /// </summary>
     [SerializeField]
     [BoxGroup("Inventory")]
-    private int horizontalCount;
+    private int horizontalSlotCount;
+    [SerializeField]
+    [BoxGroup("Inventory")]
+    private ItemIcon dragItemIcon;
+    [SerializeField]
+    [BoxGroup("Inventory")]
+    private RectTransform dragItemRect; 
+    #endregion
 
+    #region Equipments
     [SerializeField]
     [BoxGroup("Equipments")]
     private GameObject EquipmentsRoot;
+    /// <summary>
+    /// 장비 슬롯들
+    /// </summary>
     [SerializeField]
     [BoxGroup("Equipments")]
-    private SerializableDictionaryBase<Equipments.Slot, BackpackSlot> EquipmentSlots;
+    private SerializableDictionaryBase<Equipments.Slot, BackpackSlot> EquipmentSlots; 
+    #endregion
 
+    #region ToolTip
     [SerializeField]
     [BoxGroup("ToolTip")]
     private GameObject toolTipRoot;
@@ -60,8 +105,10 @@ public class BackpackUI : MonoBehaviour {
     private NormalSlot infoItemSlot;
     [SerializeField]
     [BoxGroup("ToolTip")]
-    private TextMeshProUGUI infoItemName;
+    private TextMeshProUGUI infoItemName; 
+    #endregion
 
+    #region Information
     [SerializeField]
     [BoxGroup("Information")]
     private GameObject infoRoot;
@@ -70,17 +117,28 @@ public class BackpackUI : MonoBehaviour {
     private TextMeshProUGUI infoItemText;
     [SerializeField]
     [BoxGroup("Information")]
-    private GameObject useButton;
+    private GameObject useButton; 
+    #endregion
 
+    #region Split
     [SerializeField]
     [BoxGroup("Split")]
     private GameObject splitRoot;
+    /// <summary>
+    /// 아이템 나누기 슬라이더
+    /// </summary>
     [SerializeField]
     [BoxGroup("Split")]
     private Slider valueSlider;
+    /// <summary>
+    /// 아이템 나눌 개수 (남는 쪽)
+    /// </summary>
     [SerializeField]
     [BoxGroup("Split")]
     private TMP_InputField valueInput;
+    /// <summary>
+    /// 아이템 나눌 개수 (나눠질 쪽)
+    /// </summary>
     [SerializeField]
     [BoxGroup("Split")]
     private TMP_InputField restInput;
@@ -90,11 +148,14 @@ public class BackpackUI : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Split")]
     private GameObject discardButton;
+    #endregion
+
+    //메소드 영역 ------------------------------------------------------------
 
     /// <summary>
     /// 초기화
     /// </summary>
-    public void Enable() {
+    public void Active() {
         if(this.container == null) {
             this.container = GameManager.instance.player.backpack;
         }
@@ -105,13 +166,13 @@ public class BackpackUI : MonoBehaviour {
         if(selectedSlot != null) {
             UnselectSlot();
         }
-        container.changeEvent -= MainInventoryChange;
-        container.changeEvent += MainInventoryChange;
-        equipments.changeEvent -= EquipmentInventroyChange;
-        equipments.changeEvent += EquipmentInventroyChange;
+        container.changeEvent -= UpdateMainInventory;
+        container.changeEvent += UpdateMainInventory;
+        equipments.changeEvent -= UpdateEquipmentInventroy;
+        equipments.changeEvent += UpdateEquipmentInventroy;
         EndDrag();
-        MainInventoryChange();
-        EquipmentInventroyChange();
+        UpdateMainInventory();
+        UpdateEquipmentInventroy();
         EquipmentsRoot.SetActive(true);
         gameObject.SetActive(true);
     }
@@ -119,41 +180,42 @@ public class BackpackUI : MonoBehaviour {
     /// <summary>
     /// 숨기기
     /// </summary>
-    public void Disable() {
+    public void Disactive() {
         CancelDrag();
         gameObject.SetActive(false);
         if(selectedSlot != null) {
             UnselectSlot();
         }
         EquipmentsRoot.SetActive(false);
-        container.changeEvent -= MainInventoryChange;
-        equipments.changeEvent -= EquipmentInventroyChange;
+        container.changeEvent -= UpdateMainInventory;
+        equipments.changeEvent -= UpdateEquipmentInventroy;
     }
 
+    #region UpdateUI
     /// <summary>
     /// 인벤토리의 변경사항 반영
     /// </summary>
     /// <param name="self">이벤트에 등록하기 위해 파리미터 조건을 맞출려고 들어감</param>
-    public void MainInventoryChange(Container self) {
-        MainInventoryChange();
+    public void UpdateMainInventory(Container self) {
+        UpdateMainInventory();
     }
 
     /// <summary>
     /// 인벤토리의 변경사항 반영
     /// </summary>
-    public void MainInventoryChange() {
+    public void UpdateMainInventory() {
         if(slots.Count != container.size) { //리사이즈
             //기존 슬롯 제거
-            for(int i = 0; i < slotRoot.transform.childCount; i++) {
-                Destroy(slotRoot.transform.GetChild(i).gameObject);
+            for(int i = 0; i < inventoryContent.transform.childCount; i++) {
+                Destroy(inventoryContent.transform.GetChild(i).gameObject);
             }
             slots.Clear();
 
             //슬롯 초기화
-            slotRoot.sizeDelta = new Vector2(0, -1 * ( origin.y + ( margin.y * ( ( container.size - 1 ) / horizontalCount + 1 ) ) ));
+            inventoryContent.sizeDelta = new Vector2(0, -1 * ( slotOrigin.y + ( slotMargin.y * ( ( container.size - 1 ) / horizontalSlotCount + 1 ) ) ));
             for(int i = 0; i < container.size; i++) {
-                BackpackSlot slot = Instantiate(slotPrefab, slotRoot.transform);
-                slot.GetComponent<RectTransform>().localPosition = new Vector3(origin.x + ( margin.x * ( i % horizontalCount ) ), origin.y + ( margin.y * ( i / horizontalCount ) ), 0);
+                BackpackSlot slot = Instantiate(slotPrefab, inventoryContent.transform);
+                slot.GetComponent<RectTransform>().localPosition = new Vector3(slotOrigin.x + ( slotMargin.x * ( i % horizontalSlotCount ) ), slotOrigin.y + ( slotMargin.y * ( i / horizontalSlotCount ) ), 0);
                 slots.Add(slot);
                 slot.onClick -= OnClickSlot;
                 slot.onClick += OnClickSlot;
@@ -165,8 +227,8 @@ public class BackpackUI : MonoBehaviour {
                 slot.onExit += OnSlotOut;
 
                 if(slot == dragSlot) {
-                    dragItem.itemstack = container[i];
-                    dragItem.UpdateHUD();
+                    dragItemIcon.itemstack = container[i];
+                    dragItemIcon.UpdateHUD();
                     if(container[i].IsEmpty()) {
                         CancelDrag();
                     }
@@ -180,8 +242,8 @@ public class BackpackUI : MonoBehaviour {
             for(int i = 0; i < container.size; i++) {
                 BackpackSlot slot = slots[i];
                 if(slot == dragSlot) {
-                    dragItem.itemstack = container[i];
-                    dragItem.UpdateHUD();
+                    dragItemIcon.itemstack = container[i];
+                    dragItemIcon.UpdateHUD();
                     if(container[i].IsEmpty()) {
                         CancelDrag();
                     }
@@ -193,14 +255,6 @@ public class BackpackUI : MonoBehaviour {
         }
         //팝업창 업데이트
         UpdateToolTip();
-    }
-
-    /// <summary>
-    /// 장비 인벤토리의 변경사항 반영
-    /// <param name="self">이벤트에 등록하기 위해 파리미터 조건을 맞출려고 들어감</param>
-    /// </summary>
-    public void EquipmentInventroyChange(Equipments self) {
-        EquipmentInventroyChange();
     }
 
     /// <summary>
@@ -222,29 +276,25 @@ public class BackpackUI : MonoBehaviour {
 
     /// <summary>
     /// 장비 인벤토리의 변경사항 반영
+    /// <param name="self">이벤트에 등록하기 위해 파리미터 조건을 맞출려고 들어감</param>
     /// </summary>
-    public void EquipmentInventroyChange() {
+    public void UpdateEquipmentInventroy(Equipments self) {
+        UpdateEquipmentInventroy();
+    }
+
+    /// <summary>
+    /// 장비 인벤토리의 변경사항 반영
+    /// </summary>
+    public void UpdateEquipmentInventroy() {
         foreach(Equipments.Slot type in Enum.GetValues(typeof(Equipments.Slot))) {
             BackpackSlot slot = EquipmentSlots[type];
             slot.itemstack = equipments.GetEquipment(type);
             slot.UpdateHUD();
         }
     }
+    #endregion
 
-    /// <summary>
-    /// 슬롯 클릭시
-    /// </summary>
-    /// <param name="clickedSlot">클릭된 슬롯</param>
-    public void OnClickSlot(BackpackSlot clickedSlot) {
-        if(selectedSlot == clickedSlot) {
-            //이미 선택되었었다면 취소
-            UnselectSlot();
-        } else {
-            //선택되지 않았었다면 선택
-            SelectSlot(clickedSlot);
-        }
-    }
-
+    #region DragControll
     /// <summary>
     /// 슬롯 홀드시
     /// </summary>
@@ -268,15 +318,15 @@ public class BackpackUI : MonoBehaviour {
         if(runDrag) {
             CancelDrag();
         }
-        scroll.enabled = false;
+        inventroyScroll.enabled = false;
         dragTargetSlot = slot;
         dragSlot = slot;
-        dragItem.itemstack = slot.itemstack;
-        dragItem.UpdateHUD();
+        dragItemIcon.itemstack = slot.itemstack;
+        dragItemIcon.UpdateHUD();
         FixDragItemHUD();
         slot.itemstack = ItemStack.Empty;
         slot.UpdateHUD();
-        dragItem.gameObject.SetActive(true);
+        dragItemIcon.gameObject.SetActive(true);
         runDrag = true;
         Vibration.VibrateShort();
     }
@@ -287,6 +337,9 @@ public class BackpackUI : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 드레그시 아이템 아이콘 마우스 위치로 고정
+    /// </summary>
     public void FixDragItemHUD() {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, Input.mousePosition, GameManager.instance.camera, out Vector2 localPos);
         dragItemRect.anchoredPosition = localPos;
@@ -337,8 +390,23 @@ public class BackpackUI : MonoBehaviour {
         if(!runDrag) {
             return;
         }
-        ItemStack from = dragItem.itemstack;
+        ItemStack from = dragItemIcon.itemstack;
         ItemStack to = dragTargetSlot.itemstack;
+        if(Util.GetKey(EquipmentSlots, dragTargetSlot, out Equipments.Slot slot)) {
+            if(from.type.itemFuntion == null || !from.type.itemFuntion.CanEquip(slot, from)) {
+                CancelDrag();
+                UpdateMainInventory();
+                UpdateEquipmentInventroy();
+                HUDManager.instance.UpdateQuickBar();
+                return;
+            } else {
+                if(!to.IsEmpty() && to.type.itemFuntion != null) {
+                    to.type.itemFuntion.OnUnequip(slot, to);
+                }
+                from.type.itemFuntion.OnEquip(slot, from);
+            }
+        }
+
         if(to.Stackable(from)) {
             int count = to.AddItem(from);
             from.OperateAmount(-count);
@@ -356,8 +424,8 @@ public class BackpackUI : MonoBehaviour {
             }
         }
         CancelDrag();
-        MainInventoryChange();
-        EquipmentInventroyChange();
+        UpdateMainInventory();
+        UpdateEquipmentInventroy();
         HUDManager.instance.UpdateQuickBar();
     }
 
@@ -366,16 +434,32 @@ public class BackpackUI : MonoBehaviour {
     /// </summary>
     public void CancelDrag() {
         runDrag = false;
-        dragItem.gameObject.SetActive(false);
+        dragItemIcon.gameObject.SetActive(false);
         if(dragSlot != null) {
-            dragSlot.itemstack = dragItem.itemstack;
+            dragSlot.itemstack = dragItemIcon.itemstack;
             dragSlot.UpdateHUD();
         }
-        dragItem.itemstack = ItemStack.Empty;
-        dragItem.UpdateHUD();
+        dragItemIcon.itemstack = ItemStack.Empty;
+        dragItemIcon.UpdateHUD();
         dragSlot = null;
-        scroll.enabled = true;
+        inventroyScroll.enabled = true;
         dragTargetSlot = null;
+    }
+    #endregion
+
+    #region SelectSlot
+    /// <summary>
+    /// 슬롯 클릭시
+    /// </summary>
+    /// <param name="clickedSlot">클릭된 슬롯</param>
+    public void OnClickSlot(BackpackSlot clickedSlot) {
+        if(selectedSlot == clickedSlot) {
+            //이미 선택되었었다면 취소
+            UnselectSlot();
+        } else {
+            //선택되지 않았었다면 선택
+            SelectSlot(clickedSlot);
+        }
     }
 
     /// <summary>
@@ -407,8 +491,33 @@ public class BackpackUI : MonoBehaviour {
             selectedSlot.OnUnselect();
         }
         HideInfo();
+    } 
+    #endregion
+
+    /// <summary>
+    /// 아이템 정보창 업데이트
+    /// </summary>
+    public void UpdateToolTip() {
+        ItemStack item = infoItemSlot.itemstack;
+        if(item.IsEmpty()) {
+            HideInfo();
+            HideSplit();
+            return;
+        }
+
+        infoItemSlot.UpdateHUD();
+        infoItemName.text = item.type.name;
+        infoItemText.text = item.type.information;
+        UpdateSplitStateForValue(splitAmount);
+
+        if(item.type.itemFuntion?.CanUse(item) ?? false) {
+            useButton.SetActive(true);
+        } else {
+            useButton.SetActive(false);
+        }
     }
 
+    #region Infomation Popup
     /// <summary>
     /// 아이템 정보창 띄우기
     /// </summary>
@@ -434,30 +543,6 @@ public class BackpackUI : MonoBehaviour {
     }
 
     /// <summary>
-    /// 아이템 정보창 업데이트
-    /// </summary>
-    public void UpdateToolTip() {
-        ItemStack item = infoItemSlot.itemstack;
-        if(item.IsEmpty()) {
-            HideInfo();
-            HideSplit();
-            return;
-        }
-
-        infoItemSlot.UpdateHUD();
-        infoItemName.text = item.type.name;
-        infoItemText.text = item.type.information;
-        UpdateSplitStateForValue(splitAmount);
-
-        //TODO ItemFunction 수정
-        if(item.type.HasAttribute(ItemAttribute.Useable) && ( item.type.itemFuntion?.CanUse(item) ?? true )) {
-            useButton.SetActive(true);
-        } else {
-            useButton.SetActive(false);
-        }
-    }
-
-    /// <summary>
     /// 아이템 정보창 숨기기
     /// </summary>
     public void HideInfo() {
@@ -472,7 +557,9 @@ public class BackpackUI : MonoBehaviour {
         UnselectSlot();
         selectedSlot = null;
     }
+    #endregion
 
+    #region Split Popup
     private void ResetSplitState(bool forDiscard) {
         if(selectedSlot == null) {
             return;
@@ -481,13 +568,12 @@ public class BackpackUI : MonoBehaviour {
             return;
         }
 
-        this.forDiscard = forDiscard;
         if(forDiscard) {
             UpdateSplitStateForValue(selectedSlot.itemstack.amount);
             discardButton.SetActive(true);
             splitButton.SetActive(false);
         } else {
-            UpdateSplitStateForValue((selectedSlot.itemstack.amount + 1) / 2);
+            UpdateSplitStateForValue(( selectedSlot.itemstack.amount + 1 ) / 2);
             discardButton.SetActive(false);
             splitButton.SetActive(true);
         }
@@ -524,7 +610,7 @@ public class BackpackUI : MonoBehaviour {
         if(value > maxAmount) {
             value = maxAmount;
         }
-        valueSlider.value = ((float) value) / maxAmount;
+        valueSlider.value = ( (float) value ) / maxAmount;
         valueInput.text = "" + value;
         restInput.text = "" + ( maxAmount - value );
         splitAmount = value;
@@ -544,7 +630,9 @@ public class BackpackUI : MonoBehaviour {
         infoRoot.SetActive(true);
         toolTipRoot.SetActive(true);
     }
+    #endregion
 
+    #region Split Input
     public void SplitAddButtonClick() {
         UpdateSplitStateForValue(splitAmount + 1);
     }
@@ -597,8 +685,8 @@ public class BackpackUI : MonoBehaviour {
         targetItem.OperateAmount(-splitAmount);
         HideSplit();
 
-        MainInventoryChange();
-        EquipmentInventroyChange();
+        UpdateMainInventory();
+        UpdateEquipmentInventroy();
     }
 
     public void SplitSplitButtonClick() {
@@ -610,8 +698,8 @@ public class BackpackUI : MonoBehaviour {
         targetItem.AddItem(rest);
 
         HideSplit();
-        MainInventoryChange();
-        EquipmentInventroyChange();
+        UpdateMainInventory();
+        UpdateEquipmentInventroy();
     }
 
     /// <summary>
@@ -623,20 +711,23 @@ public class BackpackUI : MonoBehaviour {
     }
 
     /// <summary>
-    /// 아이템 사용 버튼 클릭시
-    /// </summary>
-    public void UseButtonClicked() {
-        ItemStack item = infoItemSlot.itemstack;
-        item.type.itemFuntion?.OnUse(item);
-        MainInventoryChange();
-        EquipmentInventroyChange();
-    }
-
-    /// <summary>
     /// 아이템 버리기 버튼 클릭시
     /// </summary>
     public void DiscardButtonClicked() {
         ResetSplitState(true);
         ShowSplit();
+    }
+    #endregion
+
+    /// <summary>
+    /// 아이템 사용 버튼 클릭시
+    /// </summary>
+    public void UseButtonClicked() {
+        ItemStack item = infoItemSlot.itemstack;
+        if(item.type.itemFuntion != null && item.type.itemFuntion.CanUse(item)) {
+            item.type.itemFuntion.OnUse(item);
+            UpdateMainInventory();
+            UpdateEquipmentInventroy();
+        }
     }
 }

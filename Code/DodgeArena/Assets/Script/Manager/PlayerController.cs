@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        //Vector2 direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         Vector2 direction = joystick.GetMovement();
         if(direction.Equals(Vector2.zero)) {
             rigidbody.velocity = Vector2.zero;

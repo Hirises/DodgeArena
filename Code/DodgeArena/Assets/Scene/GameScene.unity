@@ -288,14 +288,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 390731814}
-  scroll: {fileID: 713500279}
-  dragItem: {fileID: 1145769612}
-  dragItemRect: {fileID: 1145769611}
-  slotRoot: {fileID: 466606659}
+  inventroyScroll: {fileID: 713500279}
+  inventoryContent: {fileID: 466606659}
   slotPrefab: {fileID: 5279028793275999658, guid: 09d14e2ce015c5b4982d9b54db04cbd4, type: 3}
-  origin: {x: -250, y: -25}
-  margin: {x: 125, y: -125}
-  horizontalCount: 5
+  slotOrigin: {x: -250, y: -25}
+  slotMargin: {x: 125, y: -125}
+  horizontalSlotCount: 5
+  dragItemIcon: {fileID: 1145769612}
+  dragItemRect: {fileID: 1145769611}
   EquipmentsRoot: {fileID: 481749177}
   EquipmentSlots:
     reorderableList:
@@ -2796,14 +2796,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
-  scroll: {fileID: 0}
-  dragItem: {fileID: 0}
-  dragItemRect: {fileID: 0}
-  slotRoot: {fileID: 0}
+  inventroyScroll: {fileID: 0}
+  inventoryContent: {fileID: 0}
   slotPrefab: {fileID: 5279028793275999658, guid: 09d14e2ce015c5b4982d9b54db04cbd4, type: 3}
-  origin: {x: 0, y: 0}
-  margin: {x: 0, y: 0}
-  horizontalCount: 0
+  slotOrigin: {x: 0, y: 0}
+  slotMargin: {x: 0, y: 0}
+  horizontalSlotCount: 0
+  dragItemIcon: {fileID: 0}
+  dragItemRect: {fileID: 0}
   EquipmentsRoot: {fileID: 0}
   EquipmentSlots:
     reorderableList:

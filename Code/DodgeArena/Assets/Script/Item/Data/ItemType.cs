@@ -19,9 +19,14 @@ public class ItemType : ScriptableObject
     }
 
     public ItemTypeEnum enumType;
-    public int maxStackSize;
     [SerializeField]
     private Sprite _sprite;
+    [SerializeField]
+    private ItemFuntion _itemFuntion;
+    public ItemFuntion itemFuntion { get => _itemFuntion; }
+    [SerializeField]
+    private int _maxStackSize;
+    public int maxStackSize { get => _maxStackSize; }
     public Sprite sprite { get => _sprite; }
     [SerializeField]
     private string _name;
@@ -32,29 +37,11 @@ public class ItemType : ScriptableObject
     public string information {
         get => _information;
     }
-    [SerializeField]
-    public ItemFuntion itemFuntion { private set; get; }
-    [SerializeField]
-    private List<ItemAttribute> attrubutes;
-    [SerializeField]
-    private SerializableDictionaryBase<string, string> data = new SerializableDictionaryBase<string, string>();
-
-    public bool HasData(string key) {
-        return data.ContainsKey(key);
-    }
-
-    public string GetData(string key) {
-        return data[key];
-    }
-
-    public bool HasAttribute(ItemAttribute tag) {
-        return attrubutes.Contains(tag);
-    }
 
     private static ItemType Empty() {
         ItemType instance = CreateInstance<ItemType>();
         instance.enumType = ItemTypeEnum.Empty;
-        instance.maxStackSize = 0;
+        instance._maxStackSize = 0;
         return instance;
     }
 
