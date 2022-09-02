@@ -5,7 +5,6 @@ using UnityEngine;
 using RotaryHeart.Lib.SerializableDictionary;
 using System;
 using UnityEngine.UI;
-using static Equipments;
 
 public class BackpackUI : MonoBehaviour {
     private Container container;
@@ -15,6 +14,8 @@ public class BackpackUI : MonoBehaviour {
     private BackpackSlot dragSlot;
     private BackpackSlot dragTargetSlot;
     private bool runDrag = false;
+    private bool forDiscard = false;
+    private int splitAmount;
 
     [SerializeField]
     [BoxGroup("Inventory")]
@@ -74,6 +75,21 @@ public class BackpackUI : MonoBehaviour {
     [SerializeField]
     [BoxGroup("Split")]
     private GameObject splitRoot;
+    [SerializeField]
+    [BoxGroup("Split")]
+    private Slider valueSlider;
+    [SerializeField]
+    [BoxGroup("Split")]
+    private TMP_InputField valueInput;
+    [SerializeField]
+    [BoxGroup("Split")]
+    private TMP_InputField restInput;
+    [SerializeField]
+    [BoxGroup("Split")]
+    private GameObject splitButton;
+    [SerializeField]
+    [BoxGroup("Split")]
+    private GameObject discardButton;
 
     /// <summary>
     /// 초기화
@@ -332,7 +348,12 @@ public class BackpackUI : MonoBehaviour {
             from.CopyFrom(tmp);
         }
         if(dragSlot == selectedSlot) {
-            SelectSlot(dragTargetSlot);
+            if(splitRoot.activeSelf) {
+                SelectSlot(dragTargetSlot);
+                ShowSplit();
+            } else {
+                SelectSlot(dragTargetSlot);
+            }
         }
         CancelDrag();
         MainInventoryChange();
@@ -382,7 +403,9 @@ public class BackpackUI : MonoBehaviour {
     /// 현재 슬롯 선택 취소
     /// </summary>
     public void UnselectSlot() {
-        selectedSlot.OnUnselect();
+        if(selectedSlot != null) {
+            selectedSlot.OnUnselect();
+        }
         HideInfo();
     }
 
@@ -424,6 +447,7 @@ public class BackpackUI : MonoBehaviour {
         infoItemSlot.UpdateHUD();
         infoItemName.text = item.type.name;
         infoItemText.text = item.type.information;
+        UpdateSplitStateForValue(splitAmount);
 
         //TODO ItemFunction 수정
         if(item.type.HasAttribute(ItemAttribute.Useable) && ( item.type.itemFuntion?.CanUse(item) ?? true )) {
@@ -449,6 +473,26 @@ public class BackpackUI : MonoBehaviour {
         selectedSlot = null;
     }
 
+    private void ResetSplitState(bool forDiscard) {
+        if(selectedSlot == null) {
+            return;
+        }
+        if(splitRoot.activeSelf) {
+            return;
+        }
+
+        this.forDiscard = forDiscard;
+        if(forDiscard) {
+            UpdateSplitStateForValue(selectedSlot.itemstack.amount);
+            discardButton.SetActive(true);
+            splitButton.SetActive(false);
+        } else {
+            UpdateSplitStateForValue((selectedSlot.itemstack.amount + 1) / 2);
+            discardButton.SetActive(false);
+            splitButton.SetActive(true);
+        }
+    }
+
     public void ShowSplit() {
         if(selectedSlot == null) {
             return;
@@ -461,6 +505,29 @@ public class BackpackUI : MonoBehaviour {
         infoRoot.SetActive(false);
         toolTipRoot.SetActive(true);
         splitRoot.SetActive(true);
+    }
+
+    public void UpdateSplitState() {
+        int maxAmount = infoItemSlot.itemstack.amount;
+        UpdateSplitStateForValue(Convert.ToInt32(valueSlider.value * maxAmount));
+    }
+
+    public void UpdateSplitStateForRest(int value) {
+        UpdateSplitStateForValue(infoItemSlot.itemstack.amount - value);
+    }
+
+    public void UpdateSplitStateForValue(int value) {
+        int maxAmount = infoItemSlot.itemstack.amount;
+        if(value < 1) {
+            value = 1;
+        }
+        if(value > maxAmount) {
+            value = maxAmount;
+        }
+        valueSlider.value = ((float) value) / maxAmount;
+        valueInput.text = "" + value;
+        restInput.text = "" + ( maxAmount - value );
+        splitAmount = value;
     }
 
     public void HideSplit() {
@@ -478,18 +545,80 @@ public class BackpackUI : MonoBehaviour {
         toolTipRoot.SetActive(true);
     }
 
+    public void SplitAddButtonClick() {
+        UpdateSplitStateForValue(splitAmount + 1);
+    }
+
+    public void SplitRemoveButtonClick() {
+        UpdateSplitStateForValue(splitAmount - 1);
+    }
+
+    public void SplitValueSliderChange() {
+        UpdateSplitState();
+    }
+
+    public void SplitValueInputChange() {
+        if(int.TryParse(valueInput.text, out int number)) {
+            UpdateSplitStateForValue(number);
+        } else {
+            UpdateSplitStateForValue(splitAmount);
+        }
+    }
+
+    public void SplitRestInputChange() {
+        if(int.TryParse(restInput.text, out int number)) {
+            UpdateSplitStateForRest(number);
+        } else {
+            UpdateSplitStateForValue(splitAmount);
+        }
+    }
+
+    public void SplitMinButtonClicked() {
+        UpdateSplitStateForValue(1);
+    }
+
+    public void SplitHalfButtonClicked() {
+        UpdateSplitStateForValue(( selectedSlot.itemstack.amount + 1 ) / 2);
+    }
+
+    public void SplitMaxButtonClicked() {
+        UpdateSplitStateForValue(selectedSlot.itemstack.amount);
+    }
+
     public void SplitCancelButtonClick() {
         HideSplit();
     }
 
-    public void SplitDoneButtonClick() {
+    public void SplitDiscardButtonClick() {
+        Player player = GameManager.instance.player;
+        ItemStack targetItem = infoItemSlot.itemstack;
 
+        player.DropItem(targetItem.Clone().SetAmount(splitAmount));
+        targetItem.OperateAmount(-splitAmount);
+        HideSplit();
+
+        MainInventoryChange();
+        EquipmentInventroyChange();
+    }
+
+    public void SplitSplitButtonClick() {
+        Player player = GameManager.instance.player;
+        ItemStack targetItem = infoItemSlot.itemstack;
+
+        ItemStack rest = player.backpack.AddItemAtEmptySlot(targetItem.Clone().SetAmount(targetItem.amount - splitAmount));
+        targetItem.SetAmount(splitAmount);
+        targetItem.AddItem(rest);
+
+        HideSplit();
+        MainInventoryChange();
+        EquipmentInventroyChange();
     }
 
     /// <summary>
     /// 아이템 분할 버튼 클릭시
     /// </summary>
     public void SplitButtonClicked() {
+        ResetSplitState(false);
         ShowSplit();
     }
 
@@ -507,19 +636,7 @@ public class BackpackUI : MonoBehaviour {
     /// 아이템 버리기 버튼 클릭시
     /// </summary>
     public void DiscardButtonClicked() {
-        //TODO 버리기 로직 수정
-
-        Player player = GameManager.instance.player;
-        ItemStack targetItem = infoItemSlot.itemstack;
-        if(targetItem.type.itemFuntion == null) {
-            player.DropItem(targetItem);
-            player.backpack.RemoveItemRestrict(targetItem);
-            HideInfo();
-        } else {
-            targetItem.type.itemFuntion.OnDiscard(targetItem);
-            UpdateToolTip();
-        }
-        MainInventoryChange();
-        EquipmentInventroyChange();
+        ResetSplitState(true);
+        ShowSplit();
     }
 }

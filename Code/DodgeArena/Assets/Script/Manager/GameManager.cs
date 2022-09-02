@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
             player.Teleport(new WorldLocation(LoadWorld(WorldTypeEnum.Sub), new Vector2(0, 0)));
         }
         if(Input.GetKeyDown(KeyCode.Q)) {
-            player.AddItem(ItemStack.of(ItemTypeEnum.Log));
+            player.AddItem(ItemStack.of(ItemTypeEnum.Herb));
         }
 
         string biome = player.location.chunk.biome.ToString() + "(D: " + player.location.chunk.biomeInfo.dificulty + " T:" + player.location.chunk.biomeInfo.temperature + ")";

@@ -56,6 +56,24 @@ public class Container {
     }
 
     /// <summary>
+    /// 입력된 아이템을 빈칸에 추가합니다.
+    /// </summary>
+    /// <param name="item">추가할 아이템</param>
+    /// <return>추가하고 남은 아이템 (복사본)</return>
+    public ItemStack AddItemAtEmptySlot(ItemStack item) {
+        ItemStack copy = item.Clone();
+        foreach(ItemStack check in _content) {
+            if(check.IsEmpty()) {
+                check.CopyFrom(copy);
+                UpdateChange();
+                return ItemStack.Empty;
+            }
+        }
+        UpdateChange();
+        return copy;
+    }
+
+    /// <summary>
     /// 입력된 아이템을 추가합니다.
     /// </summary>
     /// <param name="item">추가할 아이템</param>
