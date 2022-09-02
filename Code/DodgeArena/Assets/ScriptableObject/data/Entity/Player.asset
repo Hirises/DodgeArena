@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   _type: 0
-  sprites: []
-  lable: []
+  prefab: {fileID: 0}
+  sprite: {fileID: 21300000, guid: da867b795d9a7b24493eada61eacad61, type: 3}
+  name: '-'
+  information: '-'

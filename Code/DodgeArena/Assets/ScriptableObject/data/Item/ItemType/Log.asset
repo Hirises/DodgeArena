@@ -14,35 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enumType: 1
   _sprite: {fileID: 21300000, guid: 9da9eb58b472c39409b7a9a28a7c3233, type: 3}
-  _itemFuntion: {fileID: 0}
-  _maxStackSize: 4
+  _itemFuntion: {fileID: 11400000, guid: e6cab3d8bfbae514facd038df63ab8e1, type: 2}
   _name: "\uD1B5\uB098\uBB34"
+  _maxStackSize: 4
   _information: "\uC77C\uBC18\uC801\uC778 \uD1B5\uB098\uBB34\uC774\uB2E4\n\uAC00\uACF5\uD558\uBA74
     \uC5EC\uB7EC \uC6A9\uB3C4\uB85C \uC0AC\uC6A9\uD560 \uC218 \uC788\uB2E4"
-  attrubutes: 00000000
-  data:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: []
-    _keys: []
-    _values: []

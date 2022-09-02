@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
     }
     public void EndGame() {
         state = GameState.Stop;
+        HUDManager.instance.HideBackpack();
         foreach(WorldType type in worlds.Keys) {
             UnloadWorld(type);
         }

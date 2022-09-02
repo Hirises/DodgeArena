@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a08369b4586caa4f834813c13e00d0e, type: 3}
   m_Name: Log
   m_EditorClassIdentifier: 
-  targetSlot: 0
+  targetSlot: 3

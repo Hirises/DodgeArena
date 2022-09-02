@@ -105,6 +105,8 @@ MonoBehaviour:
   rigidbody: {fileID: 1697931047449044390}
   trigger: {fileID: 9076025652147364937}
   collider: {fileID: 8925365585479816947}
+  normal: {fileID: 21300000, guid: ca0d63ba9fda72447a76c3b591b120e2, type: 3}
+  attack: {fileID: 21300000, guid: 3113bfb8115d1eb4c99adaa0339295d3, type: 3}
   awarenessDistance: 13
   threateningDuration: 0.5
   dashSpeed: 12

@@ -14,55 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 3
   prefab: {fileID: 5694222733819670207, guid: 44cd1962e7934204598c750590ec40a9, type: 3}
-  sprites:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: []
-    _keys: []
-    _values: []
-  data:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: []
-    _keys: []
-    _values: []
+  sprite: {fileID: 21300000, guid: 846d238c401d656419c45355af004d34, type: 3}
+  name: "\uB098\uBB34"
+  information: "\uC232\uC5D0\uC11C \uD754\uD788 \uBCF4\uC774\uB294 \uB098\uBB34\n\uCC44\uC9D1\uC2DC
+    \uD1B5\uB098\uBB34 \uD558\uB098\uB97C \uC900\uB2E4"

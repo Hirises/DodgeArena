@@ -21,16 +21,16 @@ public class ItemType : ScriptableObject
     public ItemTypeEnum enumType;
     [SerializeField]
     private Sprite _sprite;
+    public Sprite sprite { get => _sprite; }
     [SerializeField]
     private ItemFuntion _itemFuntion;
     public ItemFuntion itemFuntion { get => _itemFuntion; }
     [SerializeField]
-    private int _maxStackSize;
-    public int maxStackSize { get => _maxStackSize; }
-    public Sprite sprite { get => _sprite; }
-    [SerializeField]
     private string _name;
     public new string name { get => _name; }
+    [SerializeField]
+    private int _maxStackSize;
+    public int maxStackSize { get => _maxStackSize; }
     [SerializeField]
     [ResizableTextArea]
     private string _information;

@@ -9,6 +9,12 @@ using NaughtyAttributes;
 public class WildBoar : LivingEntity {
     [SerializeField]
     [BoxGroup("WildBoar")]
+    protected Sprite normal;
+    [SerializeField]
+    [BoxGroup("WildBoar")]
+    protected Sprite attack;
+    [SerializeField]
+    [BoxGroup("WildBoar")]
     protected float awarenessDistance;
     [SerializeField]
     [BoxGroup("WildBoar")]
@@ -39,6 +45,10 @@ public class WildBoar : LivingEntity {
         Threaten,
         Dash,
         Rest
+    }
+
+    public override void OnSpawn() {
+        spriteRenderer.sprite = normal;
     }
 
     public override bool OnLoad()
@@ -86,7 +96,7 @@ public class WildBoar : LivingEntity {
     {
         state = State.Threaten;
         LookAt(GameManager.instance.player.gameObject.transform.position);
-        spriteRenderer.sprite = type.GetSprite("attack");
+        spriteRenderer.sprite = attack;
         timer.Reset();
         timer.target = threateningDuration;
         while (true)
@@ -144,7 +154,7 @@ public class WildBoar : LivingEntity {
     {
         state = State.Rest;
         rigidbody.velocity = Vector2.zero;
-        spriteRenderer.sprite = type.GetSprite("normal");
+        spriteRenderer.sprite = normal;
         timer.Reset();
         timer.target = restDuration;
         while (true)

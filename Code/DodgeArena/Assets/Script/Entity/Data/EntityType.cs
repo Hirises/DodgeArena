@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using RotaryHeart.Lib.SerializableDictionary;
+using NaughtyAttributes;
 
 /// <summary>
 /// 엔티티의 타입
@@ -25,17 +25,12 @@ public class EntityType : ScriptableObject
     [SerializeField]
     public Entity prefab;
     [SerializeField]
-    private SerializableDictionaryBase<string, Sprite> sprites = new SerializableDictionaryBase<string, Sprite>();
+    public Sprite sprite;
     [SerializeField]
-    private SerializableDictionaryBase<string, string> data = new SerializableDictionaryBase<string, string>();
-
-    public Sprite GetSprite(string tag) {
-        return sprites[tag];
-    }
-
-    public string GetData(string tag) {
-        return data[tag];
-    }
+    public new string name;
+    [SerializeField]
+    [ResizableTextArea]
+    public string information;
 
     public EntityType(EntityTypeEnum type)
     {

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using NaughtyAttributes;
 
 /// <summary>
@@ -9,10 +10,11 @@ using NaughtyAttributes;
 /// </summary>
 public class Grass : LandScape
 {
+    [SerializeField]
+    protected Sprite[] variants;
 
     public override void OnSpawn()
     {
-        base.OnSpawn();
-        spriteRenderer.sprite = type.GetSprite("variant" + Random.instance.RandRange(1, Convert.ToInt32(type.GetData("variants"))));
+        spriteRenderer.sprite = variants[Random.instance.RandInt(0, variants.Length)];
     }
 }
