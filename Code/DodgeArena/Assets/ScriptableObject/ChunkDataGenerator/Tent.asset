@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c6991db9542c9c4eb3d8195b0537f33, type: 3}
-  m_Name: Plain
+  m_Name: Tent
   m_EditorClassIdentifier: 
   weight: 100
   whiteListForWorld: 0
   worlds: 
   whiteListForBiome: 1
-  biomes: 02000000
+  biomes: 01000000
   dense: {x: 0, y: 0}
-  risk: {x: 50, y: 100}
-  _return: {x: 10, y: 30}
+  risk: {x: 0, y: 0}
+  _return: {x: 0, y: 0}
   tags:
     reorderableList:
       canAdd: 1
@@ -27,7 +27,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 0
+      isExpanded: 1
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -42,7 +42,10 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: []
-    _keys: []
-    _values: []
+    isExpanded: 1
+    _keyValues:
+    - table
+    _keys:
+    - table
+    _values:
+    - 1

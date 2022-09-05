@@ -16,7 +16,7 @@ MonoBehaviour:
   whiteListForWorld: 0
   worlds: 
   whiteListForBiome: 1
-  biomes: 01000000
+  biomes: 03000000
   dense: {x: 0, y: 0}
   risk: {x: 100, y: 150}
   _return: {x: 20, y: 50}

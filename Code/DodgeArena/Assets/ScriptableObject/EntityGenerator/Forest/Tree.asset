@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 488d6d7d703e0a44981966c9e10d387e, type: 3}
-  m_Name: Tree_Forest_Default
+  m_Name: Tree
   m_EditorClassIdentifier: 
   weight: 100
   whiteListForWorld: 0
   worlds: 
   whiteListForBiome: 1
-  biomes: 01000000
+  biomes: 03000000
   dense: 0
   risk: 0
   returns: 0

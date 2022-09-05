@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-public abstract class BiomeGenerator : ScriptableObject, IHasWeight
-{
+public abstract class BiomeGenerator : ScriptableObject, IHasWeight {
+    [BoxGroup("Common")]
+    public int weight = 100;
+    [BoxGroup("Common")]
+    public int priority = 1;
+
     public abstract bool CheckConditions(ChunkLocation chunk, BiomeInfo info);
 
-    public abstract int GetWeight();
+    public int GetWeight() {
+        return weight;
+    }
 
-    public abstract int GetPriority();
+    public int GetPriority() {
+        return priority;
+    }
 
     public abstract Biome Generate();
 }

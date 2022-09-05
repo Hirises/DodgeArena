@@ -5,19 +5,15 @@ using NaughtyAttributes;
 
 [CreateAssetMenu(fileName = "Default", menuName = "Generator/BiomeGenerator/Default")]
 public class DefaultBiomeGenerator : BiomeGenerator {
-    [BoxGroup("Common")]
-    public int weight = 100;
-    [BoxGroup("Common")]
-    public int priority = 1;
 
     [BoxGroup("Environment")]
     public bool whiteListForWorld = false;
     [BoxGroup("Environment")]
     public List<WorldTypeEnum> worlds;
     [BoxGroup("Environment")]
-    public Vector2 difficulty;
+    public Vector2 difficulty = new Vector2(0, 1);
     [BoxGroup("Environment")]
-    public Vector2 temperature;
+    public Vector2 temperature = new Vector2(0, 1);
 
     [BoxGroup("Biome")]
     public BiomeTypeEnum biome;
@@ -27,14 +23,6 @@ public class DefaultBiomeGenerator : BiomeGenerator {
         flag &= difficulty.x <= info.dificulty && info.dificulty <= difficulty.y;
         flag &= temperature.x <= info.temperature && info.temperature <= temperature.y;
         return flag;
-    }
-
-    public override int GetPriority() {
-        return priority;
-    }
-
-    public override int GetWeight() {
-        return weight;
     }
 
     public override Biome Generate() {

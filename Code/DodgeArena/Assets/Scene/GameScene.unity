@@ -2454,9 +2454,13 @@ MonoBehaviour:
   biomeGenerators:
   - {fileID: 11400000, guid: e8d22b0fb3a259145a96d61dd0833ad8, type: 2}
   - {fileID: 11400000, guid: 9a78ad2e18e1a614c9c14a8b31d4e669, type: 2}
+  - {fileID: 11400000, guid: 17937ee0357f4474f89132df989ff4ed, type: 2}
+  - {fileID: 11400000, guid: 572beaa2b0063044a8ec24ef66dd3086, type: 2}
   chunkDataGenerators:
   - {fileID: 11400000, guid: 6e73a66f97a737b4abd3ba3d7256c24d, type: 2}
   - {fileID: 11400000, guid: 73bea87824f3d994f8c15b2e62402d04, type: 2}
+  - {fileID: 11400000, guid: e8c4993f39f229742bcff5821a24f38c, type: 2}
+  - {fileID: 11400000, guid: b098305a95a792b4c96b7936d41a8284, type: 2}
   entityGenerators:
   - {fileID: 11400000, guid: c7bf75082f82eb647a4ec4c3f69b16ce, type: 2}
   - {fileID: 11400000, guid: 8f9f30741fe25f143bf9cd8ecc0afe2e, type: 2}

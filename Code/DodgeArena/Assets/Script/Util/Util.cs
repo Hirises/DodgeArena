@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using RotaryHeart.Lib.SerializableDictionary;
+using Unity.Mathematics;
 
 public class Util {
     public delegate void Runnable();
@@ -234,8 +235,20 @@ public class Util {
     /// <param name="half">반지름</param>
     /// <returns></returns>
     public static bool IsIn(Vector2 input, Vector2 center, float half) {
-        return input.x >= center.x - half && input.x >= center.x - half
-            && input.x >= center.x - half && input.x >= center.x - half;
+        return input.x >= center.x - half && input.x <= center.x + half
+            && input.y >= center.y - half && input.y <= center.y + half;
+    }
+
+    /// <summary>
+    /// 입력된 벡터가 해당 공간 안에 있는지 판단합니다
+    /// </summary>
+    /// <param name="input">확인할 벡터</param>
+    /// <param name="center">기준점</param>
+    /// <param name="half">반지름</param>
+    /// <returns></returns>
+    public static bool IsIn(Vector2 input, Vector2 from, Vector2 to) {
+        return input.x >= from.x && input.x <= to.x
+            && input.y >= from.y && input.y <= to.y;
     }
 
     /// <summary>

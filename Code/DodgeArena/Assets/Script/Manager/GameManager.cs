@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
 
     public void Debug() {
         if(Input.GetKeyDown(KeyCode.Space)) {
-            player.Teleport(new WorldLocation(LoadWorld(WorldTypeEnum.Sub), new Vector2(0, 0)));
+            player.Teleport(new WorldLocation(LoadWorld(WorldTypeEnum.Tent), new Vector2(0, 0)));
         }
         if(Input.GetKeyDown(KeyCode.Q)) {
             player.AddItem(ItemStack.of(ItemTypeEnum.Herb));

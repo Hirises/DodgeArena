@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weight: 100
   priority: 0
-  whiteListForWorld: 0
-  worlds: 
+  whiteListForWorld: 1
+  worlds: 00000000
   difficulty: {x: 0, y: 1}
   temperature: {x: 0, y: 1}
   biome: 0

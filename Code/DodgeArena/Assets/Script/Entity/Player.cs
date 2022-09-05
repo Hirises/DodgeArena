@@ -51,11 +51,11 @@ public class Player : LivingEntity {
             this.location = location;
             FixPosition();
         } else {
-            World world = this.location.world;
+            World oldWorld = this.location.world;
             this.transform.position = location.vector;
+            FixPosition(location);
             this.location = location;
-            FixPosition();
-            world.Unload();
+            oldWorld.Unload();
         }
     }
 
