@@ -30,7 +30,7 @@ public interface IResourceSource {
         if(other is Player player) {
             if(CanHarvest(player)) {
                 OnStartHarvesting(player);
-                harvesting = HUDManager.instance.StartHarvest(time, () => EndHarveting(player));
+                HUDManager.instance.StartHarvest(time, () => EndHarveting(player));
             }
         }
     }

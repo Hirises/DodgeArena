@@ -30,15 +30,12 @@ public class Player : LivingEntity {
         get;
         private set;
     }
-    [HideInInspector]
-    public bool isHarvesting;
 
     public override void OnSpawn() {
         this.hp = initialHp;
         this.backpack = new Container(backpackSize);
         this.equipments = new Equipments();
         this.equipments.changeEvent += HUDManager.instance.UpdateQuickBar;
-        this.isHarvesting = false;
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.UI;
@@ -19,6 +20,8 @@ public class HUDManager : MonoBehaviour {
     private Image HarvestHUDFill;
     private Util.Runnable HarvestCallback;
     private Timer HarvestTimer = new Timer();
+    private Queue<Util.Runnable> HarvestQueue;
+    private bool RunHarveting = false;
 
     [SerializeField]
     [BoxGroup("Quick Bar")]
@@ -62,6 +65,10 @@ public class HUDManager : MonoBehaviour {
                 } else if(Input.GetMouseButtonUp(0)) {
                     joyStick.Disable();
                 }
+
+                if(!RunHarveting && HarvestQueue.TryDequeue(out Util.Runnable next)) {
+                    next();
+                }
                 break;
             case GameManager.GameState.UI:
                 joyStick.Disable();
@@ -72,18 +79,20 @@ public class HUDManager : MonoBehaviour {
         }
     }
 
-    public bool StartHarvest(float time, Util.Runnable harvestCallback) {
-        if(GameManager.instance.player.isHarvesting) {
-            return false;
-        }
-        GameManager.instance.player.isHarvesting = true;
+    public void StartHarvest(float time, Util.Runnable harvestCallback) {
+        HarvestQueue.Enqueue(() => {
+            StartQueuedHarvet(time, harvestCallback);
+        });
+    }
+
+    public void StartQueuedHarvet(float time, Util.Runnable harvestCallback) {
+        RunHarveting = true;
         this.HarvestCallback = harvestCallback;
         this.HarvestTimer.Reset();
         this.HarvestTimer.target = time;
         HarvestHUDFill.fillAmount = 0;
         this.HarvestHUD.SetActive(true);
         HarvestTimer.Start(DrawHarvest, EndHarvest);
-        return true;
     }
 
     private void DrawHarvest(float time) {
@@ -94,13 +103,13 @@ public class HUDManager : MonoBehaviour {
         HarvestTimer.Stop();
         this.HarvestHUD.SetActive(false);
         HarvestCallback();
-        GameManager.instance.player.isHarvesting = false;
+        RunHarveting = false;
     }
 
     public void StopHarvest() {
         HarvestTimer.Stop();
         this.HarvestHUD.SetActive(false);
-        GameManager.instance.player.isHarvesting = false;
+        RunHarveting = false;
     }
 
     public void ShowQuickBar() {
